@@ -19,4 +19,7 @@ public class FormaPagamento {
     @ManyToMany(mappedBy = "formasPagamento")
     private List<Restaurante> listaRestaurantes;
 
+    @OneToMany
+    private List<Pedido> listaPedidos;
+
 }

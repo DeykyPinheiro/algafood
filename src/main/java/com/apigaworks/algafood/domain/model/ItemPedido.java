@@ -1,9 +1,9 @@
 package com.apigaworks.algafood.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -13,19 +13,29 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Estado {
+public class ItemPedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nome;
+    private Integer quantidade;
 
-    @OneToMany(mappedBy = "estado", cascade = CascadeType.REMOVE)
-    @JsonIgnoreProperties("estado")
-    private List<Cidade> cidadeList;
+    private BigDecimal precoUnitario;
 
-    public Estado(long id) {
-        this.id = id;
-    }
+    private BigDecimal precoTotal;
+
+    private String observacao;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Produto produto;
+
+    @ManyToOne
+    private Pedido pedido;
+
+
+
 }
+
+
+

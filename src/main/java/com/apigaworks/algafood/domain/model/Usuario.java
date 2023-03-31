@@ -37,4 +37,7 @@ public class Usuario {
     private List<Grupo> listaGrupos;
 
 
+    @OneToMany
+    private List<Pedido> listaPedidos;
+
 }

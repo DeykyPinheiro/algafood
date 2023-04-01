@@ -3,7 +3,7 @@ package com.apigaworks.algafood.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,7 +13,11 @@ import java.util.List;
 
 @Entity
 @Table
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class Restaurante {
 
     @Id
@@ -27,6 +31,11 @@ public class Restaurante {
     private Boolean ativo;
 
     private Boolean aberto;
+
+    public Restaurante(Long id, String nome ){
+        this.id = id;
+        this.nome = nome;
+    }
 
     @JsonIgnore
     @CreationTimestamp
@@ -43,7 +52,7 @@ public class Restaurante {
     @JsonIgnoreProperties("restaurante")
     private Cozinha cozinha;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "restaurante_forma_pagamento",
             joinColumns = {@JoinColumn(name = "restaurante_id")},
             inverseJoinColumns = {@JoinColumn(name = "forma_pagamento_id")})
@@ -58,4 +67,5 @@ public class Restaurante {
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<Pedido> listaPedidos;
+
 }

@@ -3,9 +3,9 @@ package com.apigaworks.algafood.domain.service;
 
 import com.apigaworks.algafood.domain.model.Estado;
 import com.apigaworks.algafood.domain.repository.EstadoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -13,6 +13,7 @@ public class EstadoService {
 
     private EstadoRepository estadoRepository;
 
+    @Autowired
     public EstadoService(EstadoRepository estadoRepository) {
         this.estadoRepository = estadoRepository;
     }

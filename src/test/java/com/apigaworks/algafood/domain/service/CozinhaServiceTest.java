@@ -1,8 +1,6 @@
 package com.apigaworks.algafood.domain.service;
 
-import com.apigaworks.algafood.domain.model.Cidade;
 import com.apigaworks.algafood.domain.model.Cozinha;
-import com.apigaworks.algafood.domain.model.Estado;
 import com.apigaworks.algafood.domain.repository.CozinhaRepository;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;

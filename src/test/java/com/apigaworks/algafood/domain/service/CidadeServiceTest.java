@@ -25,7 +25,7 @@ class CidadeServiceTest {
     private CidadeRepository cidadeRepository;
 
     @Autowired
-    private CidadeService cidadeService =  new CidadeService(cidadeRepository);
+    private CidadeService cidadeService = new CidadeService(cidadeRepository);
 
     private List<Cidade> listaCidades = new ArrayList<>();
     private Cidade cidade;

@@ -32,4 +32,8 @@ public class Cozinha {
     }
 
 
+    public Cozinha(long id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
 }

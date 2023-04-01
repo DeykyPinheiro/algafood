@@ -30,8 +30,6 @@ public class CidadeService {
         return cidadeRepository.listar();
     }
 
-
-
     public void remover(long id) {
         Cidade cidade = cidadeRepository.buscar(id);
         cidadeRepository.remover(cidade);

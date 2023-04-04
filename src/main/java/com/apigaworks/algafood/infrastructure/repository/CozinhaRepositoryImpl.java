@@ -35,6 +35,7 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
     @Transactional
     public void remover(Cozinha cozinha) {
         cozinha = buscar(cozinha.getId());
+        System.out.println("eu achei o caralho da cozinha: " + cozinha.getNome());
         manager.remove(cozinha);
     }
 }

@@ -1,6 +1,7 @@
 package com.apigaworks.algafood.domain.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,8 +24,11 @@ public class Cozinha {
 
     private String nome;
 
-    @OneToMany(mappedBy = "cozinha", cascade = CascadeType.REMOVE)
+
+
+    @JsonIgnore
     @JsonIgnoreProperties("cozinha")
+    @OneToMany(mappedBy = "cozinha", cascade = CascadeType.REMOVE)
     private List<Restaurante> restauranteList;
 
     public Cozinha(String nome) {

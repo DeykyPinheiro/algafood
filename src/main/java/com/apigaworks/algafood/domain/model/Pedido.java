@@ -57,8 +57,8 @@ public class Pedido {
 
     private StatusPedido statusPedido;
 
-    @Embedded
-    private Endereco endereco;
+//    @Embedded
+//    private Endereco endereco;
 
     @ManyToOne
     @JoinColumn(name = "usuario_cliente_id")

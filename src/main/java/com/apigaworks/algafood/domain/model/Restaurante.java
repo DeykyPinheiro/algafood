@@ -32,7 +32,7 @@ public class Restaurante {
 
     private Boolean aberto;
 
-    public Restaurante(Long id, String nome ){
+    public Restaurante(Long id, String nome) {
         this.id = id;
         this.nome = nome;
     }
@@ -56,16 +56,16 @@ public class Restaurante {
     @JoinTable(name = "restaurante_forma_pagamento",
             joinColumns = {@JoinColumn(name = "restaurante_id")},
             inverseJoinColumns = {@JoinColumn(name = "forma_pagamento_id")})
-    private List<FormaPagamento> formasPagamento ;
+    private List<FormaPagamento> formasPagamento;
 
     @Embedded
     @JsonIgnore
     private Endereco endereco;
 
-    @OneToMany(mappedBy = "restaurante")
-    private List<Produto> produtos ;
+    @OneToMany(mappedBy = "restaurante", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Produto> produtos;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "restaurante", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Pedido> listaPedidos;
 
 }

@@ -32,10 +32,15 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
     }
 
     @Override
+    public Cozinha atualizar(Cozinha cozinha) {
+        return null;
+    }
+
+    @Override
     @Transactional
     public void remover(Cozinha cozinha) {
         cozinha = buscar(cozinha.getId());
-        System.out.println("eu achei o caralho da cozinha: " + cozinha.getNome());
+//        System.out.println("eu achei o caralho da cozinha: " + cozinha.getNome());
         manager.remove(cozinha);
     }
 }

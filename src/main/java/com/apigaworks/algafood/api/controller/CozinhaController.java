@@ -31,9 +31,14 @@ public class CozinhaController {
         return cozinhaService.salvar(cozinha);
     }
 
+    @PutMapping
+    public Cozinha atualizar(@RequestBody Cozinha cozinha) {
+        return cozinhaService.salvar(cozinha);
+    }
+
     @DeleteMapping("/{id}")
     public void remover(@PathVariable Long id) {
-        System.out.println("sou a porra do id: " + id);
+//        System.out.println("sou a porra do id: " + id);
         cozinhaService.remover(id);
     }
 }

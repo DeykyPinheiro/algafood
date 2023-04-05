@@ -26,6 +26,7 @@ public class CozinhaServiceTest {
     private List<Cozinha> listaCozinhas;
 
     private Cozinha cozinha;
+    private Cozinha cozinha2;
 
     private Long id;
 
@@ -44,22 +45,30 @@ public class CozinhaServiceTest {
     }
 
     @Test
+    @DisplayName("atualizar cozinha")
+    public void testAtualizarCozinha() {
+        Cozinha c = cozinhaService.atualizar(this.cozinha2);
+        Assertions.assertEquals(c.getId(), this.cozinha2.getId());
+//        Mockito.verify(cozinhaRepository).atualizar(this.cozinha2);
+    }
+
+    @Test
     @DisplayName("listar cozinhas")
-    public void testListarCozinhas(){
+    public void testListarCozinhas() {
         List<Cozinha> cozinhaList = cozinhaService.listar();
         Assertions.assertEquals(2, cozinhaList.size());
     }
 
     @Test
     @DisplayName("buscar cozinha por id")
-    public void testBuscarPorId(){
+    public void testBuscarPorId() {
         Cozinha c = cozinhaService.buscarPorId(this.id);
         Assertions.assertEquals(this.id, c.getId());
     }
 
     @Test
     @DisplayName("remover cozinha")
-    public void testRemoverCozinha(){
+    public void testRemoverCozinha() {
         cozinhaService.remover(this.id);
         Mockito.verify(cozinhaRepository).remover(this.cozinha);
     }
@@ -69,11 +78,13 @@ public class CozinhaServiceTest {
         Mockito.when(cozinhaRepository.listar()).thenReturn(this.listaCozinhas);
         Mockito.when(cozinhaRepository.listar()).thenReturn(this.listaCozinhas);
         Mockito.when(cozinhaRepository.buscar(this.id)).thenReturn(this.cozinha);
+        Mockito.when(cozinhaRepository.atualizar(this.cozinha2)).thenReturn(this.cozinha2);
     }
 
     public void startValues() {
         this.id = 1L;
         this.cozinha = new Cozinha(1L, "Indiana ana");
+        this.cozinha2 = new Cozinha(1L, "cozinha atualizada");
         this.listaCozinhas = new ArrayList<>();
         this.listaCozinhas.add(cozinha);
         this.listaCozinhas.add(cozinha);

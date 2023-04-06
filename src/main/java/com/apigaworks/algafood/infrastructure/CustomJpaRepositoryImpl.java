@@ -6,9 +6,11 @@ import java.util.Optional;
 
 import com.apigaworks.algafood.domain.repository.CustomJpaRepository;
 import jakarta.persistence.EntityManager;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
+@EnableJpaRepositories
 public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID>
         implements CustomJpaRepository<T, ID> {
 

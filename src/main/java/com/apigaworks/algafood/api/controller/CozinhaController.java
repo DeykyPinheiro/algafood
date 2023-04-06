@@ -1,7 +1,6 @@
 package com.apigaworks.algafood.api.controller;
 
 import com.apigaworks.algafood.domain.model.Cozinha;
-import com.apigaworks.algafood.domain.repository.CozinhaRepository;
 import com.apigaworks.algafood.domain.service.CozinhaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +37,6 @@ public class CozinhaController {
 
     @DeleteMapping("/{id}")
     public void remover(@PathVariable Long id) {
-//        System.out.println("sou a porra do id: " + id);
         cozinhaService.remover(id);
     }
 }

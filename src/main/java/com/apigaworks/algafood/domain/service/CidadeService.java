@@ -19,19 +19,19 @@ public class CidadeService {
     }
 
     public Cidade salvar(Cidade cidade) {
-        return cidadeRepository.salvar(cidade);
+        return cidadeRepository.save(cidade);
     }
 
     public Cidade buscarPorId(long id) {
-        return cidadeRepository.buscar(id);
+        return cidadeRepository.findById(id).get();
     }
 
     public List<Cidade> listar() {
-        return cidadeRepository.listar();
+        return cidadeRepository.findAll();
     }
 
     public void remover(long id) {
-        Cidade cidade = cidadeRepository.buscar(id);
-        cidadeRepository.remover(cidade);
+        Cidade cidade = buscarPorId(id);
+        cidadeRepository.delete(cidade);
     }
 }

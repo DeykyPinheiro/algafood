@@ -20,8 +20,8 @@ public class InclusaoCozinhaMain {
         Cozinha c1 = new Cozinha("Japonesa");
         Cozinha c2 = new Cozinha("Brasileira");
 
-        c1 = cozinhaRepository.salvar(c1);
-        c2 = cozinhaRepository.salvar(c2);
+        c1 = cozinhaRepository.save(c1);
+        c2 = cozinhaRepository.save(c2);
 
         System.out.printf("%d - %s\n", c1.getId(), c1.getNome());
         System.out.printf("%d - %s\n", c2.getId(), c2.getNome());

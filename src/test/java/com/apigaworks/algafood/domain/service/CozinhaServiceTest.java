@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -20,6 +21,8 @@ public class CozinhaServiceTest {
     @MockBean
     private CozinhaRepository cozinhaRepository;
 
+
+    // TODO lembrar de retirar o autowired
     @Autowired
     private CozinhaService cozinhaService = new CozinhaService(cozinhaRepository);
 
@@ -70,15 +73,15 @@ public class CozinhaServiceTest {
     @DisplayName("remover cozinha")
     public void testRemoverCozinha() {
         cozinhaService.remover(this.id);
-        Mockito.verify(cozinhaRepository).remover(this.cozinha);
+        Mockito.verify(cozinhaRepository).delete(this.cozinha);
     }
 
     private void startMocks() {
-        Mockito.when(cozinhaRepository.salvar(this.cozinha)).thenReturn(this.cozinha);
-        Mockito.when(cozinhaRepository.listar()).thenReturn(this.listaCozinhas);
-        Mockito.when(cozinhaRepository.listar()).thenReturn(this.listaCozinhas);
-        Mockito.when(cozinhaRepository.buscar(this.id)).thenReturn(this.cozinha);
-        Mockito.when(cozinhaRepository.atualizar(this.cozinha2)).thenReturn(this.cozinha2);
+        Mockito.when(cozinhaRepository.save(this.cozinha)).thenReturn(this.cozinha);
+        Mockito.when(cozinhaRepository.findAll()).thenReturn(this.listaCozinhas);
+        Mockito.when(cozinhaRepository.findAll()).thenReturn(this.listaCozinhas);
+        Mockito.when(cozinhaRepository.findById(this.id)).thenReturn(Optional.ofNullable(this.cozinha));
+        Mockito.when(cozinhaRepository.save(this.cozinha2)).thenReturn(this.cozinha2);
     }
 
     public void startValues() {

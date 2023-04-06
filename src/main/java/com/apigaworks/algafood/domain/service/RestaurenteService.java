@@ -19,19 +19,19 @@ public class RestaurenteService {
     }
 
     public Restaurante buscar(Long id) {
-        return restauranteRepository.buscar(id);
+        return restauranteRepository.findById(id).get();
     }
 
     public Restaurante salvar(Restaurante restaurante) {
-        return restauranteRepository.salvar(restaurante);
+        return restauranteRepository.save(restaurante);
     }
 
     public List<Restaurante> listar() {
-        return restauranteRepository.listar();
+        return restauranteRepository.findAll();
     }
 
     public void remover(Long id) {
         Restaurante r = buscar(id);
-        restauranteRepository.remover(r);
+        restauranteRepository.delete(r);
     }
 }

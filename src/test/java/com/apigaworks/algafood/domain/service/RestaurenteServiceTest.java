@@ -12,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -45,7 +46,7 @@ public class RestaurenteServiceTest {
 
     @Test
     @DisplayName("lista restaurante")
-    public void testListarRestaurante(){
+    public void testListarRestaurante() {
         List<Restaurante> l = restaurenteService.listar();
         Assertions.assertEquals(this.listaRestaurentes, l);
         Assertions.assertEquals(2, l.size());
@@ -53,7 +54,7 @@ public class RestaurenteServiceTest {
 
     @Test
     @DisplayName("buscar restaurante por id")
-    public void testBuscarRestaurantePorId(){
+    public void testBuscarRestaurantePorId() {
         Restaurante r = restaurenteService.buscar(this.id);
         Assertions.assertEquals(this.id, r.getId());
         Assertions.assertEquals(this.restaurante, r);
@@ -61,11 +62,10 @@ public class RestaurenteServiceTest {
 
     @Test
     @DisplayName("remover restaunte por id")
-    public void testRemoverRestaurantePorId(){
+    public void testRemoverRestaurantePorId() {
         restaurenteService.remover(this.id);
-        Mockito.verify(restauranteRepository).remover(this.restaurante);
+        Mockito.verify(restauranteRepository).delete(this.restaurante);
     }
-
 
 
     private void startValues() {
@@ -77,9 +77,9 @@ public class RestaurenteServiceTest {
     }
 
     private void startMocks() {
-        Mockito.when(restauranteRepository.salvar(this.restaurante)).thenReturn(this.restaurante);
-        Mockito.when(restauranteRepository.listar()).thenReturn(this.listaRestaurentes);
-        Mockito.when(restauranteRepository.buscar(this.id)).thenReturn(this.restaurante);
+        Mockito.when(restauranteRepository.save(this.restaurante)).thenReturn(this.restaurante);
+        Mockito.when(restauranteRepository.findAll()).thenReturn(this.listaRestaurentes);
+        Mockito.when(restauranteRepository.findById(this.id)).thenReturn(Optional.ofNullable(this.restaurante));
     }
 
 

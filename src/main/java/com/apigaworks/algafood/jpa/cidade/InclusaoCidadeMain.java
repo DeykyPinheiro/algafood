@@ -20,8 +20,8 @@ public class InclusaoCidadeMain {
         Cidade c2 = new Cidade();
         c2.setNome("c2");
 
-        c1 = cidadeRepository.salvar(c1);
-        c2 = cidadeRepository.salvar(c2);
+        c1 = cidadeRepository.save(c1);
+        c2 = cidadeRepository.save(c2);
 
         System.out.printf("%s - %s\n", c1.getId(), c1.getNome());
         System.out.printf("%s - %s\n", c2.getId(), c2.getNome());

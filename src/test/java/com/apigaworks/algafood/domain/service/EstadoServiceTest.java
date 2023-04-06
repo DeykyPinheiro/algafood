@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -64,7 +65,7 @@ public class EstadoServiceTest {
     @DisplayName("remover estado por id")
     public void testRemoverEstadoPorId(){
         estadoService.remover(this.id);
-        Mockito.verify(estadoRepository).remover(this.estado);
+        Mockito.verify(estadoRepository).delete(this.estado);
     }
 
     public void startValues() {
@@ -76,8 +77,8 @@ public class EstadoServiceTest {
     }
 
     public void startMocks() {
-        Mockito.when(estadoRepository.salvar(this.estado)).thenReturn(this.estado);
-        Mockito.when(estadoRepository.listar()).thenReturn(this.listaEstados);
-        Mockito.when(estadoRepository.buscar(this.id)).thenReturn(this.estado);
+        Mockito.when(estadoRepository.save(this.estado)).thenReturn(this.estado);
+        Mockito.when(estadoRepository.findAll()).thenReturn(this.listaEstados);
+        Mockito.when(estadoRepository.findById(this.id)).thenReturn(Optional.ofNullable(this.estado));
     }
 }

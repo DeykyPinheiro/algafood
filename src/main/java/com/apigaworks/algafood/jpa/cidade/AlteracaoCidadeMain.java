@@ -21,7 +21,7 @@ public class AlteracaoCidadeMain {
                 .run(args);
 
         CidadeRepository cidadeRepository = applicationContext.getBean(CidadeRepository.class);
-        List<Cidade> cidadeList = cidadeRepository.listar();
+        List<Cidade> cidadeList = cidadeRepository.findAll();
         for (Cidade c : cidadeList) {
             System.out.printf("%s - %s\n", c.getId(), c.getNome());
         }

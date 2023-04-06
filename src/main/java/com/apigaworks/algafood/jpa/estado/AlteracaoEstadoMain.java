@@ -18,7 +18,7 @@ public class AlteracaoEstadoMain {
         e.setId(1L);
         e.setNome("nome teste");
 
-        e = estadoRepository.salvar(e);
+        e = estadoRepository.save(e);
         System.out.printf("%s - %s\n", e.getId(), e.getNome());
     }
 }

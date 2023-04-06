@@ -12,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -42,7 +43,7 @@ class CidadeServiceTest {
         Cidade c = cidadeService.salvar(this.cidade);
         Assertions.assertEquals(this.cidade, c);
         Assertions.assertEquals(this.cidade.getClass(), c.getClass());
-        Mockito.verify(cidadeRepository).salvar(this.cidade);
+        Mockito.verify(cidadeRepository).save(this.cidade);
     }
 
     @Test
@@ -57,7 +58,7 @@ class CidadeServiceTest {
     @DisplayName("listar cidades")
     void listar() {
         List<Cidade> listaCidades = cidadeService.listar();
-        Mockito.verify(cidadeRepository).listar();
+        Mockito.verify(cidadeRepository).findAll();
         Assertions.assertEquals(this.listaCidades.getClass(), listaCidades.getClass());
         Assertions.assertEquals(this.listaCidades.size(), listaCidades.size());
     }
@@ -66,7 +67,7 @@ class CidadeServiceTest {
     @DisplayName("remover cidade")
     void remover() {
         cidadeService.remover(this.id);
-        Mockito.verify(cidadeRepository).remover(this.cidade);
+        Mockito.verify(cidadeRepository).delete(this.cidade);
     }
 
     private void startValues() {
@@ -81,9 +82,9 @@ class CidadeServiceTest {
     }
 
     private void startMocks() {
-        Mockito.when(cidadeRepository.salvar(cidade)).thenReturn(cidade);
-        Mockito.when(cidadeRepository.buscar(this.id)).thenReturn(cidade);
-        Mockito.when(cidadeRepository.listar()).thenReturn(this.listaCidades);
+        Mockito.when(cidadeRepository.save(cidade)).thenReturn(cidade);
+        Mockito.when(cidadeRepository.findById(this.id)).thenReturn(Optional.ofNullable(cidade));
+        Mockito.when(cidadeRepository.findAll()).thenReturn(this.listaCidades);
     }
 
 }

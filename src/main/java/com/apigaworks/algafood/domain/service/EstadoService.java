@@ -20,19 +20,19 @@ public class EstadoService {
 
 
     public Estado salvar(Estado estado) {
-        return estadoRepository.salvar(estado);
+        return estadoRepository.save(estado);
     }
 
     public List<Estado> listar() {
-        return  estadoRepository.listar();
+        return estadoRepository.findAll();
     }
 
     public Estado buscar(Long id) {
-        return estadoRepository.buscar(id);
+        return estadoRepository.findById(id).get();
     }
 
     public void remover(Long id) {
         Estado e = buscar(id);
-        estadoRepository.remover(e);
+        estadoRepository.delete(e);
     }
 }

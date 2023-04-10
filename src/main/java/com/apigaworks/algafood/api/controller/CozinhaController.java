@@ -23,7 +23,7 @@ public class CozinhaController {
 
     @GetMapping("/{id}")
     public Cozinha buscar(@PathVariable Long id) {
-        return cozinhaService.buscarPorId(id);
+        return cozinhaService.buscarOuFalhar(id);
     }
 
     @PostMapping
@@ -33,7 +33,9 @@ public class CozinhaController {
 
     @PutMapping
     public Cozinha atualizar(@RequestBody Cozinha cozinha) {
-        return cozinhaService.salvar(cozinha);
+//        faco isso apra verificar se a cozinha existe e caso nao, estouro uma exception
+        Cozinha c = cozinhaService.buscarOuFalhar(cozinha.getId());
+        return cozinhaService.atualizar(c);
     }
 
     @DeleteMapping("/{id}")
@@ -45,8 +47,7 @@ public class CozinhaController {
 //    TESTE DAS AULAS DE JPA
 
 
-
-//    para query params é só receber o parametro na funcao do controller
+    //    para query params é só receber o parametro na funcao do controller
 //    que é passada pelo path e recebida automaticamente e feito o bind pelo spring
 //    caso nao tenha o spring é só usar o @RequestParam  e colocar o nome do paramento
 //    o bind ta feito

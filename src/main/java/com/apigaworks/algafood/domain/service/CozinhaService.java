@@ -1,11 +1,14 @@
 package com.apigaworks.algafood.domain.service;
 
+import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.apigaworks.algafood.domain.model.Cozinha;
 import com.apigaworks.algafood.domain.repository.CozinhaRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +16,11 @@ import java.util.List;
 @Service
 public class CozinhaService {
 
-    public static final String MSG_COZINHA_NAO_ENCONTRADA = "Não existe um cadastro de cozinha com código %d";
+    public static final String MSG_COZINHA_NAO_ENCONTRADA
+            = "Não existe um cadastro de cozinha com código %d";
+
+    private static final String MSG_COZINHA_EM_USO
+            = "Estado de código %d não pode ser removido, pois está em uso";
     private CozinhaRepository cozinhaRepository;
 
     @Autowired
@@ -35,8 +42,16 @@ public class CozinhaService {
     }
 
     public void remover(Long id) {
-        Cozinha c = cozinhaRepository.findById(id).get();
-        cozinhaRepository.delete(c);
+        try {
+            Cozinha c = cozinhaRepository.findById(id).get();
+            cozinhaRepository.delete(c);
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntidadeNaoEncontradaException(
+                    String.format(MSG_COZINHA_NAO_ENCONTRADA, id));
+        } catch (DataIntegrityViolationException e) {
+            throw new EntidadeEmUsoException(
+                    String.format(MSG_COZINHA_EM_USO, id));
+        }
     }
 
     public Cozinha atualizar(Cozinha cozinhaNova) {
@@ -54,8 +69,8 @@ public class CozinhaService {
                 ));
     }
 
-    public  Cozinha buscarPrimeiro(){
-        return  cozinhaRepository.buscarPrimeiro().get();
+    public Cozinha buscarPrimeiro() {
+        return cozinhaRepository.buscarPrimeiro().get();
     }
 
 }

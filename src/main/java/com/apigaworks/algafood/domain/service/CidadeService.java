@@ -18,7 +18,7 @@ import java.util.Optional;
 public class CidadeService {
 
     public static final String MSG_CIDADE_NAO_ENCONTRADA
-            = "Não existe um cadastro de cozinha com código %d";
+            = "Não existe um cadastro de cidade com código %d";
 
     private static final String MSG_CIDADE_EM_USO
             = "Estado de código %d não pode ser removido, pois está em uso";

@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +22,7 @@ public class RestaurenteServiceTest {
     private RestauranteRepository restauranteRepository;
 
     @Autowired
-    private RestaurenteService restaurenteService = new RestaurenteService(restauranteRepository);
+    private RestauranteService restaurenteService = new RestauranteService(restauranteRepository);
 
     private Restaurante restaurante;
     private Long id;

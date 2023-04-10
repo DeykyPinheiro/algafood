@@ -49,9 +49,11 @@ public class Restaurante {
 
 
     @ManyToOne
+    @JsonIgnore
     @JsonIgnoreProperties("restaurante")
     private Cozinha cozinha;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "restaurante_forma_pagamento",
             joinColumns = {@JoinColumn(name = "restaurante_id")},
@@ -62,9 +64,11 @@ public class Restaurante {
     @JsonIgnore
     private Endereco endereco;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "restaurante", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Produto> produtos;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "restaurante", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Pedido> listaPedidos;
 

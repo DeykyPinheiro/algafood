@@ -54,4 +54,8 @@ public class CozinhaService {
                 ));
     }
 
+    public  Cozinha buscarPrimeiro(){
+        return  cozinhaRepository.buscarPrimeiro().get();
+    }
+
 }

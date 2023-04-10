@@ -42,16 +42,25 @@ public class CozinhaController {
     }
 
 
+//    TESTE DAS AULAS DE JPA
+
+
+
 //    para query params é só receber o parametro na funcao do controller
 //    que é passada pelo path e recebida automaticamente e feito o bind pelo spring
 //    caso nao tenha o spring é só usar o @RequestParam  e colocar o nome do paramento
 //    o bind ta feito
-    @GetMapping("/test")
-    public List<String> testQueryParms(String dia, String mes, String ano) {
+    @GetMapping("/search")
+    public List<String> search(String dia, String mes, String ano) {
         List<String> params = new ArrayList<>();
         params.add(dia);
         params.add(mes);
         params.add(ano);
         return params;
+    }
+
+    @GetMapping("/primeiro")
+    public Cozinha buscarPrimeiro() {
+        return cozinhaService.buscarPrimeiro();
     }
 }

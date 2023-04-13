@@ -3,10 +3,7 @@ package com.apigaworks.algafood.api.controller;
 import com.apigaworks.algafood.domain.model.Estado;
 import com.apigaworks.algafood.domain.service.EstadoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,5 +23,20 @@ public class EstadosController {
     @GetMapping("/{id}")
     public Estado listar(@PathVariable Long id) {
         return estadoService.buscarOuFalhar(id);
+    }
+
+    @PostMapping
+    public Estado salvar(@RequestBody Estado estado) {
+        return estadoService.salvar(estado);
+    }
+
+    @PutMapping("/{idEstado}")
+    public Estado atualizar(@PathVariable Long idEstado, @RequestBody Estado estado) {
+        return estadoService.atualizar(idEstado, estado);
+    }
+
+    @DeleteMapping("/{id}")
+    public void excluir(@PathVariable Long id) {
+        estadoService.remover(id);
     }
 }

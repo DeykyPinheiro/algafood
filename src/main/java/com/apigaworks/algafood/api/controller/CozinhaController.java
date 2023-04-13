@@ -17,8 +17,7 @@ public class CozinhaController {
 
     @GetMapping
     public List<Cozinha> listar() {
-        List<Cozinha> a = cozinhaService.listar();
-        return a;
+        return cozinhaService.listar();
     }
 
     @GetMapping("/{id}")

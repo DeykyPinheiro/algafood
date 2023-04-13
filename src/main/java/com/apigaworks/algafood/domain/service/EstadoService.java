@@ -5,6 +5,7 @@ import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.apigaworks.algafood.domain.model.Estado;
 import com.apigaworks.algafood.domain.repository.EstadoRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -60,5 +61,11 @@ public class EstadoService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException(
                         String.format(MSG_ESTADO_NAO_ENCONTRADO, id)
                 ));
+    }
+
+    public Estado atualizar(Long idEstado, Estado atualizacoesEstado) {
+        Estado estadoAserAtualizado = buscarOuFalhar(idEstado);
+        BeanUtils.copyProperties(atualizacoesEstado, estadoAserAtualizado, "id");
+        return this.salvar(estadoAserAtualizado);
     }
 }

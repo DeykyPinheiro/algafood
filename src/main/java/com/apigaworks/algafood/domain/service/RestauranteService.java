@@ -100,6 +100,8 @@ public class RestauranteService {
         });
 
 //        salvar os novos valores
+//        to usando o metodo salvar pq todas as mudancas ja foram refletidas,
+//        logo nao preciso usar o metodo atualizar pq ja foram atualizadas
         return this.salvar(restaurante);
     }
 }

@@ -48,8 +48,8 @@ public class Restaurante {
     private Date dataAtualizacao;
 
 
+    //    @JsonIgnore
     @ManyToOne
-    @JsonIgnore
     @JsonIgnoreProperties("restaurante")
     private Cozinha cozinha;
 

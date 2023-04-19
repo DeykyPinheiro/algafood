@@ -28,8 +28,7 @@ public class CidadeController {
 
     @PostMapping
     public Cidade adicionar(@RequestBody Cidade cidade) {
-        cidade = cidadeService.salvar(cidade);
-        return cidade;
+        return cidadeService.salvar(cidade);
     }
 
 //    padrao na hora de atualizar é receber o id no path e os

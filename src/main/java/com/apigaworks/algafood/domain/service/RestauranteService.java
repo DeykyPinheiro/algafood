@@ -30,6 +30,9 @@ public class RestauranteService {
     private RestauranteRepository restauranteRepository;
 
     @Autowired
+    private CozinhaService cozinhaService;
+
+    @Autowired
     public RestauranteService(RestauranteRepository restauranteRepository) {
         this.restauranteRepository = restauranteRepository;
     }
@@ -39,6 +42,7 @@ public class RestauranteService {
     }
 
     public Restaurante salvar(Restaurante restaurante) {
+        cozinhaService.buscarOuFalhar(restaurante.getCozinha().getId());
         return restauranteRepository.save(restaurante);
     }
 

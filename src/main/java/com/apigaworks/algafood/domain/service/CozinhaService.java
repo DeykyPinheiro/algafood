@@ -54,11 +54,11 @@ public class CozinhaService {
         }
     }
 
-    public Cozinha atualizar(Cozinha cozinhaNova) {
+    public Cozinha atualizar(Long id, Cozinha cozinhaNova) {
 //        TODO depois arrumar o BeanUtils.copyProperties pq alguns podem ser null
 //        TODO e tbm usar um hashmap para receber e converter no objeto recebido
-        Cozinha cozinhaAntiga = buscarPorId(cozinhaNova.getId());
-        BeanUtils.copyProperties(cozinhaNova, cozinhaAntiga);
+        Cozinha cozinhaAntiga = buscarPorId(id);
+        BeanUtils.copyProperties(cozinhaNova, cozinhaAntiga, "id");
         return salvar(cozinhaAntiga);
     }
 

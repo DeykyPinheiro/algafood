@@ -30,11 +30,11 @@ public class CozinhaController {
         return cozinhaService.salvar(cozinha);
     }
 
-    @PutMapping
-    public Cozinha atualizar(@RequestBody Cozinha cozinha) {
+    @PutMapping("/{id}")
+    public Cozinha atualizar(@PathVariable Long id, @RequestBody Cozinha cozinha) {
 //        faco isso apra verificar se a cozinha existe e caso nao, estouro uma exception
-        Cozinha c = cozinhaService.buscarOuFalhar(cozinha.getId());
-        return cozinhaService.atualizar(c);
+        cozinhaService.buscarOuFalhar(id);
+        return cozinhaService.atualizar(id, cozinha);
     }
 
     @DeleteMapping("/{id}")

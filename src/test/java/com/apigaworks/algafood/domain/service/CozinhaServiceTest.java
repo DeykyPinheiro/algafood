@@ -50,7 +50,7 @@ public class CozinhaServiceTest {
     @Test
     @DisplayName("atualizar cozinha")
     public void testAtualizarCozinha() {
-        Cozinha c = cozinhaService.atualizar(this.cozinha2);
+        Cozinha c = cozinhaService.atualizar(this.id, this.cozinha2);
         Assertions.assertEquals(c.getId(), this.cozinha2.getId());
 //        Mockito.verify(cozinhaRepository).atualizar(this.cozinha2);
     }

@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.domain.service;
 
+import com.apigaworks.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.apigaworks.algafood.domain.model.Cidade;
@@ -20,8 +21,6 @@ import java.util.Optional;
 @Service
 public class CidadeService {
 
-    public static final String MSG_CIDADE_NAO_ENCONTRADA
-            = "Não existe um cadastro de cidade com código %d";
 
     private static final String MSG_CIDADE_EM_USO
             = "Estado de código %d não pode ser removido, pois está em uso";
@@ -67,8 +66,7 @@ public class CidadeService {
             cidadeRepository.delete(cidade);
 
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(
-                    String.format(MSG_CIDADE_NAO_ENCONTRADA, id));
+            throw new CidadeNaoEncontradaException(id);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
                     String.format(MSG_CIDADE_EM_USO, id));
@@ -77,8 +75,6 @@ public class CidadeService {
 
     public Cidade buscarOuFalhar(Long id) {
         return cidadeRepository.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(
-                        String.format(MSG_CIDADE_NAO_ENCONTRADA, id)
-                ));
+                .orElseThrow(() -> new CidadeNaoEncontradaException(id));
     }
 }

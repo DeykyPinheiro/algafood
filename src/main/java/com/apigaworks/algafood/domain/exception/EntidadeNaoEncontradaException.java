@@ -1,6 +1,6 @@
 package com.apigaworks.algafood.domain.exception;
 
-public class EntidadeNaoEncontradaException extends RuntimeException {
+public abstract class EntidadeNaoEncontradaException extends NegocioException {
 
     public EntidadeNaoEncontradaException(String mensagem) {
         super(mensagem);

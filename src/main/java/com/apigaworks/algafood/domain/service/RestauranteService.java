@@ -2,6 +2,7 @@ package com.apigaworks.algafood.domain.service;
 
 import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.apigaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.apigaworks.algafood.domain.model.Restaurante;
 import com.apigaworks.algafood.domain.repository.RestauranteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -55,8 +56,7 @@ public class RestauranteService {
             Restaurante r = buscar(id);
             restauranteRepository.delete(r);
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(
-                    String.format(MSG_RESTAURANTE_EM_USO, id));
+            throw new RestauranteNaoEncontradoException(id);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(String.format(MSG_RESTAURANTE_EM_USO, id));
         }
@@ -65,9 +65,7 @@ public class RestauranteService {
 
     public Restaurante buscarOuFalhar(Long id) {
         return restauranteRepository.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(
-                        String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, id)
-                ));
+                .orElseThrow(() -> new RestauranteNaoEncontradoException(id));
     }
 
     public Restaurante atualizar(Long idRestaurante, Restaurante atualizacoesRestaurante) {

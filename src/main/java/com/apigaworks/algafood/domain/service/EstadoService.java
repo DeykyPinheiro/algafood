@@ -3,6 +3,7 @@ package com.apigaworks.algafood.domain.service;
 
 import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.apigaworks.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.apigaworks.algafood.domain.model.Estado;
 import com.apigaworks.algafood.domain.repository.EstadoRepository;
 import org.springframework.beans.BeanUtils;
@@ -47,7 +48,7 @@ public class EstadoService {
             Estado e = buscar(id);
             estadoRepository.delete(e);
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(
+            throw new EstadoNaoEncontradoException(
                     String.format(MSG_ESTADO_NAO_ENCONTRADO, id));
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
@@ -58,7 +59,7 @@ public class EstadoService {
 
     public Estado buscarOuFalhar(Long id) {
         return estadoRepository.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(
+                .orElseThrow(() -> new EstadoNaoEncontradoException(
                         String.format(MSG_ESTADO_NAO_ENCONTRADO, id)
                 ));
     }

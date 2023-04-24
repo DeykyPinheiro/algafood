@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.api.exceptionhandler;
 
+import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.apigaworks.algafood.domain.exception.NegocioException;
 import org.springframework.http.HttpStatus;
@@ -48,6 +49,18 @@ public class ApiExceptionHandler {
 
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(problema);
+    }
+
+    @ExceptionHandler(EntidadeEmUsoException.class)
+    public ResponseEntity<?> tratarEntidadeEmUsoException(EntidadeEmUsoException e){
+
+        Problema problema = Problema.builder()
+                .dataHora(LocalDateTime.now())
+                .mensagem("entidade em uso").build();
+
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(problema);
     }
 }

@@ -46,7 +46,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> handleNegocioException(NegocioException ex, WebRequest request) {
 
         HttpHeaders header = new HttpHeaders();
-        return handleExceptionInternal(ex, ex.getMessage(), header, HttpStatus.NOT_FOUND, request);
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        String details = ex.getMessage();
+        Problem problem = createProblemBuilder(httpStatus, ProblemType.ERRO_NEGOCIO, details).build();
+
+
+        return handleExceptionInternal(ex, problem, header, HttpStatus.NOT_FOUND, request);
     }
 
 ////    midias nao suportadas
@@ -66,7 +71,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> handleEntidadeEmUsoException(EntidadeEmUsoException ex, WebRequest request) {
 
         HttpHeaders header = new HttpHeaders();
-        return handleExceptionInternal(ex, ex.getMessage(), header, HttpStatus.CONFLICT, request);
+        HttpStatus httpStatus = HttpStatus.CONFLICT;
+        String details = ex.getMessage();
+        Problem problem = createProblemBuilder(httpStatus, ProblemType.ENTIDADE_EM_USO, details).build();
+
+        return handleExceptionInternal(ex, problem, header, httpStatus, request);
     }
 
     //    especializando metodo, colocando um corpo padrao para a resposta de erro ja definidas pelo spring
@@ -102,3 +111,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .detail(details);
     }
 }
+
+
+/**
+ * [x] criar enumated
+ * [x] EntidadeNaoEncontrada
+ * [x] NegocioException
+ * [x] EntidadeEmUso
+ *
+ *
+ * [x] refatorar cada handleException
+ * [x] EntidadeNaoEncontrada
+ * [x] NegocioException
+ * [x] EntidadeEmUso
+ */

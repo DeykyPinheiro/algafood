@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ProblemType {
 
+    MENSAGEM_INCOMPREENSIVEL("/mensagem-imcompreensivel", "mensagem imcompreensivel"),
+
     ENTIDADE_NAO_ENCONTRADA("/entidade-nao-encontrada", "entidade nao encontrada"),
 
     ERRO_NEGOCIO("/erro-negocio", "Violação de regra de negócio"),

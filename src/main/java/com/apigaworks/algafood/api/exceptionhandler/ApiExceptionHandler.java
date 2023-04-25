@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -40,6 +41,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         HttpHeaders header = new HttpHeaders();
         return handleExceptionInternal(ex, problem, header, httpStatus, request);
+    }
+
+//    sobreescrevi esse metodo pra testar com uma excessao que ja funciona, mas nesse cara o spring ja tava devolvendo
+//    no formato que eu configurei
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+
+        HttpHeaders header = new HttpHeaders();
+        String details = "corpo da requisicao está invalido, verifique a sintaxe";
+        Problem problem = createProblemBuilder(HttpStatus.valueOf(status.value()), ProblemType.MENSAGEM_INCOMPREENSIVEL, details).build();
+
+
+        return handleExceptionInternal(ex, problem, header, status, request);
     }
 
     @ExceptionHandler(NegocioException.class)

@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.domain.service;
 
+import com.apigaworks.algafood.domain.model.Cozinha;
 import com.apigaworks.algafood.domain.model.Restaurante;
 import com.apigaworks.algafood.domain.repository.RestauranteRepository;
 import org.junit.jupiter.api.*;
@@ -23,6 +24,9 @@ public class RestaurenteServiceTest {
 
     @Autowired
     private RestauranteService restaurenteService = new RestauranteService(restauranteRepository);
+
+    @Autowired
+    private  CozinhaService cozinhaService;
 
     private Restaurante restaurante;
     private Long id;
@@ -69,7 +73,7 @@ public class RestaurenteServiceTest {
 
     private void startValues() {
         this.id = 1L;
-        this.restaurante = new Restaurante(id, "nome restaurante");
+        this.restaurante = new Restaurante(id, "nome restaurante", new Cozinha(1L, "teste"));
         this.listaRestaurentes = new ArrayList<>();
         this.listaRestaurentes.add(restaurante);
         this.listaRestaurentes.add(restaurante);

@@ -111,17 +111,3 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .detail(details);
     }
 }
-
-
-/**
- * [x] criar enumated
- * [x] EntidadeNaoEncontrada
- * [x] NegocioException
- * [x] EntidadeEmUso
- *
- *
- * [x] refatorar cada handleException
- * [x] EntidadeNaoEncontrada
- * [x] NegocioException
- * [x] EntidadeEmUso
- */

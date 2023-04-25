@@ -70,7 +70,7 @@ public class RestauranteService {
 
     public Restaurante atualizar(Long idRestaurante, Restaurante atualizacoesRestaurante) {
         Restaurante restauranteASerAtualizado = this.buscar(idRestaurante);
-        BeanUtils.copyProperties(atualizacoesRestaurante, restauranteASerAtualizado, "id");
+        BeanUtils.copyProperties(atualizacoesRestaurante, restauranteASerAtualizado, "id", "dataCadastro");
         return this.salvar(restauranteASerAtualizado);
     }
 

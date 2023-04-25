@@ -32,9 +32,10 @@ public class Restaurante {
 
     private Boolean aberto;
 
-    public Restaurante(Long id, String nome) {
+    public Restaurante(Long id, String nome, Cozinha cozinha) {
         this.id = id;
         this.nome = nome;
+        this.cozinha = cozinha;
     }
 
     @JsonIgnore

@@ -1,17 +1,10 @@
 package com.apigaworks.algafood.api.controller;
 
-import com.apigaworks.algafood.api.exceptionhandler.Problema;
-import com.apigaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
-import com.apigaworks.algafood.domain.exception.EstadoNaoEncontradoException;
-import com.apigaworks.algafood.domain.exception.NegocioException;
 import com.apigaworks.algafood.domain.model.Cidade;
 import com.apigaworks.algafood.domain.service.CidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController

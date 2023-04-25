@@ -7,7 +7,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -21,19 +20,32 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-//    spring passa uma instancia da web request, o resto pode ser instanciar e modificado para passar a resposta
+    //    spring passa uma instancia da web request, o resto pode ser instanciar e modificado para passar a resposta
 //    dessa forma toda e qualquer excessao na hora de estourar passa por  handleExceptionInternal, inclusive as do spring
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
-    public ResponseEntity<?> tratarEntidadeNaoEncontradaException(EntidadeNaoEncontradaException ex,  WebRequest request) {
+    public ResponseEntity<?> handleEntidadeNaoEncontradaException(EntidadeNaoEncontradaException ex, WebRequest request) {
 
-        HttpHeaders header  = new HttpHeaders();
-        return handleExceptionInternal(ex, ex.getMessage(), header, HttpStatus.NOT_FOUND, request);
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        String details = ex.getMessage();
+
+        ProblemType problemType = ProblemType.ENTIDADE_NAO_ENCONTRADA;
+        Problem problem = createProblemBuilder(httpStatus, problemType, details).build();
+
+//        Problem problem = Problem.builder()
+//                .status(httpStatus.value())
+//                .type("https://algafood.com.br/entidade-nao-encontrada")
+//                .title("entidade nao encontrada")
+//                .detail(details)
+//                .build();
+
+        HttpHeaders header = new HttpHeaders();
+        return handleExceptionInternal(ex, problem, header, httpStatus, request);
     }
 
     @ExceptionHandler(NegocioException.class)
-    public ResponseEntity<?> tratarNegocioException(NegocioException ex, WebRequest request){
+    public ResponseEntity<?> handleNegocioException(NegocioException ex, WebRequest request) {
 
-        HttpHeaders header  = new HttpHeaders();
+        HttpHeaders header = new HttpHeaders();
         return handleExceptionInternal(ex, ex.getMessage(), header, HttpStatus.NOT_FOUND, request);
     }
 
@@ -51,9 +63,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 //    }
 
     @ExceptionHandler(EntidadeEmUsoException.class)
-    public ResponseEntity<?> tratarEntidadeEmUsoException(EntidadeEmUsoException ex, WebRequest request) {
+    public ResponseEntity<?> handleEntidadeEmUsoException(EntidadeEmUsoException ex, WebRequest request) {
 
-        HttpHeaders header  = new HttpHeaders();
+        HttpHeaders header = new HttpHeaders();
         return handleExceptionInternal(ex, ex.getMessage(), header, HttpStatus.CONFLICT, request);
     }
 
@@ -65,15 +77,28 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
 
         if (body == null) {
-            body = Problema.builder()
-                    .dataHora(LocalDateTime.now())
-                    .mensagem(ex.getMessage()).build();
+            body = Problem.builder()
+                    .title(statusCode.toString())
+                    .status(statusCode.value())
+                    .build();
         } else if (body instanceof String) {
-            body = Problema.builder()
-                    .dataHora(LocalDateTime.now())
-                    .mensagem(ex.getMessage()).build();
+            body = Problem.builder()
+                    .title(ex.getMessage())
+                    .status(statusCode.value())
+                    .build();
         }
 
         return super.handleExceptionInternal(ex, body, headers, statusCode, request);
+    }
+
+
+    //    Problem.ProblemBuilder essa é uma classe que o lombok cria dentro do Problem,
+//    quando ce anota com Builder, nao dei um build pq se nao ele retornaria a instancia de Problem
+    private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String details) {
+        return Problem.builder()
+                .status(status.value())
+                .type(problemType.getUri())
+                .title(problemType.getTitle())
+                .detail(details);
     }
 }

@@ -5,13 +5,18 @@ import com.apigaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.apigaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.apigaworks.algafood.domain.model.Restaurante;
 import com.apigaworks.algafood.domain.repository.RestauranteRepository;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.el.util.ReflectionUtil;
 import org.apache.ibatis.javassist.tools.reflect.Reflection;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -74,32 +79,51 @@ public class RestauranteService {
         return this.salvar(restauranteASerAtualizado);
     }
 
-    public Restaurante atualizarParcial(Long id, Map<String, Object> dadosParcial) {
+
+    public Restaurante atualizarParcial(Long id, Map<String, Object> dadosParcial, HttpServletRequest request) {
 //        busquei o restaurante que vou atualizar
         Restaurante restaurante = buscarOuFalhar(id);
 
-//        cria o objeto que para mapear todos os dados, e mapeia para ele ser uma
+//        com a injetacao pelo spring de HttpServletRequest request, posso usar pra construir um
+//        ServletServerHttpRequest que é o parametro construir um HttpMessageNotReadableException
+        ServletServerHttpRequest serverHttpRequest  = new ServletServerHttpRequest(request);
+
+        try {
+//       cria o objeto que para mapear todos os dados, e mapeia para ele ser uma
 //        objeto segundo paramentro do tipo colocado na convertValue
-        ObjectMapper objectMapper = new ObjectMapper();
-        Restaurante atualizacoes = objectMapper.convertValue(dadosParcial, Restaurante.class);
+            ObjectMapper objectMapper = new ObjectMapper();
+
+//        se a propriedade nao existe ou ela é ignorada, vai estourar uma exception,
+//        mesma coisa que fiz no application.properties com as spring.jackson.deserialization
+            objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+
+//        mapeias os dados
+            Restaurante atualizacoes = objectMapper.convertValue(dadosParcial, Restaurante.class);
 
 //        copiar as atualizacoes que chegaram, sem nulo nao intencional
 //        dentro de um objeto que vai ser atualizado
-        dadosParcial.forEach((nomePropriedade, valorPropriedade) -> {
+            dadosParcial.forEach((nomePropriedade, valorPropriedade) -> {
 //            pega o campo com nome equivalente do obejeto com as atualizacoes e quebra o encapsulamento
 //            da classe, para poder alterar os dados de fora da classe
-            Field field = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
-            field.setAccessible(true);
+                Field field = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
+                field.setAccessible(true);
 
 //            pega o novo valor do objeto mapeado e coloca em uma variavel
 //            peguei o field acima, pq string ele nao consegue pesquisar
-            Object novoValor = ReflectionUtils.getField(field, atualizacoes);
+                Object novoValor = ReflectionUtils.getField(field, atualizacoes);
 
 //            pega o objeto a ser atualizado, passa o campo que precisa ser atualizado
 //            e seta o novo valor dentro dele, como o laco for itera dentro dos dados recebidos
 //            nao tem perigo de atualizar campos que nao foram enviados para null
-            ReflectionUtils.setField(field, restaurante, novoValor);
-        });
+                ReflectionUtils.setField(field, restaurante, novoValor);
+            });
+        } catch (IllegalArgumentException e){
+//            tranformando IllegalArgumentException em  HttpMessageNotReadableException consigo tratar
+//            da mesma forma que trato outras IllegalArgumentException que tenho na api
+            Throwable rootCause = ExceptionUtils.getRootCause(e);
+            throw new HttpMessageNotReadableException(e.getMessage(), e.getCause(), serverHttpRequest);
+        }
 
 //        salvar os novos valores
 //        to usando o metodo salvar pq todas as mudancas ja foram refletidas,

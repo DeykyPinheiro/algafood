@@ -3,6 +3,8 @@ package com.apigaworks.algafood.api.exceptionhandler;
 import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.apigaworks.algafood.domain.exception.NegocioException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -14,6 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 //a anotacao ControllerAdvice captura as excecoes de forma global
 //estou herdadndo ResponseEntityExceptionHandler que é uma implementacao
@@ -43,10 +46,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problem, header, httpStatus, request);
     }
 
-//    sobreescrevi esse metodo pra testar com uma excessao que ja funciona, mas nesse cara o spring ja tava devolvendo
+    //    sobreescrevi esse metodo pra testar com uma excessao que ja funciona, mas nesse cara o spring ja tava devolvendo
 //    no formato que eu configurei
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+
+//        é a causa raiz de uma exception, tem que passar a exception para ele pesquisar e ver
+        Throwable rootCause = ExceptionUtils.getRootCause(ex);
+        if (rootCause instanceof InvalidFormatException) {
+            return handleInvalidFormatException((InvalidFormatException) rootCause, headers, status, request);
+        }
+
 
         HttpHeaders header = new HttpHeaders();
         String details = "corpo da requisicao está invalido, verifique a sintaxe";
@@ -54,6 +64,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 
         return handleExceptionInternal(ex, problem, header, status, request);
+    }
+
+    private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+
+        String propriedade = ex.getPath().stream()
+                .map(ref -> ref.getFieldName()).collect(Collectors.joining("."));
+
+        ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
+        String details = String.format("A propriedade '%s' recebeu o valor '%s' que é do tipo invalido " +
+                "passe uma propriedade do tipo '%s'", propriedade, ex.getValue(), ex.getTargetType().getSimpleName());
+
+        Problem problem = createProblemBuilder(HttpStatus.valueOf(status.value()), problemType, details).build();
+        return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
     @ExceptionHandler(NegocioException.class)
@@ -100,15 +123,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
 
         if (body == null) {
-            body = Problem.builder()
-                    .title(statusCode.toString())
-                    .status(statusCode.value())
-                    .build();
+            body = Problem.builder().title(statusCode.toString()).status(statusCode.value()).build();
         } else if (body instanceof String) {
-            body = Problem.builder()
-                    .title(ex.getMessage())
-                    .status(statusCode.value())
-                    .build();
+            body = Problem.builder().title(ex.getMessage()).status(statusCode.value()).build();
         }
 
         return super.handleExceptionInternal(ex, body, headers, statusCode, request);
@@ -118,10 +135,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     //    Problem.ProblemBuilder essa é uma classe que o lombok cria dentro do Problem,
 //    quando ce anota com Builder, nao dei um build pq se nao ele retornaria a instancia de Problem
     private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String details) {
-        return Problem.builder()
-                .status(status.value())
-                .type(problemType.getUri())
-                .title(problemType.getTitle())
-                .detail(details);
+        return Problem.builder().status(status.value()).type(problemType.getUri()).title(problemType.getTitle()).detail(details);
     }
 }

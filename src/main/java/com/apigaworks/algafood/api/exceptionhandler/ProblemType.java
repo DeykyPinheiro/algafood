@@ -13,7 +13,9 @@ public enum ProblemType {
 
     ENTIDADE_EM_USO("/entidade-em-uso", "entidade em uso"),
 
-    PARAMETRO_INVALIDO("/parametro-invalido", "parametro invalido");
+    PARAMETRO_INVALIDO("/parametro-invalido", "parametro invalido"),
+
+    ERRO_DE_SISTEMA("/erro-de-sistema", "erro de sistema");
 
     private String title;
 

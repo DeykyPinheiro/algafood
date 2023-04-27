@@ -15,6 +15,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
@@ -57,8 +58,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         Throwable rootCause = ExceptionUtils.getRootCause(ex);
         if (rootCause instanceof InvalidFormatException) {
             return handleInvalidFormatException((InvalidFormatException) rootCause, headers, status, request);
-        } else if (rootCause instanceof  PropertyBindingException){
-            return  handlePropertyBindingException((PropertyBindingException) rootCause, headers, status, request);
+        } else if (rootCause instanceof PropertyBindingException) {
+            return handlePropertyBindingException((PropertyBindingException) rootCause, headers, status, request);
         }
 
 
@@ -95,10 +96,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
+        if (ex instanceof MethodArgumentTypeMismatchException) {
+            return handleMethodArgumentTypeMismatchException((MethodArgumentTypeMismatchException) ex, headers, status, request);
+        }
+
+        return super.handleTypeMismatch(ex, headers, status, request);
+    }
+
+
+    private ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         ProblemType problemType = ProblemType.PARAMETRO_INVALIDO;
-        String details = String.format("o parametro da URL '%s' recebeu o valor '%s' que é do tipo invalido" +
-                "informe um valor compativel com o tipo '%s' ", ex.getPropertyName(), ex.getValue(), ex.getRequiredType().getSimpleName());
-        Problem problem = createProblemBuilder(HttpStatus.valueOf(status.value()), problemType,  details).build();
+        String details = String.format("o parametro da URL '%s' recebeu o valor '%s' que é do tipo invalido " +
+                "informe um valor compativel com o tipo '%s'", ex.getPropertyName(), ex.getValue(), ex.getRequiredType().getSimpleName());
+        Problem problem = createProblemBuilder(HttpStatus.valueOf(status.value()), problemType, details).build();
 
         return handleExceptionInternal(ex, problem, headers, status, request);
     }

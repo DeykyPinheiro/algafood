@@ -6,6 +6,7 @@ import com.apigaworks.algafood.domain.exception.NegocioException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -88,6 +89,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 "passe uma propriedade do tipo '%s'", propriedade, ex.getValue(), ex.getTargetType().getSimpleName());
 
         Problem problem = createProblemBuilder(HttpStatus.valueOf(status.value()), problemType, details).build();
+        return handleExceptionInternal(ex, problem, headers, status, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+
+        ProblemType problemType = ProblemType.PARAMETRO_INVALIDO;
+        String details = String.format("o parametro da URL '%s' recebeu o valor '%s' que é do tipo invalido" +
+                "informe um valor compativel com o tipo '%s' ", ex.getPropertyName(), ex.getValue(), ex.getRequiredType().getSimpleName());
+        Problem problem = createProblemBuilder(HttpStatus.valueOf(status.value()), problemType,  details).build();
+
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
 

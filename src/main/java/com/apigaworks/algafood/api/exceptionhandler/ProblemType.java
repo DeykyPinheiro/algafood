@@ -12,7 +12,9 @@ public enum ProblemType {
 
     ERRO_NEGOCIO("/erro-negocio", "Violação de regra de negócio"),
 
-    ENTIDADE_EM_USO("/entidade-em-uso", "entidade em uso");
+    ENTIDADE_EM_USO("/entidade-em-uso", "entidade em uso"),
+
+    PARAMETRO_INVALIDO("/parametro-invalido", "parametro invalido");
 
     private String title;
 

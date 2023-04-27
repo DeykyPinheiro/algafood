@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 //a anotacao ControllerAdvice captura as excecoes de forma global
@@ -35,7 +35,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
         String details = ex.getMessage();
 
-        ProblemType problemType = ProblemType.ENTIDADE_NAO_ENCONTRADA;
+        ProblemType problemType = ProblemType.RECURSO_NAO_ENCONTRADO;
         Problem problem = createProblemBuilder(httpStatus, problemType, details).build();
 
 //        Problem problem = Problem.builder()
@@ -149,6 +149,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problem, header, httpStatus, request);
     }
 
+    @Override
+    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        ProblemType problemType = ProblemType.RECURSO_NAO_ENCONTRADO;
+        String detail = String.format("O recurso %s, que você tentou acessar, é inexistente.",
+                ex.getRequestURL());
+
+        Problem problem = createProblemBuilder(HttpStatus.valueOf(status.value()), problemType, detail).build();
+
+        return handleExceptionInternal(ex, problem, headers, status, request);
+    }
+
     //    especializando metodo, colocando um corpo padrao para a resposta de erro ja definidas pelo spring
     //    usado no erro application/xml quando a midia nao é suportada, e em outros erros
     //    todas a exceptions do spring chamam ResponseEntityExceptionHandler, tal como eu faco com a negocioException
@@ -164,6 +175,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         return super.handleExceptionInternal(ex, body, headers, statusCode, request);
     }
+
 
 
     //    Problem.ProblemBuilder essa é uma classe que o lombok cria dentro do Problem,

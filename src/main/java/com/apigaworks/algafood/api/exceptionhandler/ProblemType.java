@@ -1,14 +1,13 @@
 package com.apigaworks.algafood.api.exceptionhandler;
 
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ProblemType {
 
     MENSAGEM_INCOMPREENSIVEL("/mensagem-imcompreensivel", "mensagem imcompreensivel"),
 
-    ENTIDADE_NAO_ENCONTRADA("/entidade-nao-encontrada", "entidade nao encontrada"),
+    RECURSO_NAO_ENCONTRADO("/recurso-nao-encontrado", "recurso nao encontrado"),
 
     ERRO_NEGOCIO("/erro-negocio", "Violação de regra de negócio"),
 

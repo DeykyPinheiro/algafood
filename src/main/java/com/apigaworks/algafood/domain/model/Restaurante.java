@@ -3,6 +3,10 @@ package com.apigaworks.algafood.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -25,10 +29,11 @@ public class Restaurante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotBlank
     private String nome;
 
     @NotNull
+    @DecimalMin("1")
     private BigDecimal taxaFrete;
 
     private Boolean ativo;
@@ -53,6 +58,8 @@ public class Restaurante {
 
 
     //    @JsonIgnore
+    @Valid
+    @NotNull
     @ManyToOne
     @JsonIgnoreProperties("restaurante")
     private Cozinha cozinha;

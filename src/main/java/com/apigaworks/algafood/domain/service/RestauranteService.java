@@ -122,7 +122,7 @@ public class RestauranteService {
 //            tranformando IllegalArgumentException em  HttpMessageNotReadableException consigo tratar
 //            da mesma forma que trato outras IllegalArgumentException que tenho na api
             Throwable rootCause = ExceptionUtils.getRootCause(e);
-            throw new HttpMessageNotReadableException(e.getMessage(), e.getCause(), serverHttpRequest);
+            throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
         }
 
 //        salvar os novos valores

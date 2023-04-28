@@ -28,6 +28,7 @@ public class Restaurante {
     @NotNull
     private String nome;
 
+    @NotNull
     private BigDecimal taxaFrete;
 
     private Boolean ativo;

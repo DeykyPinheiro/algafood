@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,6 +21,8 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 //a anotacao ControllerAdvice captura as excecoes de forma global
@@ -54,9 +57,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleUncaught(Exception ex, WebRequest request) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
-        String detail = "Ocorreu um erro interno inesperado no sistema. "
-                + "Tente novamente e se o problema persistir, entre em contato "
-                + "com o administrador do sistema.";
+        String detail = "Ocorreu um erro interno inesperado no sistema. " + "Tente novamente e se o problema persistir, entre em contato " + "com o administrador do sistema.";
 
         // Importante colocar o printStackTrace (pelo menos por enquanto, que não estamos
         // fazendo logging) para mostrar a stacktrace no console
@@ -103,12 +104,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
-        String propriedade = ex.getPath().stream()
-                .map(ref -> ref.getFieldName()).collect(Collectors.joining("."));
+        String propriedade = ex.getPath().stream().map(ref -> ref.getFieldName()).collect(Collectors.joining("."));
 
         ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
-        String details = String.format("A propriedade '%s' recebeu o valor '%s' que é do tipo invalido " +
-                "passe uma propriedade do tipo '%s'", propriedade, ex.getValue(), ex.getTargetType().getSimpleName());
+        String details = String.format("A propriedade '%s' recebeu o valor '%s' que é do tipo invalido " + "passe uma propriedade do tipo '%s'", propriedade, ex.getValue(), ex.getTargetType().getSimpleName());
 
         Problem problem = createProblemBuilder(HttpStatus.valueOf(status.value()), problemType, details).build();
         return handleExceptionInternal(ex, problem, headers, status, request);
@@ -127,8 +126,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         ProblemType problemType = ProblemType.PARAMETRO_INVALIDO;
-        String details = String.format("o parametro da URL '%s' recebeu o valor '%s' que é do tipo invalido " +
-                "informe um valor compativel com o tipo '%s'", ex.getPropertyName(), ex.getValue(), ex.getRequiredType().getSimpleName());
+        String details = String.format("o parametro da URL '%s' recebeu o valor '%s' que é do tipo invalido " + "informe um valor compativel com o tipo '%s'", ex.getPropertyName(), ex.getValue(), ex.getRequiredType().getSimpleName());
         Problem problem = createProblemBuilder(HttpStatus.valueOf(status.value()), problemType, details).build();
 
         return handleExceptionInternal(ex, problem, headers, status, request);
@@ -173,8 +171,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         ProblemType problemType = ProblemType.RECURSO_NAO_ENCONTRADO;
-        String detail = String.format("O recurso %s, que você tentou acessar, é inexistente.",
-                ex.getRequestURL());
+        String detail = String.format("O recurso %s, que você tentou acessar, é inexistente.", ex.getRequestURL());
 
         Problem problem = createProblemBuilder(HttpStatus.valueOf(status.value()), problemType, detail).build();
 
@@ -186,9 +183,21 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 //        nao vou especilizar esse metodo pq na hierarquia de 'MethodArgumentNotValidException'
 //        caso precise futuramente eu altero aqui
+
+
+//        armazenas as constraint de violacao
+        BindingResult bindingResult = ex.getBindingResult();
+        List<Problem.field> fieldList = bindingResult.getFieldErrors().stream()
+                .map(fieldError -> Problem.field.builder()
+                        .name(fieldError.getField())
+                        .userMessage(fieldError.getDefaultMessage())
+                        .build())
+                .collect(Collectors.toList());
+
+
         ProblemType problemType = ProblemType.DADOS_INVALIDOS;
         String details = String.format("um ou mais campos esta invalidos, preencha os campos corretamente", "");
-        Problem problem = createProblemBuilder(HttpStatus.valueOf(status.value()), problemType, details).build();
+        Problem problem = createProblemBuilder(HttpStatus.valueOf(status.value()), problemType, details).fieldList(fieldList).build();
 
 
         return handleExceptionInternal(ex, problem, headers, status, request);

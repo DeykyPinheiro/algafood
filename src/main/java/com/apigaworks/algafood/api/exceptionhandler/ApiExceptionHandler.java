@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -180,6 +181,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+
+//        nao vou especilizar esse metodo pq na hierarquia de 'MethodArgumentNotValidException'
+//        caso precise futuramente eu altero aqui
+        ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+        String details = String.format("um ou mais campos esta invalidos, preencha os campos corretamente", "");
+        Problem problem = createProblemBuilder(HttpStatus.valueOf(status.value()), problemType, details).build();
+
+
+        return handleExceptionInternal(ex, problem, headers, status, request);
+    }
 
     //    especializando metodo, colocando um corpo padrao para a resposta de erro ja definidas pelo spring
     //    usado no erro application/xml quando a midia nao é suportada, e em outros erros

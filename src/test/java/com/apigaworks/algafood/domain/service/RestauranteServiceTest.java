@@ -17,7 +17,7 @@ import java.util.Optional;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ActiveProfiles("test")
-public class RestaurenteServiceTest {
+public class RestauranteServiceTest {
 
     @MockBean
     private RestauranteRepository restauranteRepository;

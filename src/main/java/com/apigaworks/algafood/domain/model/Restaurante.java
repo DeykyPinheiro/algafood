@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.domain.model;
 
+import com.apigaworks.algafood.core.validation.Multiplo;
 import com.apigaworks.algafood.core.validation.TaxaFrete;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -30,9 +31,13 @@ public class Restaurante {
     @NotBlank
     private String nome;
 
+
+//    TaxaFrete foi usado apenas para exemplo
+//    @TaxaFrete
+//    Multiplo tbm nao tem necessidade
+//    vai ser apenas usado como exemplo
+    @Multiplo(numero= 5)
     @NotNull
-    @PositiveOrZero
-    @TaxaFrete
     private BigDecimal taxaFrete;
 
     private Boolean ativo;

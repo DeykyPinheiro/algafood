@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.domain.service;
 
+import com.apigaworks.algafood.core.validation.ValidacaoExcepiton;
 import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.apigaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
@@ -11,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.el.util.ReflectionUtil;
 import org.apache.ibatis.javassist.tools.reflect.Reflection;
+import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -19,6 +21,8 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -34,6 +38,9 @@ public class RestauranteService {
             = "restaurante de código %d não pode ser removido, pois está em uso";
 
     private RestauranteRepository restauranteRepository;
+
+    @Autowired
+    private SmartValidator smartValidator;
 
     @Autowired
     private CozinhaService cozinhaService;
@@ -86,7 +93,7 @@ public class RestauranteService {
 
 //        com a injetacao pelo spring de HttpServletRequest request, posso usar pra construir um
 //        ServletServerHttpRequest que é o parametro construir um HttpMessageNotReadableException
-        ServletServerHttpRequest serverHttpRequest  = new ServletServerHttpRequest(request);
+        ServletServerHttpRequest serverHttpRequest = new ServletServerHttpRequest(request);
 
         try {
 //       cria o objeto que para mapear todos os dados, e mapeia para ele ser uma
@@ -100,6 +107,7 @@ public class RestauranteService {
 
 //        mapeias os dados
             Restaurante atualizacoes = objectMapper.convertValue(dadosParcial, Restaurante.class);
+            validate(atualizacoes, "restaurante");
 
 //        copiar as atualizacoes que chegaram, sem nulo nao intencional
 //        dentro de um objeto que vai ser atualizado
@@ -118,7 +126,7 @@ public class RestauranteService {
 //            nao tem perigo de atualizar campos que nao foram enviados para null
                 ReflectionUtils.setField(field, restaurante, novoValor);
             });
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
 //            tranformando IllegalArgumentException em  HttpMessageNotReadableException consigo tratar
 //            da mesma forma que trato outras IllegalArgumentException que tenho na api
             Throwable rootCause = ExceptionUtils.getRootCause(e);
@@ -129,5 +137,16 @@ public class RestauranteService {
 //        to usando o metodo salvar pq todas as mudancas ja foram refletidas,
 //        logo nao preciso usar o metodo atualizar pq ja foram atualizadas
         return this.salvar(restaurante);
+    }
+
+    //    serve pra validar depois de recebido e tranformado o objeto
+    private void validate(Restaurante atualizacoes, String objectName) {
+
+        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(atualizacoes, objectName);
+        smartValidator.validate(atualizacoes, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            throw new ValidacaoExcepiton(bindingResult);
+        }
     }
 }

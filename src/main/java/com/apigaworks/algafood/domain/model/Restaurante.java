@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.domain.model;
 
+import com.apigaworks.algafood.core.validation.TaxaFrete;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -31,6 +32,7 @@ public class Restaurante {
 
     @NotNull
     @PositiveOrZero
+    @TaxaFrete
     private BigDecimal taxaFrete;
 
     private Boolean ativo;

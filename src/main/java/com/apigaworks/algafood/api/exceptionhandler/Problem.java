@@ -3,7 +3,6 @@ package com.apigaworks.algafood.api.exceptionhandler;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
-import org.apache.catalina.LifecycleState;
 
 import java.util.List;
 
@@ -21,11 +20,11 @@ public class Problem {
 
     private String detail;
 
-    List<field> fieldList;
+    List<Object> objectList;
 
     @Builder
     @Getter
-    static class field {
+    static class Object {
 
         String name;
 

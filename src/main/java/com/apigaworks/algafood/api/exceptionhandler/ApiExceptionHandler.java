@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,7 +25,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-//    serve para manipular a msg que chegam
+    //    serve para manipular a msg que chegam
     @Autowired
     private MessageSource messageSource;
 
@@ -194,13 +194,20 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 //        armazenas as constraint de violacao
         BindingResult bindingResult = ex.getBindingResult();
-        List<Problem.field> fieldList = bindingResult.getFieldErrors().stream()
-                .map(fieldError -> {
+        List<Problem.Object> objectList = bindingResult.getAllErrors().stream()
+                .map(objectError -> {
 
-                    String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+                    String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
 
-                    return Problem.field.builder()
-                            .name(fieldError.getField())
+//                    isso serve para passar nao só os campos com erro, mas todos o erros
+//                    a validacao abaixo é pra passar o campo
+                    String name = objectError.getObjectName();
+                    if (objectError instanceof FieldError) {
+                        name = ((FieldError) objectError).getField();
+                    }
+
+                    return Problem.Object.builder()
+                            .name(name)
                             .userMessage(message)
                             .build();
                 })
@@ -209,7 +216,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         ProblemType problemType = ProblemType.DADOS_INVALIDOS;
         String details = String.format("um ou mais campos esta invalidos, preencha os campos corretamente", "");
-        Problem problem = createProblemBuilder(HttpStatus.valueOf(status.value()), problemType, details).fieldList(fieldList).build();
+        Problem problem = createProblemBuilder(HttpStatus.valueOf(status.value()), problemType, details).objectList(objectList).build();
 
 
         return handleExceptionInternal(ex, problem, headers, status, request);

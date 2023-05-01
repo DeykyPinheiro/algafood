@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = {ValorZeroIncluiDescricaoValidator.class})
 public @interface ValorZeroIncluiDescricao {
 
-    String message() default "teste krai";
+    String message() default "{ValorZeroIncluiDescricao}";
 
     Class<?>[] groups() default {};
 

@@ -2,6 +2,7 @@ package com.apigaworks.algafood.domain.model;
 
 import com.apigaworks.algafood.core.validation.Multiplo;
 import com.apigaworks.algafood.core.validation.TaxaFrete;
+import com.apigaworks.algafood.core.validation.ValorZeroIncluiDescricao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -15,6 +16,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+@ValorZeroIncluiDescricao(valorField = "taxaFrete", descricaoField = "nome",
+        descricaoObrigatoria = "Frete Gratis")
 @Entity
 @Table
 @Getter
@@ -32,11 +35,11 @@ public class Restaurante {
     private String nome;
 
 
-//    TaxaFrete foi usado apenas para exemplo
+    //    TaxaFrete foi usado apenas para exemplo
 //    @TaxaFrete
 //    Multiplo tbm nao tem necessidade
 //    vai ser apenas usado como exemplo
-    @Multiplo(numero= 5)
+    @Multiplo(numero = 5)
     @NotNull
     private BigDecimal taxaFrete;
 

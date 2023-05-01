@@ -7,6 +7,9 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -30,6 +33,10 @@ import java.util.stream.Collectors;
 // padrao que ja trata as excepections do spring
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+
+//    serve para manipular a msg que chegam
+    @Autowired
+    private MessageSource messageSource;
 
     //    spring passa uma instancia da web request, o resto pode ser instanciar e modificado para passar a resposta
 //    dessa forma toda e qualquer excessao na hora de estourar passa por  handleExceptionInternal, inclusive as do spring
@@ -188,10 +195,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 //        armazenas as constraint de violacao
         BindingResult bindingResult = ex.getBindingResult();
         List<Problem.field> fieldList = bindingResult.getFieldErrors().stream()
-                .map(fieldError -> Problem.field.builder()
-                        .name(fieldError.getField())
-                        .userMessage(fieldError.getDefaultMessage())
-                        .build())
+                .map(fieldError -> {
+
+                    String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+
+                    return Problem.field.builder()
+                            .name(fieldError.getField())
+                            .userMessage(message)
+                            .build();
+                })
                 .collect(Collectors.toList());
 
 

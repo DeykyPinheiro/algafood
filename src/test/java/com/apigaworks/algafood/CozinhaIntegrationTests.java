@@ -1,5 +1,6 @@
 package com.apigaworks.algafood;
 
+import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.model.Cozinha;
 import com.apigaworks.algafood.domain.service.CozinhaService;
 import jakarta.validation.ConstraintViolationException;
@@ -7,6 +8,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.NoSuchElementException;
 
 @SpringBootTest
 class CozinhaIntegrationTests {
@@ -39,6 +42,28 @@ class CozinhaIntegrationTests {
                 Assertions.assertThrows(ConstraintViolationException.class, () -> {
                     cozinhaService.salvar(c);
                 });
+        Assertions.assertTrue(erroEsperado != null);
+    }
+
+    @Test
+    void deveFalhar_QuandoExcluirCozinhaEmUso() {
+
+        EntidadeEmUsoException erroEsperado =
+                Assertions.assertThrows(EntidadeEmUsoException.class, () -> {
+                    cozinhaService.remover(1L);
+                });
+
+        Assertions.assertTrue(erroEsperado != null);
+    }
+
+    @Test
+    void deveFalhar_QuandoExcluirCozinhaInexistente() {
+
+        NoSuchElementException erroEsperado =
+                Assertions.assertThrows(NoSuchElementException.class, () -> {
+                    cozinhaService.remover(100L);
+                });
+
         Assertions.assertTrue(erroEsperado != null);
     }
 

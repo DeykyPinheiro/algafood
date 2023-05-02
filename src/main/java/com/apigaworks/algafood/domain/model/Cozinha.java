@@ -32,7 +32,7 @@ public class Cozinha {
 
     @JsonIgnore
     @JsonIgnoreProperties("cozinha")
-    @OneToMany(mappedBy = "cozinha", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "cozinha")
     private List<Restaurante> restauranteList;
 
     public Cozinha(String nome) {

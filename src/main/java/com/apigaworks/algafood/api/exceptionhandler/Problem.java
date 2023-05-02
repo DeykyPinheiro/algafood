@@ -20,10 +20,10 @@ public class Problem {
 
     private String detail;
 
-    List<Object> objectList;
+    List<Object> objects;
 
-    @Builder
     @Getter
+    @Builder
     static class Object {
 
         String name;

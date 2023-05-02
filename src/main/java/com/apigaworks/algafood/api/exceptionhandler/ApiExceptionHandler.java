@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.api.exceptionhandler;
 
+import com.apigaworks.algafood.core.validation.ValidacaoExcepiton;
 import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.apigaworks.algafood.domain.exception.NegocioException;
@@ -164,6 +165,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 //                .body(problema);
 //    }
 
+
     @ExceptionHandler(EntidadeEmUsoException.class)
     public ResponseEntity<?> handleEntidadeEmUsoException(EntidadeEmUsoException ex, WebRequest request) {
 
@@ -187,21 +189,54 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        return handleValidationInternal(ex, ex.getBindingResult(), headers, HttpStatus.valueOf(status.value()), request);
 
-//        nao vou especilizar esse metodo pq na hierarquia de 'MethodArgumentNotValidException'
-//        caso precise futuramente eu altero aqui
+////        nao vou especilizar esse metodo pq na hierarquia de 'MethodArgumentNotValidException'
+////        caso precise futuramente eu altero aqui
+//
+//
+////        armazenas as constraint de violacao
+//        BindingResult bindingResult = ex.getBindingResult();
+//        List<Problem.Object> objectList = bindingResult.getAllErrors().stream()
+//                .map(objectError -> {
+//
+//                    String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
+//
+////                    isso serve para passar nao só os campos com erro, mas todos o erros
+////                    a validacao abaixo é pra passar o campo
+//                    String name = objectError.getObjectName();
+//                    if (objectError instanceof FieldError) {
+//                        name = ((FieldError) objectError).getField();
+//                    }
+//
+//                    return Problem.Object.builder()
+//                            .name(name)
+//                            .userMessage(message)
+//                            .build();
+//                })
+//                .collect(Collectors.toList());
+//
+//
+//        ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+//        String details = String.format("um ou mais campos esta invalidos, preencha os campos corretamente", "");
+//        Problem problem = createProblemBuilder(HttpStatus.valueOf(status.value()), problemType, details).objectList(objectList).build();
+//
+//
+//        return handleExceptionInternal(ex, problem, headers, status, request);
+    }
 
+    private ResponseEntity<Object> handleValidationInternal(Exception ex, BindingResult bindingResult, HttpHeaders headers,
+                                                            HttpStatus status, WebRequest request) {
 
-//        armazenas as constraint de violacao
-        BindingResult bindingResult = ex.getBindingResult();
-        List<Problem.Object> objectList = bindingResult.getAllErrors().stream()
+        ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+        String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
+
+        List<Problem.Object> problemObjects = bindingResult.getAllErrors().stream()
                 .map(objectError -> {
-
                     String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
 
-//                    isso serve para passar nao só os campos com erro, mas todos o erros
-//                    a validacao abaixo é pra passar o campo
                     String name = objectError.getObjectName();
+
                     if (objectError instanceof FieldError) {
                         name = ((FieldError) objectError).getField();
                     }
@@ -214,10 +249,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .collect(Collectors.toList());
 
 
-        ProblemType problemType = ProblemType.DADOS_INVALIDOS;
-        String details = String.format("um ou mais campos esta invalidos, preencha os campos corretamente", "");
-        Problem problem = createProblemBuilder(HttpStatus.valueOf(status.value()), problemType, details).objectList(objectList).build();
-
+        Problem problem = createProblemBuilder(HttpStatus.valueOf(status.value()), problemType, detail).objects(problemObjects).build();
 
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
@@ -236,6 +268,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         }
 
         return super.handleExceptionInternal(ex, body, headers, statusCode, request);
+    }
+
+    @ExceptionHandler({ ValidacaoExcepiton.class })
+    public ResponseEntity<Object> handleValidacaoException(ValidacaoExcepiton ex, WebRequest request) {
+        return handleValidationInternal(ex, ex.getBindResult(), new HttpHeaders(),
+                HttpStatus.BAD_REQUEST, request);
     }
 
 

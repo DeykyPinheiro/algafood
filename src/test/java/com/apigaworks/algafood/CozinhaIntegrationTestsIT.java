@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.NoSuchElementException;
 
 @SpringBootTest
-class CozinhaIntegrationTests {
+class CozinhaIntegrationTestsIT {
 
     @Autowired
     private CozinhaService cozinhaService;

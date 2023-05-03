@@ -5,6 +5,10 @@ import static io.restassured.RestAssured.*;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.apache.http.client.methods.HttpTrace;
+import org.hamcrest.Matcher;
+
+import static org.hamcrest.Matchers.*;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,9 +21,9 @@ import org.springframework.http.HttpStatus;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CozinhaControllerTestIT {
 
-//    essa anotacao injeta o numero da porta que esta sendo ultiliza  na variavel
+    //    essa anotacao injeta o numero da porta que esta sendo ultiliza  na variavel
     @LocalServerPort
-    private  int port;
+    private int port;
 
     @Test
     void deveRetornar200_QuandoConsultarCozinhas() {
@@ -35,9 +39,27 @@ class CozinhaControllerTestIT {
                 .basePath("/cozinhas")
                 .port(port)
                 .accept(ContentType.JSON)
-        .when()
+                .when()
                 .get()
-        .then()
+                .then()
                 .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    void deveRetornar4Cozinhas_QuandoConsultarCozinhas() {
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+
+//        verificar se tenho 4 cozinhas
+//        verificar se tenho os item indiana e tailandesa no campo de nome
+
+        given()
+                .basePath("/cozinhas")
+                .port(port)
+                .accept(ContentType.JSON)
+                .when()
+                .get()
+                .then()
+                .body("", hasSize(4))
+                .body("nome", hasItems("Indiana", "Tailandesa"));
     }
 }

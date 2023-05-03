@@ -63,6 +63,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!--        melhorar os testes de API, pra ler e escrever os testes de uma forma mais
+        pratica-->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+        </dependency>
+
 
         <!--usei para capturar e buscar a causa raiz das exception-->
         <dependency>

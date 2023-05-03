@@ -11,6 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.NoSuchElementException;
 
+//deixei esse aqui a titulo de exemplo
+// de como pegas as excepition de um teste de integracao
+// esse inclusive foi apagado no modulo do curso
 @SpringBootTest
 class CozinhaIntegrationTestsIT {
 

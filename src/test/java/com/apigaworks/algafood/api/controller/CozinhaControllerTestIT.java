@@ -5,6 +5,7 @@ import static io.restassured.RestAssured.*;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.apache.http.client.methods.HttpTrace;
+import org.flywaydb.core.Flyway;
 import org.hamcrest.Matcher;
 
 import static org.hamcrest.Matchers.*;
@@ -26,12 +27,20 @@ class CozinhaControllerTestIT {
     @LocalServerPort
     private int port;
 
+    @Autowired
+    private Flyway flyway;
+
 
     @BeforeEach
     public void setUp() {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.port = port;
         RestAssured.basePath = "/cozinhas";
+
+//        rodo as migrations do flyway para garantir que a massa de
+//        dados para test é sempre a mesma, assim a ordem dos testes
+//        para de interferir
+        flyway.migrate();
     }
 
     @Test

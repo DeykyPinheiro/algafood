@@ -5,6 +5,7 @@ import com.apigaworks.algafood.domain.service.RestauranteService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class RestauranteController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Restaurante salvar(@RequestBody @Valid Restaurante restaurante) {
         return restauranteService.salvar(restaurante);
     }

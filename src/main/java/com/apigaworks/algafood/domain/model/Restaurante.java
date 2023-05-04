@@ -54,6 +54,12 @@ public class Restaurante {
         this.cozinha = cozinha;
     }
 
+    public Restaurante(String nome, BigDecimal taxaFrete, long cozinhaId) {
+        this.taxaFrete = taxaFrete;
+        this.nome = nome;
+        this.cozinha.setId(cozinhaId) ;
+    }
+
     @JsonIgnore
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
@@ -90,5 +96,6 @@ public class Restaurante {
     @JsonIgnore
     @OneToMany(mappedBy = "restaurante", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Pedido> listaPedidos;
+
 
 }

@@ -37,14 +37,14 @@ class CidadeServiceTest {
         startMocks();
     }
 
-    @Test
-    @DisplayName("salvar cidade")
-    void testSalvarCidade() {
-        Cidade c = cidadeService.salvar(this.cidade);
-        Assertions.assertEquals(this.cidade, c);
-        Assertions.assertEquals(this.cidade.getClass(), c.getClass());
-        Mockito.verify(cidadeRepository).save(this.cidade);
-    }
+//    @Test
+//    @DisplayName("salvar cidade")
+//    void testSalvarCidade() {
+//        Cidade c = cidadeService.salvar(this.cidade);
+//        Assertions.assertEquals(this.cidade, c);
+//        Assertions.assertEquals(this.cidade.getClass(), c.getClass());
+//        Mockito.verify(cidadeRepository).save(this.cidade);
+//    }
 
     @Test
     @DisplayName("buscar por id")

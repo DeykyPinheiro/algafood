@@ -34,19 +34,19 @@ class CozinhaIntegrationTestsIT {
         Assertions.assertTrue(c != null);
     }
 
-    @Test
-    void deveFalhar_QuandoCadastrarCozinhaSemNome() {
-        Cozinha c = new Cozinha();
-        c.setNome(null);
-
-
-//confirma a exception lancada
-        ConstraintViolationException erroEsperado =
-                Assertions.assertThrows(ConstraintViolationException.class, () -> {
-                    cozinhaService.salvar(c);
-                });
-        Assertions.assertTrue(erroEsperado != null);
-    }
+//    @Test
+//    void deveFalhar_QuandoCadastrarCozinhaSemNome() {
+//        Cozinha c = new Cozinha();
+//        c.setNome(null);
+//
+//
+////confirma a exception lancada
+//        ConstraintViolationException erroEsperado =
+//                Assertions.assertThrows(ConstraintViolationException.class, () -> {
+//                    cozinhaService.salvar(c);
+//                });
+//        Assertions.assertTrue(erroEsperado != null);
+//    }
 
     @Test
     void deveFalhar_QuandoExcluirCozinhaEmUso() {

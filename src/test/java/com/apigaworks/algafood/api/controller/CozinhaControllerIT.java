@@ -22,10 +22,10 @@ import static org.hamcrest.Matchers.*;
 //sobe um servidor aleatorio e usa a porta
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
-class CozinhaControllerTestIT {
+class CozinhaControllerIT {
 
     public static final int ID_COZINHA_NAO_EXISTENTE = 100;
-    String relativePath = "src\\test\\java\\com\\apigaworks\\algafood\\json\\correto\\cozinha-chinesa.json";
+    public static final String CAMINHO_RELATIVO = "src/test/java/com/apigaworks/algafood/json";
 
     //    essa anotacao injeta o numero da porta que esta sendo ultiliza  na variavel
     @LocalServerPort
@@ -37,8 +37,7 @@ class CozinhaControllerTestIT {
     @Autowired
     private CozinhaRepository cozinhaRepository;
 
-
-    String china = getContentFromResource(relativePath);
+    String china = getContentFromResource(CAMINHO_RELATIVO + "/correto/cozinha-chinesa.json");
 
     Cozinha cozinha1 = new Cozinha("Tailandesa");
 
@@ -164,8 +163,3 @@ class CozinhaControllerTestIT {
 //                .body("", hasSize(4))
 //                .body("nome", hasItems("Indiana", "Tailandesa"));
 //    }
-
-/**
- * -[] consulta de restaurante
- * -[] cadastro de restaurante
- * */

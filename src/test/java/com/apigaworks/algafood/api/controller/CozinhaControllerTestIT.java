@@ -16,11 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.TestPropertySource;
 
 
 //todos que estao nessa pasta serao usado como teste de API
 //sobe um servidor aleatorio e usa a porta
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource("/application-test.properties")
 class CozinhaControllerTestIT {
 
     //    essa anotacao injeta o numero da porta que esta sendo ultiliza  na variavel

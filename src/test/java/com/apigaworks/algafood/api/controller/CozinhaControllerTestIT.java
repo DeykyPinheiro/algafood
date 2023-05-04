@@ -81,6 +81,29 @@ class CozinhaControllerTestIT {
                 .statusCode(HttpStatus.CREATED.value());
     }
 
+    @Test
+    void deveRetornarRespostaEStatusCorretos_QuandoConsultarCozinhaExistente(){
+        given()
+                .accept(ContentType.JSON)
+                .pathParam("id",1)
+        .when()
+                .get("/{id}")
+        .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("nome", equalTo("Tailandesa"));
+    }
+
+    @Test
+    void deveRetornarRespostaEStatus404_QuandoConsultarCozinhaInexistente(){
+        given()
+                .accept(ContentType.JSON)
+                .pathParam("id",10)
+        .when()
+                .get("/{id}")
+        .then()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
 
     private void prepararDados() {
         Cozinha cozinha1 = new Cozinha();

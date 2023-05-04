@@ -2,6 +2,9 @@ package com.apigaworks.algafood.api.controller;
 
 import static io.restassured.RestAssured.*;
 
+import com.apigaworks.algafood.domain.model.Cozinha;
+import com.apigaworks.algafood.domain.repository.CozinhaRepository;
+import com.apigaworks.algafood.util.DatabaseCleaner;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.apache.http.client.methods.HttpTrace;
@@ -30,8 +33,10 @@ class CozinhaControllerTestIT {
     private int port;
 
     @Autowired
-    private Flyway flyway;
+    private DatabaseCleaner databaseCleaner;
 
+    @Autowired
+    private CozinhaRepository cozinhaRepository;
 
     @BeforeEach
     public void setUp() {
@@ -39,10 +44,8 @@ class CozinhaControllerTestIT {
         RestAssured.port = port;
         RestAssured.basePath = "/cozinhas";
 
-//        rodo as migrations do flyway para garantir que a massa de
-//        dados para test é sempre a mesma, assim a ordem dos testes
-//        para de interferir
-        flyway.migrate();
+        databaseCleaner.clearTables();
+        prepararDados();
     }
 
     @Test
@@ -56,13 +59,13 @@ class CozinhaControllerTestIT {
     }
 
     @Test
-    void deveRetornar4Cozinhas_QuandoConsultarCozinhas() {
+    void deveRetornarCozinhas_QuandoConsultarCozinhas() {
         given()
                 .accept(ContentType.JSON)
         .when()
                 .get()
         .then()
-                .body("", hasSize(4))
+                .body("", hasSize(2))
                 .body("nome", hasItems("Indiana", "Tailandesa"));
     }
 
@@ -76,6 +79,17 @@ class CozinhaControllerTestIT {
                 .post()
         .then()
                 .statusCode(HttpStatus.CREATED.value());
+    }
+
+
+    private void prepararDados() {
+        Cozinha cozinha1 = new Cozinha();
+        cozinha1.setNome("Tailandesa");
+        cozinhaRepository.save(cozinha1);
+
+        Cozinha cozinha2 = new Cozinha();
+        cozinha2.setNome("Indiana");
+        cozinhaRepository.save(cozinha2);
     }
 }
 

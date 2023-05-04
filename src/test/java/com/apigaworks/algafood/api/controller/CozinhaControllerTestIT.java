@@ -54,6 +54,18 @@ class CozinhaControllerTestIT {
                 .body("", hasSize(4))
                 .body("nome", hasItems("Indiana", "Tailandesa"));
     }
+
+    @Test
+    void deveRetornarStatus201_QuandoCadastrarCozinha(){
+        given()
+                .body("{\"nome\":\"chinesa\"}")
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+        .when()
+                .post()
+        .then()
+                .statusCode(HttpStatus.CREATED.value());
+    }
 }
 
 //  MESMAS CLASSES DE CIMA ESCRITA DE UMA OUTRA FORMA, UM POUCO MAIS SIMPLES

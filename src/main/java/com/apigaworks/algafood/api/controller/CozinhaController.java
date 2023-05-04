@@ -3,6 +3,7 @@ package com.apigaworks.algafood.api.controller;
 import com.apigaworks.algafood.domain.model.Cozinha;
 import com.apigaworks.algafood.domain.service.CozinhaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class CozinhaController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Cozinha salvar(@RequestBody Cozinha cozinha) {
         return cozinhaService.salvar(cozinha);
     }

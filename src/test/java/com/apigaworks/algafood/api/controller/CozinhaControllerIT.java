@@ -1,23 +1,10 @@
 package com.apigaworks.algafood.api.controller;
 
-import static io.restassured.RestAssured.*;
-
 import com.apigaworks.algafood.domain.model.Cozinha;
 import com.apigaworks.algafood.domain.repository.CozinhaRepository;
 import com.apigaworks.algafood.util.DatabaseCleaner;
-
-import static com.apigaworks.algafood.util.ResourceUtils.*;
-
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.apache.http.client.methods.HttpTrace;
-import org.aspectj.weaver.ast.Var;
-import org.flywaydb.core.Flyway;
-import org.hamcrest.Matcher;
-
-import static org.hamcrest.Matchers.*;
-
-import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +13,9 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 
-import java.io.IOException;
+import static com.apigaworks.algafood.util.ResourceUtils.getContentFromResource;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
 
 
 //todos que estao nessa pasta serao usado como teste de API
@@ -175,3 +164,8 @@ class CozinhaControllerTestIT {
 //                .body("", hasSize(4))
 //                .body("nome", hasItems("Indiana", "Tailandesa"));
 //    }
+
+/**
+ * -[] consulta de restaurante
+ * -[] cadastro de restaurante
+ * */

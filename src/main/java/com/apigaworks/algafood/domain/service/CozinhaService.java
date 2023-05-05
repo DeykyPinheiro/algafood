@@ -5,6 +5,7 @@ import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.apigaworks.algafood.domain.model.Cozinha;
 import com.apigaworks.algafood.domain.repository.CozinhaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -39,10 +40,15 @@ public class CozinhaService {
         return cozinhaRepository.findById(id).get();
     }
 
+    @Transactional
     public void remover(Long id) {
         try {
             Cozinha c = cozinhaRepository.findById(id).get();
             cozinhaRepository.delete(c);
+
+//            isso garante que o jpa vai descarregar todas as mundacas pendentes
+//            no banco de dados, e aqui ele ja lanca a exception
+            cozinhaRepository.flush();
         } catch (EmptyResultDataAccessException e) {
             throw new CozinhaNaoEncontradaException(id);
         } catch (DataIntegrityViolationException e) {

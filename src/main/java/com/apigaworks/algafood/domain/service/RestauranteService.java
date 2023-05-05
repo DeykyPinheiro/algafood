@@ -9,6 +9,7 @@ import com.apigaworks.algafood.domain.repository.RestauranteRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.el.util.ReflectionUtil;
 import org.apache.ibatis.javassist.tools.reflect.Reflection;
@@ -50,6 +51,10 @@ public class RestauranteService {
         this.restauranteRepository = restauranteRepository;
     }
 
+//  a antoacao ficar assim pq se tiver erro em algumas das transacoes
+//  o banco automaticamente faz hold back dai o banco nao apresenta incositencia,
+//  sempre bom por em qualquer metodo que faz alguma transacao no banco de dados
+    @Transactional
     public Restaurante buscar(Long id) {
         return restauranteRepository.findById(id).get();
     }

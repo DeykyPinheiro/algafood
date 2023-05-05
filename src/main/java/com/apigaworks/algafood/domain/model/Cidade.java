@@ -21,7 +21,7 @@ public class Cidade {
     private String nome;
 
     @ManyToOne
-    @JsonIgnoreProperties("cidade")
+    @JsonIgnoreProperties(value = {"cidade", "nome"}, allowGetters = true)
     private Estado estado;
 
     public Cidade(String nome, Estado estado) {

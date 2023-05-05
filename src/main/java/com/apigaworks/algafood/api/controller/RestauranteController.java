@@ -1,6 +1,6 @@
 package com.apigaworks.algafood.api.controller;
 
-import com.apigaworks.algafood.domain.dto.RestauranteDTO;
+import com.apigaworks.algafood.domain.dto.restaurante.RestauranteDTO;
 import com.apigaworks.algafood.domain.model.Restaurante;
 import com.apigaworks.algafood.domain.service.RestauranteService;
 import jakarta.servlet.http.HttpServletRequest;

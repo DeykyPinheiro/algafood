@@ -3,11 +3,10 @@ package com.apigaworks.algafood.domain.model;
 import com.apigaworks.algafood.core.validation.Multiplo;
 import com.apigaworks.algafood.core.validation.TaxaFrete;
 import com.apigaworks.algafood.core.validation.ValorZeroIncluiDescricao;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -60,12 +59,12 @@ public class Restaurante {
         this.cozinha.setId(cozinhaId) ;
     }
 
-    @JsonIgnore
+
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
     private Date dataCadastro;
 
-    @JsonIgnore
+
     @UpdateTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
     private Date dataAtualizacao;
@@ -74,13 +73,13 @@ public class Restaurante {
 //    isso serve pra ignorar o nome que vem da origem restaraunte
 //    na serializacao, na desserializacao, ele mostra, ou seja
 //    nao ignora
-    @JsonIgnoreProperties(value = "nome", allowGetters = true)
+//    @JsonIgnoreProperties(value = "nome", allowGetters = true)
     @Valid
     @NotNull
     @ManyToOne
     private Cozinha cozinha;
 
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "restaurante_forma_pagamento",
             joinColumns = {@JoinColumn(name = "restaurante_id")},
@@ -88,14 +87,14 @@ public class Restaurante {
     private List<FormaPagamento> formasPagamento;
 
     @Embedded
-    @JsonIgnore
+//    @JsonIgnore
     private Endereco endereco;
 
-    @JsonIgnore
+//    @JsonIgnore
     @OneToMany(mappedBy = "restaurante", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Produto> produtos;
 
-    @JsonIgnore
+//    @JsonIgnore
     @OneToMany(mappedBy = "restaurante", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Pedido> listaPedidos;
 

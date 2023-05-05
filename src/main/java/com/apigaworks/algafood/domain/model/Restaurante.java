@@ -71,11 +71,13 @@ public class Restaurante {
     private Date dataAtualizacao;
 
 
-    //    @JsonIgnore
+//    isso serve pra ignorar o nome que vem da origem restaraunte
+//    na serializacao, na desserializacao, ele mostra, ou seja
+//    nao ignora
+    @JsonIgnoreProperties(value = "nome", allowGetters = true)
     @Valid
     @NotNull
     @ManyToOne
-    @JsonIgnoreProperties("restaurante")
     private Cozinha cozinha;
 
     @JsonIgnore

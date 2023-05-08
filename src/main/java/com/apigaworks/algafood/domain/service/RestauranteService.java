@@ -91,6 +91,18 @@ public class RestauranteService {
         return this.salvar(restauranteASerAtualizado);
     }
 
+    @Transactional
+    public void ativar(Long id){
+        Restaurante r = buscarOuFalhar(id);
+        r.ativar();
+    }
+
+    @Transactional
+    public void desativar(Long id){
+        Restaurante r = buscarOuFalhar(id);
+        r.desativar();
+    }
+
 
     public Restaurante atualizarParcial(Long id, Map<String, Object> dadosParcial, HttpServletRequest request) {
 //        busquei o restaurante que vou atualizar

@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 
-public record RestauranteDTO(Long id, String nome, BigDecimal taxaFrete, CozinhaDTO cozinha) {
+public record RestauranteDTO(Long id, String nome, BigDecimal taxaFrete, CozinhaDTO cozinha, Boolean ativo) {
 
 
     public RestauranteDTO(Restaurante data) {
-        this(data.getId(), data.getNome(), data.getTaxaFrete(), new CozinhaDTO(data.getCozinha()));
+        this(data.getId(), data.getNome(), data.getTaxaFrete(), new CozinhaDTO(data.getCozinha()), data.getAtivo());
     }
 }

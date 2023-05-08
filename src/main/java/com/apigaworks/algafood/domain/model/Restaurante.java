@@ -43,7 +43,7 @@ public class Restaurante {
     @NotNull
     private BigDecimal taxaFrete;
 
-    private Boolean ativo;
+    private Boolean ativo = Boolean.TRUE;
 
     private Boolean aberto;
 
@@ -57,6 +57,14 @@ public class Restaurante {
         this.taxaFrete = taxaFrete;
         this.nome = nome;
         this.cozinha.setId(cozinhaId) ;
+    }
+
+    public void ativar(){
+        setAtivo(true);
+    }
+
+    public void desativar(){
+        setAtivo(false);
     }
 
 

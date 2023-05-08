@@ -48,4 +48,16 @@ public class RestauranteController {
     public Restaurante atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> restaurante, HttpServletRequest request) {
         return restauranteService.atualizarParcial(id, restaurante, request);
     }
+
+    @PutMapping("/{id}/ativar")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void ativar(@PathVariable long id) {
+        restauranteService.ativar(id);
+    }
+
+    @DeleteMapping("/{id}/ativar")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void desativar(@PathVariable long id) {
+        restauranteService.desativar(id);
+    }
 }

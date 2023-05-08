@@ -1,13 +1,18 @@
 package com.apigaworks.algafood.domain.model;
 
+import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoDTO;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
-@Data
 @Table
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class FormaPagamento {
 
     @Id
@@ -19,7 +24,14 @@ public class FormaPagamento {
     @ManyToMany(mappedBy = "formasPagamento")
     private List<Restaurante> listaRestaurantes;
 
-    @OneToMany
+    @OneToMany(mappedBy = "formaPagamento")
     private List<Pedido> listaPedidos;
 
+    public FormaPagamento(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public FormaPagamento(FormaPagamentoDTO formaPagamento) {
+        this.descricao = formaPagamento.descricao();
+    }
 }

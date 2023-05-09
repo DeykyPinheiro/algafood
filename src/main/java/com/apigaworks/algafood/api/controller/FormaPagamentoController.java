@@ -1,7 +1,6 @@
 package com.apigaworks.algafood.api.controller;
 
-import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoDTO;
-import com.apigaworks.algafood.domain.model.FormaPagamento;
+import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoDto;
 import com.apigaworks.algafood.domain.service.FormaPagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,18 +17,18 @@ public class FormaPagamentoController {
     private FormaPagamentoService formaPagamentoService;
 
     @GetMapping
-    public List<FormaPagamentoDTO> listar(){
+    public List<FormaPagamentoDto> listar(){
         return formaPagamentoService.listar();
     }
 
     @GetMapping("/{id}")
-    public FormaPagamentoDTO buscar(@PathVariable  Long id){
+    public FormaPagamentoDto buscar(@PathVariable  Long id){
         return formaPagamentoService.buscarOuFalhar(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public FormaPagamentoDTO salvar(@RequestBody FormaPagamentoDTO formaPagamento){
+    public FormaPagamentoDto salvar(@RequestBody FormaPagamentoDto formaPagamento){
         return formaPagamentoService.salvar(formaPagamento);
     }
 

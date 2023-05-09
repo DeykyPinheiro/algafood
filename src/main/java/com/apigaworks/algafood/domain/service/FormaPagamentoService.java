@@ -1,6 +1,6 @@
 package com.apigaworks.algafood.domain.service;
 
-import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoDTO;
+import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoDto;
 import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.exception.FormaPagamentoNaoEncontradaException;
 import com.apigaworks.algafood.domain.model.FormaPagamento;
@@ -31,23 +31,23 @@ public class FormaPagamentoService {
     }
 //     personRepository.findAll().stream().map(ListPersonDto::new).collect(Collectors.toList());
 
-    public List<FormaPagamentoDTO> listar() {
-        List<FormaPagamentoDTO> listaFormaPagamentos = formaPagamentoRepository.findAll()
-                .stream().map(FormaPagamentoDTO::new).collect(Collectors.toList());
+    public List<FormaPagamentoDto> listar() {
+        List<FormaPagamentoDto> listaFormaPagamentos = formaPagamentoRepository.findAll()
+                .stream().map(FormaPagamentoDto::new).collect(Collectors.toList());
         return listaFormaPagamentos;
     }
 
     //    deveria retornar um FormaPagamentoDTO mas, é didatico
 //    ja sei como fazer e nao quero perder tempo
-    public FormaPagamentoDTO buscarOuFalhar(Long id) {
+    public FormaPagamentoDto buscarOuFalhar(Long id) {
         FormaPagamento formaPagamento = formaPagamentoRepository.findById(id)
                 .orElseThrow(() -> new FormaPagamentoNaoEncontradaException(id));
 
-        return new FormaPagamentoDTO(formaPagamento);
+        return new FormaPagamentoDto(formaPagamento);
     }
 
-    public FormaPagamentoDTO salvar(FormaPagamentoDTO formaPagamento) {
-        formaPagamento = new FormaPagamentoDTO(formaPagamentoRepository.save(new FormaPagamento(formaPagamento)));
+    public FormaPagamentoDto salvar(FormaPagamentoDto formaPagamento) {
+        formaPagamento = new FormaPagamentoDto(formaPagamentoRepository.save(new FormaPagamento(formaPagamento)));
         return formaPagamento;
     }
 

@@ -1,6 +1,6 @@
 package com.apigaworks.algafood.api.controller;
 
-import com.apigaworks.algafood.domain.dto.restaurante.RestauranteDTO;
+import com.apigaworks.algafood.domain.dto.restaurante.RestauranteDto;
 import com.apigaworks.algafood.domain.model.Restaurante;
 import com.apigaworks.algafood.domain.service.RestauranteService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,11 +25,11 @@ public class RestauranteController {
     }
 
     @GetMapping("/{id}")
-    public RestauranteDTO buscar(@PathVariable Long id) {
+    public RestauranteDto buscar(@PathVariable Long id) {
 //        o recomenaddo é fazer dentro da classe de servico, eu to fazendo aqui pq vou ter que
 //        mudar muitas coisa em um projeto didatico, nao vale a pena
         Restaurante r = restauranteService.buscarOuFalhar(id);
-        return new RestauranteDTO(r);
+        return new RestauranteDto(r);
     }
 
     @PostMapping

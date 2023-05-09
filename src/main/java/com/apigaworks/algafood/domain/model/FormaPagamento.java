@@ -1,6 +1,6 @@
 package com.apigaworks.algafood.domain.model;
 
-import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoDTO;
+import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,7 +31,7 @@ public class FormaPagamento {
         this.descricao = descricao;
     }
 
-    public FormaPagamento(FormaPagamentoDTO formaPagamento) {
+    public FormaPagamento(FormaPagamentoDto formaPagamento) {
         this.descricao = formaPagamento.descricao();
     }
 }

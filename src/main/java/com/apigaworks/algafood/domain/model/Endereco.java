@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.domain.model;
 
+import com.apigaworks.algafood.domain.dto.endereco.EndecoUpdateDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
@@ -24,4 +25,15 @@ public class Endereco {
     @JoinColumn(name = "endereco_cidade_id")
     private Cidade cidade;
 
+    public Endereco(EndecoUpdateDto endereco) {
+        this.cep = endereco.cep();
+        this.logradouro = endereco.logradouro();
+        this.numero = endereco.numero();
+        this.complemento = endereco.complemento();
+        this.bairro = endereco.bairro();
+        this.cidade = new Cidade(endereco.cidade());
+    }
+
+    public Endereco() {
+    }
 }

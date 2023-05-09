@@ -1,16 +1,41 @@
 package com.apigaworks.algafood.domain.dto.restaurante;
 
-import com.apigaworks.algafood.domain.dto.cozinha.CozinhaDTO;
+import com.apigaworks.algafood.domain.dto.cozinha.CozinhaDto;
+import com.apigaworks.algafood.domain.dto.cozinha.CozinhaUpdateDto;
 import com.apigaworks.algafood.domain.dto.endereco.EnderecoDto;
-import com.apigaworks.algafood.domain.model.Endereco;
 import com.apigaworks.algafood.domain.model.Restaurante;
 
 import java.math.BigDecimal;
 
-public record RestauranteDto(Long id, String nome, BigDecimal taxaFrete, CozinhaDTO cozinha, Boolean ativo, EnderecoDto endereco) {
+public record RestauranteDto(
+
+        Long id,
+
+        String nome,
+
+        BigDecimal taxaFrete,
+
+        CozinhaDto cozinha,
+
+        Boolean ativo,
+
+        EnderecoDto endereco) {
 
 
-    public RestauranteDto(Restaurante data) {
-        this(data.getId(), data.getNome(), data.getTaxaFrete(), new CozinhaDTO(data.getCozinha()), data.getAtivo(), new EnderecoDto(data.getEndereco()));
+    public RestauranteDto(Restaurante restaurante) {
+
+        this(
+                restaurante.getId(),
+                restaurante.getNome(),
+                restaurante.getTaxaFrete(),
+                restaurante.getCozinha() != null ? new CozinhaDto(restaurante.getCozinha()): null,
+                restaurante.getAtivo(),
+                restaurante.getEndereco() != null ? new EnderecoDto(restaurante.getEndereco()) : null
+        );
+
+
     }
+
 }
+
+

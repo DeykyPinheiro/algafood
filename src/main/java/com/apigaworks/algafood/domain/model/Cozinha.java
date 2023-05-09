@@ -1,6 +1,7 @@
 package com.apigaworks.algafood.domain.model;
 
 
+import com.apigaworks.algafood.domain.dto.cozinha.CozinhaUpdateDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -44,4 +45,10 @@ public class Cozinha {
         this.id = id;
         this.nome = nome;
     }
+
+    public Cozinha(CozinhaUpdateDto cozinha) {
+        this.id = cozinha.id();
+    }
+
+
 }

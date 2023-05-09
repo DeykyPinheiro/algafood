@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.domain.model;
 
+import com.apigaworks.algafood.domain.dto.cidade.CidadeUpdateDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,5 +28,9 @@ public class Cidade {
     public Cidade(String nome, Estado estado) {
         this.nome = nome;
         this.estado = estado;
+    }
+
+    public Cidade(CidadeUpdateDto cidade) {
+        this.id = cidade.id();
     }
 }

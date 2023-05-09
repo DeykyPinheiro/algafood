@@ -15,12 +15,13 @@ public record EnderecoDto(
 
         String bairro,
 
-        String nomeCidade,
+        CidadeDto cidade) {
 
-        String nomeEstado) {
+    public EnderecoDto(Endereco endereco) {
+        this(endereco.getCep(), endereco.getLogradouro(), endereco.getNumero(), endereco.getComplemento(),
+                endereco.getBairro(), new CidadeDto(endereco.getCidade()));
+    }
 
-    public EnderecoDto(Endereco data) {
-        this(data.getCep(), data.getLogradouro(), data.getNumero(), data.getComplemento(),
-                data.getBairro(), data.getCidade().getNome(), data.getCidade().getEstado().getNome());
+    public EnderecoDto {
     }
 }

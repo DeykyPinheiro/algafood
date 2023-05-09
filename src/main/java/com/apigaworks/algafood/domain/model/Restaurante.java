@@ -3,6 +3,7 @@ package com.apigaworks.algafood.domain.model;
 import com.apigaworks.algafood.core.validation.Multiplo;
 import com.apigaworks.algafood.core.validation.TaxaFrete;
 import com.apigaworks.algafood.core.validation.ValorZeroIncluiDescricao;
+import com.apigaworks.algafood.domain.dto.restaurante.RestauranteUpdateDto;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -57,6 +58,13 @@ public class Restaurante {
         this.taxaFrete = taxaFrete;
         this.nome = nome;
         this.cozinha.setId(cozinhaId) ;
+    }
+
+    public Restaurante(RestauranteUpdateDto data) {
+        this.nome = data.nome();
+        this.taxaFrete = data.taxaFrete();
+        this.cozinha = new Cozinha(data.cozinha());
+        this.endereco = new Endereco(data.endereco());
     }
 
     public void ativar(){

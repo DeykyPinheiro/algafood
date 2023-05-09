@@ -1,6 +1,7 @@
 package com.apigaworks.algafood.api.controller;
 
 import com.apigaworks.algafood.domain.dto.restaurante.RestauranteDto;
+import com.apigaworks.algafood.domain.dto.restaurante.RestauranteUpdateDto;
 import com.apigaworks.algafood.domain.model.Restaurante;
 import com.apigaworks.algafood.domain.service.RestauranteService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,13 +35,15 @@ public class RestauranteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Restaurante salvar(@RequestBody @Valid Restaurante restaurante) {
-        return restauranteService.salvar(restaurante);
+    public RestauranteDto salvar(@RequestBody @Valid Restaurante restaurante) {
+        Restaurante r = restauranteService.salvar(restaurante);
+        return new RestauranteDto(r);
     }
 
     @PutMapping("/{id}")
-    public Restaurante atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
-        return restauranteService.atualizar(id, restaurante);
+    public RestauranteDto atualizar(@PathVariable Long id, @RequestBody @Valid RestauranteUpdateDto data) {
+        var a =  new RestauranteDto(restauranteService.atualizar(id, new Restaurante(data)));
+        return a;
     }
 
     //    o argumento HttpServletRequest request, é uma especificacao do jee, o spring injeta automaticamente

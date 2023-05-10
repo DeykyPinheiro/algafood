@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.domain.model;
 
+import com.apigaworks.algafood.domain.dto.usuario.UsuarioSaveDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -32,12 +33,17 @@ public class Usuario {
 
     @ManyToMany
     @JoinTable(name = "usuario_grupo",
-    joinColumns = @JoinColumn(name = "usuario_id"),
-    inverseJoinColumns = @JoinColumn(name = "grupo_id"))
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "grupo_id"))
     private List<Grupo> listaGrupos;
 
 
     @OneToMany
     private List<Pedido> listaPedidos;
 
+    public Usuario(UsuarioSaveDto usuarioDto) {
+        this.nome = usuarioDto.nome();
+        this.email = usuarioDto.email();
+        this.senha = usuarioDto.senha();
+    }
 }

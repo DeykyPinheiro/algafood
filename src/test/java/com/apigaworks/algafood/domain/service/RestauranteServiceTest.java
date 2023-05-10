@@ -26,7 +26,7 @@ public class RestauranteServiceTest {
     private RestauranteService restaurenteService = new RestauranteService(restauranteRepository);
 
     @Autowired
-    private  CozinhaService cozinhaService;
+    private CozinhaService cozinhaService;
 
     private Restaurante restaurante;
     private Long id;
@@ -75,8 +75,8 @@ public class RestauranteServiceTest {
         this.id = 1L;
         this.restaurante = new Restaurante(id, "nome restaurante", new Cozinha(1L, "teste"));
         this.listaRestaurentes = new ArrayList<>();
-        this.listaRestaurentes.add(restaurante);
-        this.listaRestaurentes.add(restaurante);
+        this.listaRestaurentes.add(this.restaurante);
+        this.listaRestaurentes.add(this.restaurante);
     }
 
     private void startMocks() {

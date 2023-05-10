@@ -1,5 +1,7 @@
 package com.apigaworks.algafood.domain.model;
 
+import com.apigaworks.algafood.domain.dto.grupo.GrupoDto;
+import com.apigaworks.algafood.domain.dto.grupo.GrupoSaveDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,4 +31,16 @@ public class Grupo {
     @ManyToMany(mappedBy = "listaGrupos")
     private List<Usuario> listaUsuario;
 
+    public Grupo(GrupoSaveDto grupo) {
+        this.nome = grupo.nome();
+    }
+
+    public Grupo(String nome) {
+        this.nome = nome;
+    }
+
+    public Grupo(GrupoDto grupo) {
+        this.id = grupo.id();
+        this.nome = grupo.nome();
+    }
 }

@@ -4,6 +4,8 @@ import com.apigaworks.algafood.domain.dto.cidade.CidadeDto;
 import com.apigaworks.algafood.domain.dto.cidade.CidadeUpdateDto;
 import com.apigaworks.algafood.domain.model.Cidade;
 import com.apigaworks.algafood.domain.model.Endereco;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 public record EndecoUpdateDto(
 
@@ -17,6 +19,8 @@ public record EndecoUpdateDto(
 
         String bairro,
 
+        @Valid
+        @NotNull
         CidadeUpdateDto cidade) {
 
     public EndecoUpdateDto(Endereco endereco) {

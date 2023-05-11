@@ -54,11 +54,11 @@ public class RestauranteService {
 //  a antoacao ficar assim pq se tiver erro em algumas das transacoes
 //  o banco automaticamente faz hold back dai o banco nao apresenta incositencia,
 //  sempre bom por em qualquer metodo que faz alguma transacao no banco de dados
-    @Transactional
     public Restaurante buscar(Long id) {
         return restauranteRepository.findById(id).get();
     }
 
+    @Transactional
     public Restaurante salvar(Restaurante restaurante) {
         cozinhaService.buscarOuFalhar(restaurante.getCozinha().getId());
         return restauranteRepository.save(restaurante);
@@ -68,6 +68,7 @@ public class RestauranteService {
         return restauranteRepository.findAll();
     }
 
+    @Transactional
     public void remover(Long id) {
         try {
             Restaurante r = buscar(id);
@@ -85,6 +86,7 @@ public class RestauranteService {
                 .orElseThrow(() -> new RestauranteNaoEncontradoException(id));
     }
 
+    @Transactional
     public Restaurante atualizar(Long idRestaurante, Restaurante atualizacoesRestaurante) {
         Restaurante restauranteASerAtualizado = this.buscarOuFalhar(idRestaurante);
         BeanUtils.copyProperties(atualizacoesRestaurante, restauranteASerAtualizado, "id", "dataCadastro");

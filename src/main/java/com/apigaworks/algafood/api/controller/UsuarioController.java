@@ -3,6 +3,7 @@ package com.apigaworks.algafood.api.controller;
 import com.apigaworks.algafood.domain.dto.usuario.UsuarioDto;
 import com.apigaworks.algafood.domain.dto.usuario.UsuarioListDto;
 import com.apigaworks.algafood.domain.dto.usuario.UsuarioSaveDto;
+import com.apigaworks.algafood.domain.dto.usuario.UsuarioUpdateDto;
 import com.apigaworks.algafood.domain.model.Usuario;
 import com.apigaworks.algafood.domain.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -39,5 +40,10 @@ public class UsuarioController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long id) {
         usuarioService.remover(id);
+    }
+
+    @PutMapping("/{id}")
+    public UsuarioDto atualizar(@PathVariable Long id, @RequestBody @Valid UsuarioUpdateDto usuario){
+        return usuarioService.atualizar(id, usuario);
     }
 }

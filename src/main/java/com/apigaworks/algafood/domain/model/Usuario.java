@@ -2,6 +2,7 @@ package com.apigaworks.algafood.domain.model;
 
 import com.apigaworks.algafood.domain.dto.usuario.UsuarioDto;
 import com.apigaworks.algafood.domain.dto.usuario.UsuarioSaveDto;
+import com.apigaworks.algafood.domain.dto.usuario.UsuarioUpdateDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -56,6 +57,16 @@ public class Usuario {
 
     public Usuario(UsuarioDto usuario) {
         this.id = usuario.id();
+        this.nome = usuario.nome();
+        this.email = usuario.email();
+    }
+
+    public Usuario(String nome, String email) {
+        this.nome = nome;
+        this.email = email;
+    }
+
+    public Usuario(UsuarioUpdateDto usuario) {
         this.nome = usuario.nome();
         this.email = usuario.email();
     }

@@ -3,12 +3,15 @@ package com.apigaworks.algafood.domain.service;
 import com.apigaworks.algafood.domain.dto.usuario.UsuarioDto;
 import com.apigaworks.algafood.domain.dto.usuario.UsuarioListDto;
 import com.apigaworks.algafood.domain.dto.usuario.UsuarioSaveDto;
+import com.apigaworks.algafood.domain.dto.usuario.UsuarioUpdateDto;
 import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.exception.GrupoNaoEncontratoException;
 import com.apigaworks.algafood.domain.exception.UsuarioNaoEncontratoException;
 import com.apigaworks.algafood.domain.model.Usuario;
 import com.apigaworks.algafood.domain.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -18,6 +21,9 @@ import java.util.List;
 
 @Service
 public class UsuarioService {
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     private static final String MSG_USUARIO_EM_USO
             = "Usuario de código %d não pode ser removido, pois está em uso";
@@ -64,5 +70,19 @@ public class UsuarioService {
             throw new EntidadeEmUsoException(
                     String.format(MSG_USUARIO_EM_USO, id));
         }
+    }
+
+    @Transactional
+    public UsuarioDto atualizar(Long id, UsuarioUpdateDto usuario) {
+//        cuidado nessas conversoes, como são representativos, podemos
+//        perder dados como data e tudo mais
+        UsuarioDto usuarioDto = buscarOuFalhar(id);
+        Usuario usuarioAtual = usuarioRepository.findById(usuarioDto.id()).get();
+        Usuario atualizacoes = new Usuario(usuario);
+
+
+//        nao seja burro krai, pelo amor de deus, obrigado modelMapper
+        modelMapper.map(atualizacoes, usuarioAtual);
+        return new UsuarioDto(usuarioAtual);
     }
 }

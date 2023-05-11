@@ -45,6 +45,10 @@ public class UsuarioControllerIT {
 
     private String jsonUsuarioEmailInvalido;
 
+    private String jsonUsuarioAtualizadoComSenha;
+
+    private String jsonUsuarioAtualizadoValido;
+
     Usuario u4 = new Usuario("u4", "email4@email.com", "12345674");
 
     private int quantidadeUsuariosCadastrados = 0;
@@ -73,6 +77,12 @@ public class UsuarioControllerIT {
 
         jsonUsuarioEmailInvalido = getContentFromResource(CAMINHO_RELATIVO +
                 "/incorreto/usuario-com-email-invalido.json");
+
+        jsonUsuarioAtualizadoComSenha = getContentFromResource(CAMINHO_RELATIVO +
+                        "/incorreto/usuario-atualizado-com-senha.json");
+
+        jsonUsuarioAtualizadoValido = getContentFromResource(CAMINHO_RELATIVO +
+                        "/correto/usuario-atualizado-valido.json");
 
         databaseCleaner.clearTables();
         prepararDados();
@@ -178,7 +188,7 @@ public class UsuarioControllerIT {
     }
 
     @Test
-    void deveRetornarStatus200_QuandoBuscarUsuarioPorId(){
+    void deveRetornarStatus200_QuandoBuscarUsuarioPorId() {
         RestAssured.given()
                 .accept(ContentType.JSON)
                 .pathParam("id", u4.getId())
@@ -189,21 +199,21 @@ public class UsuarioControllerIT {
     }
 
     @Test
-    void deveRetornarCorpoCorretoSemSenha_QuandoBuscarUsuarioPorId(){
+    void deveRetornarCorpoCorretoSemSenha_QuandoBuscarUsuarioPorId() {
         RestAssured.given()
                 .accept(ContentType.JSON)
                 .pathParam("id", u4.getId())
                 .when()
                 .get("/{id}")
                 .then()
-                .body("nome",equalTo( u4.getNome()))
-                .body("email",equalTo( u4.getEmail()))
+                .body("nome", equalTo(u4.getNome()))
+                .body("email", equalTo(u4.getEmail()))
                 .body("$", not(hasKey("senha")));
 //                serve para verificar que nao existe no body
     }
 
     @Test
-    void deveRetornarStatus404_QuandoBuscarUsuarioPorIdInexistente(){
+    void deveRetornarStatus404_QuandoBuscarUsuarioPorIdInexistente() {
         RestAssured.given()
                 .accept(ContentType.JSON)
                 .pathParam("id", ID_USUARIO_NAO_EXISTENTE)
@@ -235,6 +245,50 @@ public class UsuarioControllerIT {
                 .then()
                 .statusCode(HttpStatus.NO_CONTENT.value());
     }
+
+    @Test
+    void deveRetornarStatus200_QuandoAtualizarUsuarioValido() {
+        RestAssured.given()
+                .body(jsonUsuarioAtualizadoValido)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .pathParam("id", u4.getId())
+                .when()
+                .put("/{id}")
+                .then()
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    void deveRetornarCorpoValido_QuandoAtualizarUsuarioValido() {
+        RestAssured.given()
+                .body(jsonUsuarioAtualizadoValido)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .pathParam("id", u4.getId())
+                .when()
+                .put("/{id}")
+                .then()
+                .body("nome", equalTo("update"))
+                .body("email", equalTo("atualizado@email"))
+                .body("$", not(hasKey("senha")));
+    }
+
+    @Test
+    void deveRetornarStatus400_QuandoAtualizarUsuarioInvalido() {
+        RestAssured.given()
+                .body(jsonUsuarioAtualizadoComSenha)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .pathParam("id", u4.getId())
+                .when()
+                .put("/{id}")
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+
+
 
 
     private void prepararDados() {

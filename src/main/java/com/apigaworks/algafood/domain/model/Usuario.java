@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.domain.model;
 
+import com.apigaworks.algafood.domain.dto.usuario.UsuarioDto;
 import com.apigaworks.algafood.domain.dto.usuario.UsuarioSaveDto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,12 +39,24 @@ public class Usuario {
     private List<Grupo> listaGrupos;
 
 
-    @OneToMany
+    @OneToMany(mappedBy = "cliente")
     private List<Pedido> listaPedidos;
 
     public Usuario(UsuarioSaveDto usuarioDto) {
         this.nome = usuarioDto.nome();
         this.email = usuarioDto.email();
         this.senha = usuarioDto.senha();
+    }
+
+    public Usuario(String nome, String email, String senha) {
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+    }
+
+    public Usuario(UsuarioDto usuario) {
+        this.id = usuario.id();
+        this.nome = usuario.nome();
+        this.email = usuario.email();
     }
 }

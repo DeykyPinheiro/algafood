@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 public record UsuarioDto(
 
         Long id,
-        
+
         String nome,
 
         String email

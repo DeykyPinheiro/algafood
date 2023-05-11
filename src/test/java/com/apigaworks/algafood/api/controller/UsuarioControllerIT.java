@@ -30,6 +30,14 @@ public class UsuarioControllerIT {
 
     private String jsonUsuarioCorreto;
 
+    private String jsonUsuarioSemEmail;
+
+    private String jsonUsuarioSemNome;
+
+    private String jsonUsuarioSemSenha;
+
+    private String jsonUsuarioVazio;
+
     private int quantidadeUsuariosCadastrados = 0;
 
     @BeforeEach
@@ -42,13 +50,24 @@ public class UsuarioControllerIT {
         jsonUsuarioCorreto = getContentFromResource(CAMINHO_RELATIVO +
                 "/correto/usuario-correto.json");
 
+        jsonUsuarioSemEmail = getContentFromResource(CAMINHO_RELATIVO +
+                "/incorreto/usuario-sem-email.json");
+
+        jsonUsuarioSemNome = getContentFromResource(CAMINHO_RELATIVO +
+                "/incorreto/usuario-sem-nome.json");
+
+        jsonUsuarioSemSenha = getContentFromResource(CAMINHO_RELATIVO +
+                "/incorreto/usuario-sem-senha.json");
+
+        jsonUsuarioVazio = getContentFromResource(CAMINHO_RELATIVO +
+                "/incorreto/usuario-vazio.json");
 
         databaseCleaner.clearTables();
         prepararDados();
     }
 
     @Test
-    void deveRetornar201_QuandoCadatrarUsuario() {
+    void deveRetornar201_QuandoCadatrarUsuarioCorreto() {
         RestAssured.given()
                 .body(jsonUsuarioCorreto)
                 .contentType(ContentType.JSON)
@@ -56,11 +75,71 @@ public class UsuarioControllerIT {
                 .when()
                 .post()
                 .then()
-                .statusCode(HttpStatus.CREATED.value())
+                .statusCode(HttpStatus.CREATED.value());
+    }
+
+    @Test
+    void deveRetornarCorpoSemSenha_QuandoCadastrarUsuarioCorreto() {
+        RestAssured.given()
+                .body(jsonUsuarioCorreto)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .when()
+                .post()
+                .then()
                 .body("nome", equalTo("jose"))
                 .body("email", equalTo("email@email"))
                 .body("$", not(hasKey("senha")));
 //                serve para verificar que nao existe no body
+    }
+
+
+    @Test
+    void deveRetornarStatus400_QuandoCadatrarUsuarioSemEmail() {
+        RestAssured.given()
+                .body(jsonUsuarioSemEmail)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .when()
+                .post()
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    void deveRetornarStatus400_QuandoCadatrarUsuarioSemNome() {
+        RestAssured.given()
+                .body(jsonUsuarioSemNome)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .when()
+                .post()
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    void deveRetornarStatus400_QuandoCadatrarUsuarioSemSenha() {
+        RestAssured.given()
+                .body(jsonUsuarioSemSenha)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .when()
+                .post()
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    void deveRetornarStatus400_QuandoCadatrarUsuarioVazio() {
+        RestAssured.given()
+                .body(jsonUsuarioVazio)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .when()
+                .post()
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
 

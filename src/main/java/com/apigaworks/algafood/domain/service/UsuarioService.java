@@ -16,6 +16,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -42,6 +43,11 @@ public class UsuarioService {
 
     @Transactional
     public UsuarioDto salvar(UsuarioSaveDto usuarioDto) {
+
+        Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(usuarioDto.email());
+        if (usuarioExistente.isPresent()){
+            throw new NegocioException("Já existe um usuario com o e-mail informado");
+        }
         Usuario usuario = usuarioRepository.save(new Usuario(usuarioDto));
         return new UsuarioDto(usuario);
     }
@@ -72,11 +78,23 @@ public class UsuarioService {
 
     @Transactional
     public UsuarioDto atualizar(Long id, UsuarioUpdateDto usuario) {
+
+        Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(usuario.email());
+
+
+
 //        cuidado nessas conversoes, como são representativos, podemos
 //        perder dados como data e tudo mais
         UsuarioDto usuarioDto = buscarOuFalhar(id);
         Usuario usuarioAtual = usuarioRepository.findById(usuarioDto.id()).get();
         Usuario atualizacoes = new Usuario(usuario);
+
+
+//        isso verifica se o email existe, caso exista o usuario que eu tenho no banco e o usuario que eu estou
+//        mandando tesm que ser diferentes
+        if (usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuarioAtual)){
+            throw new NegocioException("Já existe um usuario com o e-mail informado");
+        }
 
 
 //        nao seja burro krai, pelo amor de deus, obrigado modelMapper
@@ -86,6 +104,8 @@ public class UsuarioService {
 
     @Transactional
     public void atualizarSenha(Long id, UsuarioUpdateSenhaDto usuario) {
+
+
         UsuarioDto usuarioDto = buscarOuFalhar(id);
         Usuario usuarioAtual = usuarioRepository.findById(usuarioDto.id()).get();
         Usuario atualizacoes = new Usuario(usuario);

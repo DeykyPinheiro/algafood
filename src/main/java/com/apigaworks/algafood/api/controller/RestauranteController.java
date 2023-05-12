@@ -1,5 +1,7 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoDto;
+import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoListDto;
 import com.apigaworks.algafood.domain.dto.restaurante.RestauranteDto;
 import com.apigaworks.algafood.domain.dto.restaurante.RestauranteUpdateDto;
 import com.apigaworks.algafood.domain.model.Restaurante;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -62,5 +65,20 @@ public class RestauranteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void desativar(@PathVariable long id) {
         restauranteService.desativar(id);
+    }
+
+    @GetMapping("/{id}/formaPagamento")
+    public Set<FormaPagamentoListDto> listarFormasPagamento(@PathVariable Long id){
+        return restauranteService.listarFormasPagamento(id);
+    }
+
+    @DeleteMapping("/{idRestaurante}/formaPagamento/{idFormaPagamento}")
+    public void desassociarFormaPagamento(@PathVariable Long idRestaurante, @PathVariable Long idFormaPagamento){
+        restauranteService.desassociarFormaPagamento(idRestaurante, idFormaPagamento);
+    }
+
+    @PutMapping("/{idRestaurante}/formaPagamento/{idFormaPagamento}")
+    public void associarFormaPagamento(@PathVariable Long idRestaurante, @PathVariable Long idFormaPagamento){
+        restauranteService.associarFormaPagamento(idRestaurante, idFormaPagamento);
     }
 }

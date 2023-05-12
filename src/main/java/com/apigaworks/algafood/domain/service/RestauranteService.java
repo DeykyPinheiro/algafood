@@ -1,10 +1,14 @@
 package com.apigaworks.algafood.domain.service;
 
 import com.apigaworks.algafood.core.validation.ValidacaoExcepiton;
+import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoDto;
+import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoListDto;
 import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.apigaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
+import com.apigaworks.algafood.domain.model.FormaPagamento;
 import com.apigaworks.algafood.domain.model.Restaurante;
+import com.apigaworks.algafood.domain.repository.FormaPagamentoRepository;
 import com.apigaworks.algafood.domain.repository.RestauranteRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +32,7 @@ import org.springframework.validation.SmartValidator;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class RestauranteService {
@@ -41,17 +46,24 @@ public class RestauranteService {
     private RestauranteRepository restauranteRepository;
 
     @Autowired
+    private FormaPagamentoRepository formaPagamentoRepository;
+
+
+    @Autowired
     private SmartValidator smartValidator;
 
     @Autowired
     private CozinhaService cozinhaService;
 
     @Autowired
+    private FormaPagamentoService formaPagamentoService;
+
+    @Autowired
     public RestauranteService(RestauranteRepository restauranteRepository) {
         this.restauranteRepository = restauranteRepository;
     }
 
-//  a antoacao ficar assim pq se tiver erro em algumas das transacoes
+    //  a antoacao ficar assim pq se tiver erro em algumas das transacoes
 //  o banco automaticamente faz hold back dai o banco nao apresenta incositencia,
 //  sempre bom por em qualquer metodo que faz alguma transacao no banco de dados
     public Restaurante buscar(Long id) {
@@ -94,13 +106,13 @@ public class RestauranteService {
     }
 
     @Transactional
-    public void ativar(Long id){
+    public void ativar(Long id) {
         Restaurante r = buscarOuFalhar(id);
         r.ativar();
     }
 
     @Transactional
-    public void desativar(Long id){
+    public void desativar(Long id) {
         Restaurante r = buscarOuFalhar(id);
         r.desativar();
     }
@@ -167,5 +179,25 @@ public class RestauranteService {
         if (bindingResult.hasErrors()) {
             throw new ValidacaoExcepiton(bindingResult);
         }
+    }
+
+    public Set<FormaPagamentoListDto> listarFormasPagamento(Long id) {
+        Restaurante r = restauranteRepository.findById(buscarOuFalhar(id).getId()).get();
+        return FormaPagamentoListDto.converterLista(r.getFormasPagamento());
+    }
+
+    @Transactional
+    public void desassociarFormaPagamento(Long idRestaurante, Long idFormaPagamento) {
+        Restaurante restaurante = restauranteRepository.findById(buscarOuFalhar(idRestaurante).getId()).get();
+        FormaPagamento formaPagamento = formaPagamentoRepository.findById(formaPagamentoService.buscarOuFalhar(idFormaPagamento).id()).get();
+        restaurante.desassociarFormaPagamento(formaPagamento);
+    }
+
+
+    @Transactional
+    public void associarFormaPagamento(Long idRestaurante, Long idFormaPagamento) {
+        Restaurante restaurante = restauranteRepository.findById(buscarOuFalhar(idRestaurante).getId()).get();
+        FormaPagamento formaPagamento = formaPagamentoRepository.findById(formaPagamentoService.buscarOuFalhar(idFormaPagamento).id()).get();
+        restaurante.associarFormaPagamento(formaPagamento);
     }
 }

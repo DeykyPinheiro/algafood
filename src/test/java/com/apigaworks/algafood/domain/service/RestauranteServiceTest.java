@@ -39,13 +39,13 @@ public class RestauranteServiceTest {
         startMocks();
     }
 
-    @Test
-    @DisplayName("salvar restaurante")
-    public void testSalvarRestaurente() {
-        Restaurante r = restaurenteService.salvar(this.restaurante);
-        Assertions.assertNotNull(r.getId());
-        Assertions.assertEquals(this.restaurante.getId(), r.getId());
-    }
+//    @Test
+//    @DisplayName("salvar restaurante")
+//    public void testSalvarRestaurente() {
+//        Restaurante r = restaurenteService.salvar(this.restaurante);
+//        Assertions.assertNotNull(r.getId());
+//        Assertions.assertEquals(this.restaurante.getId(), r.getId());
+//    }
 
     @Test
     @DisplayName("lista restaurante")

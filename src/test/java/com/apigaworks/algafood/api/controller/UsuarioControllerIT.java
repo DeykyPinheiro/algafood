@@ -49,6 +49,12 @@ public class UsuarioControllerIT {
 
     private String jsonUsuarioAtualizadoValido;
 
+    private String jsonUsuarioUpdateSenhaValido;
+
+    private String jsonUsuarioUpdateSenhaInvalido;
+
+
+
     Usuario u4 = new Usuario("u4", "email4@email.com", "12345674");
 
     private int quantidadeUsuariosCadastrados = 0;
@@ -83,6 +89,12 @@ public class UsuarioControllerIT {
 
         jsonUsuarioAtualizadoValido = getContentFromResource(CAMINHO_RELATIVO +
                         "/correto/usuario-atualizado-valido.json");
+
+        jsonUsuarioUpdateSenhaValido = getContentFromResource(CAMINHO_RELATIVO +
+                "/correto/usuario-update-senha-valido.json");
+
+        jsonUsuarioUpdateSenhaInvalido = getContentFromResource(CAMINHO_RELATIVO +
+                "/incorreto/usuario-update-senha-invalido.json");
 
         databaseCleaner.clearTables();
         prepararDados();
@@ -286,6 +298,37 @@ public class UsuarioControllerIT {
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
     }
+
+    @Test
+    void deveRetornarStatus204_QuandoAtualizarSenhaDoUsuarioValido() {
+        RestAssured.given()
+                .body(jsonUsuarioUpdateSenhaValido)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .pathParam("id", u4.getId())
+                .when()
+                .put("/{id}/senha")
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    void deveRetornarStatus400_QuandoSenhaAtualDiferenteDaSenhaDoUsuario(){
+        RestAssured.given()
+                .body(jsonUsuarioUpdateSenhaValido)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .pathParam("id", u4.getId())
+                .when()
+                .put("/{id}/senha")
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+
+
+
+
 
 
 

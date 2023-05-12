@@ -1,11 +1,9 @@
 package com.apigaworks.algafood.domain.service;
 
-import com.apigaworks.algafood.domain.dto.usuario.UsuarioDto;
-import com.apigaworks.algafood.domain.dto.usuario.UsuarioListDto;
-import com.apigaworks.algafood.domain.dto.usuario.UsuarioSaveDto;
-import com.apigaworks.algafood.domain.dto.usuario.UsuarioUpdateDto;
+import com.apigaworks.algafood.domain.dto.usuario.*;
 import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.exception.GrupoNaoEncontratoException;
+import com.apigaworks.algafood.domain.exception.NegocioException;
 import com.apigaworks.algafood.domain.exception.UsuarioNaoEncontratoException;
 import com.apigaworks.algafood.domain.model.Usuario;
 import com.apigaworks.algafood.domain.repository.UsuarioRepository;
@@ -84,5 +82,19 @@ public class UsuarioService {
 //        nao seja burro krai, pelo amor de deus, obrigado modelMapper
         modelMapper.map(atualizacoes, usuarioAtual);
         return new UsuarioDto(usuarioAtual);
+    }
+
+    @Transactional
+    public void atualizarSenha(Long id, UsuarioUpdateSenhaDto usuario) {
+        UsuarioDto usuarioDto = buscarOuFalhar(id);
+        Usuario usuarioAtual = usuarioRepository.findById(usuarioDto.id()).get();
+        Usuario atualizacoes = new Usuario(usuario);
+
+
+        if (usuarioAtual.getSenha().equals(usuario.senhaAtual())) {
+            modelMapper.map(atualizacoes, usuarioAtual);
+        } else {
+            throw new NegocioException("Senha atual informada não coincide com a senha do usuário");
+        }
     }
 }

@@ -53,6 +53,7 @@ public class UsuarioControllerIT {
 
     private String jsonUsuarioUpdateSenhaInvalido;
 
+    private String jsonusuarioUpdateEmailInvalido;
 
 
     Usuario u4 = new Usuario("u4", "email4@email.com", "12345674");
@@ -85,16 +86,20 @@ public class UsuarioControllerIT {
                 "/incorreto/usuario-com-email-invalido.json");
 
         jsonUsuarioAtualizadoComSenha = getContentFromResource(CAMINHO_RELATIVO +
-                        "/incorreto/usuario-atualizado-com-senha.json");
+                "/incorreto/usuario-atualizado-com-senha.json");
 
         jsonUsuarioAtualizadoValido = getContentFromResource(CAMINHO_RELATIVO +
-                        "/correto/usuario-atualizado-valido.json");
+                "/correto/usuario-atualizado-valido.json");
 
         jsonUsuarioUpdateSenhaValido = getContentFromResource(CAMINHO_RELATIVO +
                 "/correto/usuario-update-senha-valido.json");
 
         jsonUsuarioUpdateSenhaInvalido = getContentFromResource(CAMINHO_RELATIVO +
                 "/incorreto/usuario-update-senha-invalido.json");
+
+
+        jsonusuarioUpdateEmailInvalido = getContentFromResource(CAMINHO_RELATIVO +
+                "/incorreto/usuario-update-email-invalido.json");
 
         databaseCleaner.clearTables();
         prepararDados();
@@ -272,6 +277,18 @@ public class UsuarioControllerIT {
     }
 
     @Test
+    void deveRetornarStatus400_QuandoAtualizarUsuarioComEmailInvalido() {
+        RestAssured.given()
+                .body(jsonusuarioUpdateEmailInvalido)
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON)
+                .pathParam("id", u4.getId())
+                .put("/{id}")
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
     void deveRetornarCorpoValido_QuandoAtualizarUsuarioValido() {
         RestAssured.given()
                 .body(jsonUsuarioAtualizadoValido)
@@ -287,7 +304,7 @@ public class UsuarioControllerIT {
     }
 
     @Test
-    void deveRetornarStatus400_QuandoAtualizarUsuarioInvalido() {
+    void deveRetornarStatus400_QuandoAtualizarUsuarioComSenha() {
         RestAssured.given()
                 .body(jsonUsuarioAtualizadoComSenha)
                 .contentType(ContentType.JSON)
@@ -313,7 +330,7 @@ public class UsuarioControllerIT {
     }
 
     @Test
-    void deveRetornarStatus400_QuandoSenhaAtualDiferenteDaSenhaDoUsuario(){
+    void deveRetornarStatus400_QuandoSenhaAtualDiferenteDaSenhaDoUsuario() {
         RestAssured.given()
                 .body(jsonUsuarioUpdateSenhaValido)
                 .contentType(ContentType.JSON)
@@ -324,14 +341,6 @@ public class UsuarioControllerIT {
                 .then()
                 .statusCode(HttpStatus.NO_CONTENT.value());
     }
-
-
-
-
-
-
-
-
 
 
     private void prepararDados() {

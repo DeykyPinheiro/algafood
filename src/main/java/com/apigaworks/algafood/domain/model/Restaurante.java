@@ -14,7 +14,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @ValorZeroIncluiDescricao(valorField = "taxaFrete", descricaoField = "nome",
@@ -81,11 +80,11 @@ public class Restaurante {
 
     //    @JsonIgnore
     @OneToMany(mappedBy = "restaurante", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Produto> produtos;
+    private Set<Produto> listaProdutos;
 
     //    @JsonIgnore
     @OneToMany(mappedBy = "restaurante", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Pedido> listaPedidos;
+    private Set<Pedido> listaPedidos;
 
 
     public Restaurante(Long id, String nome, Cozinha cozinha) {
@@ -121,6 +120,14 @@ public class Restaurante {
 
     public void desassociarFormaPagamento(FormaPagamento formaPagamento){
         this.getFormasPagamento().remove(formaPagamento);
+    }
+
+    public void adicionarProduto(Produto produto){
+        this.getListaProdutos().add(produto);
+    }
+
+    public void removerProduto(Produto produto){
+        this.getListaProdutos().remove(produto);
     }
 
 }

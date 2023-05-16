@@ -45,7 +45,7 @@ public class RestauranteController {
 
     @PutMapping("/{id}")
     public RestauranteDto atualizar(@PathVariable Long id, @RequestBody @Valid RestauranteUpdateDto data) {
-        var a =  new RestauranteDto(restauranteService.atualizar(id, new Restaurante(data)));
+        var a = new RestauranteDto(restauranteService.atualizar(id, new Restaurante(data)));
         return a;
     }
 
@@ -68,17 +68,29 @@ public class RestauranteController {
     }
 
     @GetMapping("/{id}/formaPagamento")
-    public Set<FormaPagamentoListDto> listarFormasPagamento(@PathVariable Long id){
+    public Set<FormaPagamentoListDto> listarFormasPagamento(@PathVariable Long id) {
         return restauranteService.listarFormasPagamento(id);
     }
 
     @DeleteMapping("/{idRestaurante}/formaPagamento/{idFormaPagamento}")
-    public void desassociarFormaPagamento(@PathVariable Long idRestaurante, @PathVariable Long idFormaPagamento){
+    public void desassociarFormaPagamento(@PathVariable Long idRestaurante, @PathVariable Long idFormaPagamento) {
         restauranteService.desassociarFormaPagamento(idRestaurante, idFormaPagamento);
     }
 
     @PutMapping("/{idRestaurante}/formaPagamento/{idFormaPagamento}")
-    public void associarFormaPagamento(@PathVariable Long idRestaurante, @PathVariable Long idFormaPagamento){
+    public void associarFormaPagamento(@PathVariable Long idRestaurante, @PathVariable Long idFormaPagamento) {
         restauranteService.associarFormaPagamento(idRestaurante, idFormaPagamento);
     }
+
+    @PutMapping("/{idRestaurante}/abertura")
+    public void abrirRestaurante(@PathVariable Long idRestaurante) {
+        restauranteService.abrirRestaurante(idRestaurante);
+    }
+
+    @DeleteMapping("/{idRestaurante}/fechamento")
+    public void fecharRestaurante(@PathVariable Long idRestaurante) {
+        restauranteService.fecharRestaurante(idRestaurante);
+    }
+
+
 }

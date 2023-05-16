@@ -5,7 +5,7 @@ import com.apigaworks.algafood.domain.model.Restaurante;
 import com.apigaworks.algafood.domain.repository.CozinhaRepository;
 import com.apigaworks.algafood.domain.repository.RestauranteRepository;
 import com.apigaworks.algafood.util.DatabaseCleaner;
-import  io.restassured.RestAssured;
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,6 +43,7 @@ public class RestauranteControllerIT {
     private String jsonRestauranteSemFrete;
     private String jsonRestauranteSemCozinha;
     private String jsonRestauranteComCozinhaInexistente;
+    Restaurante comidaMineiraRestaurante = new Restaurante();
 
     private Restaurante burgerTopRestaurante;
 
@@ -56,13 +57,13 @@ public class RestauranteControllerIT {
                 "/correto/restaurante-new-york-barbecue.json");
 
         jsonRestauranteSemFrete = getContentFromResource(
-                CAMINHO_RELATIVO +"/incorreto/restaurante-new-york-barbecue-sem-frete.json");
+                CAMINHO_RELATIVO + "/incorreto/restaurante-new-york-barbecue-sem-frete.json");
 
         jsonRestauranteSemCozinha = getContentFromResource(
                 CAMINHO_RELATIVO + "/incorreto/restaurante-new-york-barbecue-sem-cozinha.json");
 
         jsonRestauranteComCozinhaInexistente = getContentFromResource(
-                CAMINHO_RELATIVO +"/incorreto/restaurante-new-york-barbecue-com-cozinha-inexistente.json");
+                CAMINHO_RELATIVO + "/incorreto/restaurante-new-york-barbecue-com-cozinha-inexistente.json");
 
         databaseCleaner.clearTables();
         prepararDados();
@@ -92,10 +93,27 @@ public class RestauranteControllerIT {
                 .statusCode(HttpStatus.CREATED.value());
     }
 
+    @Test
+    void deveRetornarStatus204_QuandoAbrirRestaurante() {
+        RestAssured.given()
+                .accept(ContentType.JSON)
+                .when()
+                .pathParam("id", comidaMineiraRestaurante.getId())
+                .put("/{id}/abertura")
+                .then()
+                .statusCode(HttpStatus.OK.value());
+    }
 
-
-
-
+    @Test
+    void deveRetornarStatus204_QuandoFecharRestaurante() {
+        RestAssured.given()
+                .accept(ContentType.JSON)
+                .when()
+                .pathParam("id", comidaMineiraRestaurante.getId())
+                .delete("/{id}/fechamento")
+                .then()
+                .statusCode(HttpStatus.OK.value());
+    }
 
     private void prepararDados() {
 
@@ -113,13 +131,12 @@ public class RestauranteControllerIT {
         burgerTopRestaurante.setCozinha(cozinhaAmericana);
         restauranteRepository.save(burgerTopRestaurante);
 
-        Restaurante comidaMineiraRestaurante = new Restaurante();
+//        Restaurante comidaMineiraRestaurante = new Restaurante();
         comidaMineiraRestaurante.setNome("Comida Mineira");
         comidaMineiraRestaurante.setTaxaFrete(new BigDecimal(10));
         comidaMineiraRestaurante.setCozinha(cozinhaBrasileira);
         restauranteRepository.save(comidaMineiraRestaurante);
     }
-
 
 
 }

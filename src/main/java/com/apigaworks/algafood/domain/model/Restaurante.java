@@ -130,4 +130,11 @@ public class Restaurante {
         this.getListaProdutos().remove(produto);
     }
 
+    public void abrirRestaurante() {
+        setAtivo(true);
+    }
+
+    public void fecharRestaurante(){
+        setAtivo(false);
+    }
 }

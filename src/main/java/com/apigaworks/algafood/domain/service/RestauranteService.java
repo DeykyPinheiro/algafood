@@ -1,10 +1,8 @@
 package com.apigaworks.algafood.domain.service;
 
 import com.apigaworks.algafood.core.validation.ValidacaoExcepiton;
-import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoDto;
 import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoListDto;
 import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
-import com.apigaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.apigaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.apigaworks.algafood.domain.model.FormaPagamento;
 import com.apigaworks.algafood.domain.model.Restaurante;
@@ -15,9 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.el.util.ReflectionUtil;
-import org.apache.ibatis.javassist.tools.reflect.Reflection;
-import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -200,4 +195,17 @@ public class RestauranteService {
         FormaPagamento formaPagamento = formaPagamentoRepository.findById(formaPagamentoService.buscarOuFalhar(idFormaPagamento).id()).get();
         restaurante.associarFormaPagamento(formaPagamento);
     }
+
+    @Transactional
+    public void abrirRestaurante(Long idRestaurante){
+        Restaurante restaurante = restauranteRepository.findById(buscarOuFalhar(idRestaurante).getId()).get();
+        restaurante.abrirRestaurante();
+    }
+
+    @Transactional
+    public void fecharRestaurante(Long idRestaurante){
+        Restaurante restaurante = restauranteRepository.findById(buscarOuFalhar(idRestaurante).getId()).get();
+        restaurante.fecharRestaurante();
+    }
+
 }

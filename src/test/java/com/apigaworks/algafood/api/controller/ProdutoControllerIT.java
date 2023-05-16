@@ -166,6 +166,32 @@ public class ProdutoControllerIT {
                 .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
+    @Test
+    void deveRetornarProdutoValido_QuandoPesquisarProdutoPorRestaurante(){
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .pathParam("idRestaurante", restaurantePreCadastrado.getId())
+                .pathParam("idProduto", p1.getId())
+                .when()
+                .get("/{idRestaurante}/produtos/{idProduto}")
+                .then()
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    void deveLancarRetornarStatus404_QuandoPesquisarProdutoPorRestauranteInexistente(){
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .pathParam("idRestaurante", ID_PRODUTO_NAO_EXISTENTE)
+                .pathParam("idProduto", p1.getId())
+                .when()
+                .get("/{idRestaurante}/produtos/{idProduto}")
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+
+
     private void prepararDados() {
 
 //        criacao de restaurante

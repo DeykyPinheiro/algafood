@@ -43,6 +43,11 @@ public class ProdutoController {
         produtoService.remover(idRestaurante, idProduto);
     }
 
+    @GetMapping("/{idProduto}")
+    public ProdutoDto buscarProdutoPorId(@PathVariable Long idRestaurante, @PathVariable Long idProduto){
+        return produtoService.buscarProdutoPorIdPorRestaurante(idRestaurante, idProduto);
+    }
+
 
 
 }

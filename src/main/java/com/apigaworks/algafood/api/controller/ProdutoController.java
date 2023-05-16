@@ -43,6 +43,7 @@ public class ProdutoController {
         produtoService.remover(idRestaurante, idProduto);
     }
 
+//    consulta mais diferente, pq tenho que relacionar produto e restaurante
     @GetMapping("/{idProduto}")
     public ProdutoDto buscarProdutoPorId(@PathVariable Long idRestaurante, @PathVariable Long idProduto){
         return produtoService.buscarProdutoPorIdPorRestaurante(idRestaurante, idProduto);

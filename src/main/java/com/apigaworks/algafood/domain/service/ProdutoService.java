@@ -83,9 +83,13 @@ public class ProdutoService {
 
     public ProdutoDto buscarProdutoPorIdPorRestaurante(Long idRestaurante, Long idProduto) {
 
+//        verifico se os dois id existem, tanto produto, quando restaurante
+
             restauranteService.buscarOuFalhar(idRestaurante);
             this.buscarProdutoPorId(idRestaurante, idProduto);
 
+//            caso existam, eu vou usar uma funcao que eu mesmo implemento por meio de uma
+//            interface, clica em cima que vai pra ela
             Produto produto = produtoRespository.buscarProdutoPorIdPorRestaurante(idRestaurante, idProduto)
                     .orElseThrow(() -> new ProdutoNaoEncontratoException(idRestaurante, idProduto));
 

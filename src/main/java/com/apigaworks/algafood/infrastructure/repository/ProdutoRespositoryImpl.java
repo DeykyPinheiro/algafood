@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+//implmentacao de CustomProdutoRespository, para injetar no repository
+// a funcao que eu preciso
 @Repository
 public class ProdutoRespositoryImpl implements CustomProdutoRespository {
 

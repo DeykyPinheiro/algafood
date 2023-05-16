@@ -131,10 +131,10 @@ public class Restaurante {
     }
 
     public void abrirRestaurante() {
-        setAtivo(true);
+        setAberto(true);
     }
 
     public void fecharRestaurante(){
-        setAtivo(false);
+        setAberto(false);
     }
 }

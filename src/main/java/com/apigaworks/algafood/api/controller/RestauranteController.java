@@ -83,11 +83,13 @@ public class RestauranteController {
     }
 
     @PutMapping("/{idRestaurante}/abertura")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void abrirRestaurante(@PathVariable Long idRestaurante) {
         restauranteService.abrirRestaurante(idRestaurante);
     }
 
     @DeleteMapping("/{idRestaurante}/fechamento")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void fecharRestaurante(@PathVariable Long idRestaurante) {
         restauranteService.fecharRestaurante(idRestaurante);
     }

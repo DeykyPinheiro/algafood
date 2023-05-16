@@ -101,7 +101,7 @@ public class RestauranteControllerIT {
                 .pathParam("id", comidaMineiraRestaurante.getId())
                 .put("/{id}/abertura")
                 .then()
-                .statusCode(HttpStatus.OK.value());
+                .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
     @Test
@@ -112,7 +112,7 @@ public class RestauranteControllerIT {
                 .pathParam("id", comidaMineiraRestaurante.getId())
                 .delete("/{id}/fechamento")
                 .then()
-                .statusCode(HttpStatus.OK.value());
+                .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
     private void prepararDados() {

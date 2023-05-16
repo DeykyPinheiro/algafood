@@ -18,6 +18,7 @@ public record RestauranteDto(
         CozinhaDto cozinha,
 
         Boolean ativo,
+        Boolean aberto,
 
         EnderecoDto endereco) {
 
@@ -30,7 +31,9 @@ public record RestauranteDto(
                 restaurante.getTaxaFrete(),
                 restaurante.getCozinha() != null ? new CozinhaDto(restaurante.getCozinha()): null,
                 restaurante.getAtivo(),
+                restaurante.getAberto(),
                 restaurante.getEndereco() != null ? new EnderecoDto(restaurante.getEndereco()) : null
+
         );
 
 

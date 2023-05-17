@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table
@@ -22,11 +23,11 @@ public class Grupo {
 
     private String nome;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "grupo_permissao",
             joinColumns = @JoinColumn(name = "grupo_id"),
             inverseJoinColumns = @JoinColumn(name = "permissao_id"))
-    private List<Permissao> listaPermissao;
+    private Set<Permissao> listaPermissao;
 
     @ManyToMany(mappedBy = "listaGrupos")
     private List<Usuario> listaUsuario;
@@ -40,11 +41,11 @@ public class Grupo {
     }
 
     public void associarPermissao(Permissao permissao){
-        this.listaPermissao.add(permissao);
+        this.getListaPermissao().add(permissao);
     }
 
     public void desassociarPermissao(Permissao permissao){
-        this.listaPermissao.remove(permissao);
+        this.getListaPermissao().remove(permissao);
     }
 
     public Grupo(GrupoDto grupo) {

@@ -46,16 +46,26 @@ public class GrupoController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(@ PathVariable Long id){
-         grupoService.remover(id);
+    public void remover(@PathVariable Long id) {
+        grupoService.remover(id);
     }
 
     @GetMapping("/{grupoId}/permissoes")
-    public List<PermissaoListDto> listaPermissoesPorGrupo(@PathVariable Long grupoId){
+    public List<PermissaoListDto> listaPermissoesPorGrupo(@PathVariable Long grupoId) {
         return grupoService.listaPermissoesPorGrupo(grupoId);
     }
 
+    @PutMapping("/{grupoId}/permissoes/{permissaoId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void associarPermissao(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
+        grupoService.associarPermissao(grupoId, permissaoId);
+    }
 
+    @DeleteMapping("/{grupoId}/permissoes/{permissaoId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void desassociarPermissao(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
+        grupoService.desassociarPermissao(grupoId, permissaoId);
+    }
 
 
 }

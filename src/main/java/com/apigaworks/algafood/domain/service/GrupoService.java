@@ -28,6 +28,12 @@ public class GrupoService {
 
     private GrupoRepository grupoRepository;
 
+    @Autowired
+    private  PermissaoRepository permissaoRepository;
+
+    @Autowired
+    private  PermissaoService permissaoService;
+
 //    @Autowired
 //    private Permissa
 
@@ -83,10 +89,18 @@ public class GrupoService {
         return PermissaoListDto.converterLista(grupo.getListaPermissao());
     }
 
-//    @Transactional
-//    public void associarPermissao(Long grupoId, Long permissaoId) {
-//        Grupo grupo = grupoRepository.findById(buscarOuFalhar(grupoId).id()).get();
-//        Permissao permissao =
-//    }
+    @Transactional
+    public void associarPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = grupoRepository.findById(buscarOuFalhar(grupoId).id()).get();
+        Permissao permissao = permissaoRepository.findById(permissaoService.buscarOuFalhar(permissaoId).id()).get();
+        grupo.associarPermissao(permissao);
+    }
 
+
+    @Transactional
+    public void desassociarPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = grupoRepository.findById(buscarOuFalhar(grupoId).id()).get();
+        Permissao permissao = permissaoRepository.findById(permissaoService.buscarOuFalhar(permissaoId).id()).get();
+        grupo.desassociarPermissao(permissao);
+    }
 }

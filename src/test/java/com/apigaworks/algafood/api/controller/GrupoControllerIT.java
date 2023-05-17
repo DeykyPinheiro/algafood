@@ -50,6 +50,8 @@ public class GrupoControllerIT {
 
     private Grupo g1 = new Grupo("Gerente");
 
+    private Permissao permissao1 = new Permissao("Professor", "é o professor");
+
     private int quantidadeGrupoCadastrados = 0;
 
     @BeforeEach
@@ -188,6 +190,30 @@ public class GrupoControllerIT {
                 .statusCode(HttpStatus.OK.value());
     }
 
+    @Test
+    void deveRetornarStatus200_QuandoAssociarGrupoComPermissao(){
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .pathParam("grupoId", g1.getId())
+                .pathParam("permissaoId", permissao1.getId())
+                .when()
+                .put("/{grupoId}/permissoes/{permissaoId}")
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    void deveRetornarStatus200_QuandoDesassociarGrupoComPermissao(){
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .pathParam("grupoId", g1.getId())
+                .pathParam("permissaoId", permissao1.getId())
+                .when()
+                .delete("/{grupoId}/permissoes/{permissaoId}")
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
 
     private void prepararDados() {
 
@@ -195,16 +221,16 @@ public class GrupoControllerIT {
         Grupo g3 = new Grupo("Secretária");
         Grupo g4 = new Grupo("Cadastrador");
 
-        Permissao permissao1 = new Permissao("Professor", "é o professor");
+//        Permissao permissao1 = new Permissao("Professor", "é o professor");
         Permissao permissao2 = new Permissao("teste", "é um teste");
         permissao1 = permissaoRepository.save(permissao1);
         permissao2 = permissaoRepository.save(permissao2);
 
 
-        grupoRepository.save(g1);
-        grupoRepository.save(g2);
-        grupoRepository.save(g3);
-        grupoRepository.save(g4);
+        g1 = grupoRepository.save(g1);
+        g2 = grupoRepository.save(g2);
+        g3 = grupoRepository.save(g3);
+        g4 = grupoRepository.save(g4);
 //        grupoService.associarPermissao(permissao);
 
         quantidadeGrupoCadastrados = (int) grupoRepository.count();

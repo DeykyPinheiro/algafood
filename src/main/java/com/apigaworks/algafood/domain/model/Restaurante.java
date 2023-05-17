@@ -46,7 +46,8 @@ public class Restaurante {
 
     private Boolean ativo = Boolean.TRUE;
 
-    private Boolean aberto;
+//    isso Boolean.TRUE faz com que o padrao seja true, sem precisar incluir nos teste
+    private Boolean aberto = Boolean.TRUE;
 
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")

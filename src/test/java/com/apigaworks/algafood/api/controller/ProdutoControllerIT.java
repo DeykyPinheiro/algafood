@@ -202,6 +202,7 @@ public class ProdutoControllerIT {
         comidaMineiraRestaurante.setNome("Comida Mineira");
         comidaMineiraRestaurante.setTaxaFrete(new BigDecimal(10));
         comidaMineiraRestaurante.setCozinha(cozinhaBrasileira);
+        comidaMineiraRestaurante.setAberto(true);
         restaurantePreCadastrado = restauranteRepository.save(comidaMineiraRestaurante);
 
 

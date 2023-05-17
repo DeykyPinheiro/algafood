@@ -129,12 +129,14 @@ public class RestauranteControllerIT {
         burgerTopRestaurante.setNome("Burger Top");
         burgerTopRestaurante.setTaxaFrete(new BigDecimal(10));
         burgerTopRestaurante.setCozinha(cozinhaAmericana);
+        burgerTopRestaurante.setAberto(true);
         restauranteRepository.save(burgerTopRestaurante);
 
 //        Restaurante comidaMineiraRestaurante = new Restaurante();
         comidaMineiraRestaurante.setNome("Comida Mineira");
         comidaMineiraRestaurante.setTaxaFrete(new BigDecimal(10));
         comidaMineiraRestaurante.setCozinha(cozinhaBrasileira);
+        comidaMineiraRestaurante.setAberto(true);
         restauranteRepository.save(comidaMineiraRestaurante);
     }
 

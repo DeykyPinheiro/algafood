@@ -4,7 +4,9 @@ import com.apigaworks.algafood.domain.dto.grupo.GrupoDto;
 import com.apigaworks.algafood.domain.dto.grupo.GrupoListDto;
 import com.apigaworks.algafood.domain.dto.grupo.GrupoSaveDto;
 import com.apigaworks.algafood.domain.dto.grupo.GrupoUpdateDto;
+import com.apigaworks.algafood.domain.dto.permissao.PermissaoListDto;
 import com.apigaworks.algafood.domain.model.Grupo;
+import com.apigaworks.algafood.domain.model.Permissao;
 import com.apigaworks.algafood.domain.service.GrupoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +49,13 @@ public class GrupoController {
     public void remover(@ PathVariable Long id){
          grupoService.remover(id);
     }
+
+    @GetMapping("/{grupoId}/permissoes")
+    public List<PermissaoListDto> listaPermissoesPorGrupo(@PathVariable Long grupoId){
+        return grupoService.listaPermissoesPorGrupo(grupoId);
+    }
+
+
 
 
 }

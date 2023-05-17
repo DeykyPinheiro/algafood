@@ -39,6 +39,14 @@ public class Grupo {
         this.nome = nome;
     }
 
+    public void associarPermissao(Permissao permissao){
+        this.listaPermissao.add(permissao);
+    }
+
+    public void desassociarPermissao(Permissao permissao){
+        this.listaPermissao.remove(permissao);
+    }
+
     public Grupo(GrupoDto grupo) {
         this.id = grupo.id();
         this.nome = grupo.nome();

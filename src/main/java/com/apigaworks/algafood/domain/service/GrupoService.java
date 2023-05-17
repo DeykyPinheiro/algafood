@@ -4,10 +4,13 @@ import com.apigaworks.algafood.domain.dto.grupo.GrupoDto;
 import com.apigaworks.algafood.domain.dto.grupo.GrupoListDto;
 import com.apigaworks.algafood.domain.dto.grupo.GrupoSaveDto;
 import com.apigaworks.algafood.domain.dto.grupo.GrupoUpdateDto;
+import com.apigaworks.algafood.domain.dto.permissao.PermissaoListDto;
 import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.exception.GrupoNaoEncontratoException;
 import com.apigaworks.algafood.domain.model.Grupo;
+import com.apigaworks.algafood.domain.model.Permissao;
 import com.apigaworks.algafood.domain.repository.GrupoRepository;
+import com.apigaworks.algafood.domain.repository.PermissaoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +26,10 @@ public class GrupoService {
     private static final String MSG_GRUPO_EM_USO
             = "Estado de código %d não pode ser removido, pois está em uso";
 
-
     private GrupoRepository grupoRepository;
+
+//    @Autowired
+//    private Permissa
 
     @Autowired
     public GrupoService(GrupoRepository grupoRepository) {
@@ -60,7 +65,6 @@ public class GrupoService {
 
     @Transactional
     public void remover(Long id) {
-
         try {
             Grupo g = new Grupo(this.buscarOuFalhar(id));
             grupoRepository.delete(g);
@@ -73,4 +77,16 @@ public class GrupoService {
                     String.format(MSG_GRUPO_EM_USO, id));
         }
     }
+
+    public List<PermissaoListDto> listaPermissoesPorGrupo(Long grupoId) {
+        Grupo grupo = grupoRepository.findById(buscarOuFalhar(grupoId).id()).get();
+        return PermissaoListDto.converterLista(grupo.getListaPermissao());
+    }
+
+//    @Transactional
+//    public void associarPermissao(Long grupoId, Long permissaoId) {
+//        Grupo grupo = grupoRepository.findById(buscarOuFalhar(grupoId).id()).get();
+//        Permissao permissao =
+//    }
+
 }

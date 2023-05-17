@@ -1,7 +1,10 @@
 package com.apigaworks.algafood.api.controller;
 
 import com.apigaworks.algafood.domain.model.Grupo;
+import com.apigaworks.algafood.domain.model.Permissao;
 import com.apigaworks.algafood.domain.repository.GrupoRepository;
+import com.apigaworks.algafood.domain.repository.PermissaoRepository;
+import com.apigaworks.algafood.domain.service.GrupoService;
 import com.apigaworks.algafood.util.DatabaseCleaner;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -34,6 +37,12 @@ public class GrupoControllerIT {
 
     @Autowired
     private GrupoRepository grupoRepository;
+
+    @Autowired
+    private GrupoService grupoService;
+
+    @Autowired
+    private PermissaoRepository permissaoRepository;
 
     private String jsonGrupoCorreto;
 
@@ -168,7 +177,16 @@ public class GrupoControllerIT {
                 .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
-
+    @Test
+    void deveRetornarStatus200_QuandoListarAssociacoesNoGrupo() {
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .pathParam("grupoId", g1.getId())
+                .when()
+                .get("/{grupoId}/permissoes")
+                .then()
+                .statusCode(HttpStatus.OK.value());
+    }
 
 
     private void prepararDados() {
@@ -176,10 +194,18 @@ public class GrupoControllerIT {
         Grupo g2 = new Grupo("Vendedor");
         Grupo g3 = new Grupo("Secretária");
         Grupo g4 = new Grupo("Cadastrador");
+
+        Permissao permissao1 = new Permissao("Professor", "é o professor");
+        Permissao permissao2 = new Permissao("teste", "é um teste");
+        permissao1 = permissaoRepository.save(permissao1);
+        permissao2 = permissaoRepository.save(permissao2);
+
+
         grupoRepository.save(g1);
         grupoRepository.save(g2);
         grupoRepository.save(g3);
         grupoRepository.save(g4);
+//        grupoService.associarPermissao(permissao);
 
         quantidadeGrupoCadastrados = (int) grupoRepository.count();
     }

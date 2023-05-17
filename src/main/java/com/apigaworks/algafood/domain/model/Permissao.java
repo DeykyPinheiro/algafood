@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.context.annotation.Primary;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table
@@ -24,5 +25,10 @@ public class Permissao {
     private String descricao;
 
     @ManyToMany(mappedBy = "listaPermissao")
-    private List<Grupo> listaGrupos;
+    private Set<Grupo> listaGrupos;
+
+    public Permissao(String nome, String descricao) {
+        this.nome = nome;
+        this.descricao = descricao;
+    }
 }

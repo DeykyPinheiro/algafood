@@ -9,7 +9,9 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table
@@ -38,7 +40,7 @@ public class Usuario {
     @JoinTable(name = "usuario_grupo",
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "grupo_id"))
-    private List<Grupo> listaGrupos;
+    private Set<Grupo> listaGrupos;
 
 
     @OneToMany(mappedBy = "cliente")
@@ -74,5 +76,13 @@ public class Usuario {
 
     public Usuario(UsuarioUpdateSenhaDto usuario) {
         this.senha = usuario.novaSenha();
+    }
+
+    public void associarGrupo(Grupo grupo) {
+        this.getListaGrupos().add(grupo);
+    }
+
+    public void desassociarGrupo(Grupo grupo) {
+        this.getListaGrupos().remove(grupo);
     }
 }

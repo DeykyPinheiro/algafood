@@ -1,7 +1,12 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.domain.dto.grupo.GrupoSaveDto;
+import com.apigaworks.algafood.domain.model.Grupo;
 import com.apigaworks.algafood.domain.model.Usuario;
+import com.apigaworks.algafood.domain.repository.GrupoRepository;
 import com.apigaworks.algafood.domain.repository.UsuarioRepository;
+import com.apigaworks.algafood.domain.service.GrupoService;
+import com.apigaworks.algafood.domain.service.UsuarioService;
 import com.apigaworks.algafood.util.DatabaseCleaner;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -23,6 +28,7 @@ public class UsuarioControllerIT {
     public static final String CAMINHO_RELATIVO = "src/test/java/com/apigaworks/algafood/json";
 
     public static final int ID_USUARIO_NAO_EXISTENTE = 100;
+    public static final int NUMERO_GRUPOS_CADASTRADO = 2;
 
     @LocalServerPort
     private int port;
@@ -32,6 +38,15 @@ public class UsuarioControllerIT {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private GrupoRepository grupoRepository;
+
+    @Autowired
+    private GrupoService grupoService;
 
     private String jsonUsuarioCorreto;
 
@@ -56,9 +71,13 @@ public class UsuarioControllerIT {
     private String jsonusuarioUpdateEmailInvalido;
 
 
-    Usuario u4 = new Usuario("u4", "email4@email.com", "12345674");
+    private Usuario u4 = new Usuario("u4", "email4@email.com", "12345674");
+
+
+    private Grupo g1 = new Grupo("grupo um");
 
     private int quantidadeUsuariosCadastrados = 0;
+
 
     @BeforeEach
     void setUp() {
@@ -342,6 +361,58 @@ public class UsuarioControllerIT {
                 .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
+    @Test
+    void deveRetornarStatus200_QuandoListarGruposDoUsuario() {
+        RestAssured.given()
+                .accept(ContentType.JSON)
+                .pathParam("userId", u4.getId())
+                .when()
+                .get("/{userId}/grupos")
+                .then()
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    void deveRetornarCorpoEStatusCorreto_QuandoListarGruposPorUsuario(){
+        RestAssured.given()
+                .accept(ContentType.JSON)
+                .pathParam("userId", u4.getId())
+                .when()
+                .get("/{userId}/grupos")
+                .then()
+                .body("", hasSize(NUMERO_GRUPOS_CADASTRADO))
+                .body("nome", hasItems("grupo dois"))
+                .body("nome", hasItems("grupo tres"));
+    }
+
+    @Test
+    void  deveRetornarStatus204_QuandoAssociarUsuarioComGrupo(){
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .pathParam("userId", u4.getId())
+                .pathParam("grupoId", g1.getId())
+                .when()
+                .put("/{userId}/grupos/{grupoId}")
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    void  deveRetornarStatus204_QuandoDesassociarUsuarioComGrupo(){
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .pathParam("userId", u4.getId())
+                .pathParam("grupoId", g1.getId())
+                .when()
+                .delete("/{userId}/grupos/{grupoId}")
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+
+
+
+
 
     private void prepararDados() {
 
@@ -349,13 +420,27 @@ public class UsuarioControllerIT {
         Usuario u2 = new Usuario("u2", "email2@email.com", "12345679");
         Usuario u3 = new Usuario("u3", "email3@email.com", "12345670");
 
+        Grupo g2 = new Grupo("grupo dois");
+        Grupo g3 = new Grupo("grupo tres");
+
+        g1 = grupoRepository.findById(grupoService.salvar(new GrupoSaveDto(g1)).id()).get();
+        g2 = grupoRepository.findById(grupoService.salvar(new GrupoSaveDto(g2)).id()).get();
+        g3 = grupoRepository.findById(grupoService.salvar(new GrupoSaveDto(g3)).id()).get();
+
+
         usuarioRepository.save(u1);
         usuarioRepository.save(u2);
         usuarioRepository.save(u3);
         usuarioRepository.save(u4);
 
+        usuarioService.associarGrupo(u4.getId(), g2.getId());
+        usuarioService.associarGrupo(u4.getId(), g3.getId());
+
+
 
         quantidadeUsuariosCadastrados = (int) usuarioRepository.count();
+
+
     }
 
 }

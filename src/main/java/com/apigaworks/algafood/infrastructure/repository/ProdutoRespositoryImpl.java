@@ -29,7 +29,7 @@ public class ProdutoRespositoryImpl implements CustomProdutoRespository {
 
 
         String queryText = query.toString();
-        System.out.println("sou query selecionada " + queryText);
+//        System.out.println("sou query selecionada " + queryText);
 
 
         try {

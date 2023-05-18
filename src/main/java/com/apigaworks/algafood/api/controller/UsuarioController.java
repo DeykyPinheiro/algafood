@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.domain.dto.grupo.GrupoListDto;
 import com.apigaworks.algafood.domain.dto.usuario.*;
 import com.apigaworks.algafood.domain.model.Usuario;
 import com.apigaworks.algafood.domain.service.UsuarioService;
@@ -48,5 +49,22 @@ public class UsuarioController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void atualizarSenha(@PathVariable Long id, @RequestBody @Valid UsuarioUpdateSenhaDto usuario){
         usuarioService.atualizarSenha(id, usuario);
+    }
+
+    @GetMapping("/{userId}/grupos")
+    public List<GrupoListDto> listarGruposPorUsuario(@PathVariable Long userId){
+        return usuarioService.listarGruposPorUsuario(userId);
+    }
+
+    @PutMapping("/{userId}/grupos/{grupoId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void associarGrupo(@PathVariable Long userId, @PathVariable Long grupoId){
+        usuarioService.associarGrupo(userId, grupoId);
+    }
+
+    @DeleteMapping("/{userId}/grupos/{grupoId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void desassociarGrupo(@PathVariable Long userId, @PathVariable Long grupoId){
+        usuarioService.desassociarGrupo(userId, grupoId);
     }
 }

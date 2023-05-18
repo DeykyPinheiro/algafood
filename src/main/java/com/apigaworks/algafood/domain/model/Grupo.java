@@ -40,6 +40,7 @@ public class Grupo {
         this.nome = nome;
     }
 
+
     public void associarPermissao(Permissao permissao){
         this.getListaPermissao().add(permissao);
     }

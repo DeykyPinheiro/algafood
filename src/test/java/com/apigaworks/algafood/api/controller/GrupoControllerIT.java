@@ -191,7 +191,7 @@ public class GrupoControllerIT {
     }
 
     @Test
-    void deveRetornarStatus200_QuandoAssociarGrupoComPermissao(){
+    void deveRetornarStatus204_QuandoAssociarGrupoComPermissao(){
         RestAssured.given()
                 .contentType(ContentType.JSON)
                 .pathParam("grupoId", g1.getId())

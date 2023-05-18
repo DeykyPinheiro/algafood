@@ -1,11 +1,14 @@
 package com.apigaworks.algafood.domain.service;
 
+import com.apigaworks.algafood.domain.dto.grupo.GrupoListDto;
 import com.apigaworks.algafood.domain.dto.usuario.*;
 import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.exception.GrupoNaoEncontratoException;
 import com.apigaworks.algafood.domain.exception.NegocioException;
 import com.apigaworks.algafood.domain.exception.UsuarioNaoEncontratoException;
+import com.apigaworks.algafood.domain.model.Grupo;
 import com.apigaworks.algafood.domain.model.Usuario;
+import com.apigaworks.algafood.domain.repository.GrupoRepository;
 import com.apigaworks.algafood.domain.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -30,6 +33,9 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
+    private GrupoRepository grupoRepository;
+
+    @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
@@ -45,7 +51,7 @@ public class UsuarioService {
     public UsuarioDto salvar(UsuarioSaveDto usuarioDto) {
 
         Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(usuarioDto.email());
-        if (usuarioExistente.isPresent()){
+        if (usuarioExistente.isPresent()) {
             throw new NegocioException("Já existe um usuario com o e-mail informado");
         }
         Usuario usuario = usuarioRepository.save(new Usuario(usuarioDto));
@@ -82,7 +88,6 @@ public class UsuarioService {
         Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(usuario.email());
 
 
-
 //        cuidado nessas conversoes, como são representativos, podemos
 //        perder dados como data e tudo mais
         UsuarioDto usuarioDto = buscarOuFalhar(id);
@@ -92,7 +97,7 @@ public class UsuarioService {
 
 //        isso verifica se o email existe, caso exista o usuario que eu tenho no banco e o usuario que eu estou
 //        mandando tesm que ser diferentes
-        if (usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuarioAtual)){
+        if (usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuarioAtual)) {
             throw new NegocioException("Já existe um usuario com o e-mail informado");
         }
 
@@ -116,5 +121,29 @@ public class UsuarioService {
         } else {
             throw new NegocioException("Senha atual informada não coincide com a senha do usuário");
         }
+    }
+
+    public List<GrupoListDto> listarGruposPorUsuario(Long userId) {
+        UsuarioDto usuarioDto = buscarOuFalhar(userId);
+        Usuario usuario = usuarioRepository.findById(usuarioDto.id()).get();
+        return GrupoListDto.converterLista(usuario.getListaGrupos());
+    }
+
+
+    @Transactional
+    public void associarGrupo(Long userId, Long grupoId) {
+        UsuarioDto usuarioDto = buscarOuFalhar(userId);
+        Usuario usuario = usuarioRepository.findById(usuarioDto.id()).get();
+        Grupo grupo = grupoRepository.findById(buscarOuFalhar(grupoId).id()).get();
+        usuario.associarGrupo(grupo);
+
+    }
+
+    @Transactional
+    public void desassociarGrupo(Long userId, Long grupoId) {
+        UsuarioDto usuarioDto = buscarOuFalhar(userId);
+        Usuario usuario = usuarioRepository.findById(usuarioDto.id()).get();
+        Grupo grupo = grupoRepository.findById(buscarOuFalhar(grupoId).id()).get();
+        usuario.desassociarGrupo(grupo);
     }
 }

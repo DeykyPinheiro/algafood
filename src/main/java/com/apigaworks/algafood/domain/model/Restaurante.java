@@ -34,6 +34,9 @@ public class Restaurante {
     @NotBlank
     private String nome;
 
+    @ManyToMany(mappedBy = "listaResraurantes")
+    private Set<Usuario> listaUsuario;
+
 
     //    TaxaFrete foi usado apenas para exemplo
 //    @TaxaFrete

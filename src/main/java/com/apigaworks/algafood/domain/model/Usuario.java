@@ -42,6 +42,12 @@ public class Usuario {
             inverseJoinColumns = @JoinColumn(name = "grupo_id"))
     private Set<Grupo> listaGrupos;
 
+    @ManyToMany
+    @JoinTable(name = "restaurante_usuario_responsavel",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "restaurante_id"))
+    private Set<Restaurante> listaResraurantes;
+
 
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> listaPedidos;

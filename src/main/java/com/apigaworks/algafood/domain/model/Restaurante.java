@@ -48,7 +48,7 @@ public class Restaurante {
 //    @TaxaFrete
 //    Multiplo tbm nao tem necessidade
 //    vai ser apenas usado como exemplo
-    @Multiplo(numero = 5)
+//    @Multiplo(numero = 5)
     @TaxaFrete
     @NotNull
     private BigDecimal taxaFrete;

@@ -66,6 +66,18 @@ public class RestauranteController {
         restauranteService.desativar(id);
     }
 
+    @PutMapping("/ativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void ativar(@RequestBody  List<Long> restaurantesIds) {
+        restauranteService.ativarMultiplos(restaurantesIds);
+    }
+
+    @DeleteMapping("/ativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void desativar(@RequestBody  List<Long> restaurantesIds) {
+        restauranteService.desativarMultiplos(restaurantesIds);
+    }
+
     @GetMapping("/{id}/formaPagamento")
     public List<FormaPagamentoListDto> listarFormasPagamento(@PathVariable Long id) {
         return restauranteService.listarFormasPagamento(id);

@@ -54,7 +54,7 @@ public class RestauranteService {
     private CozinhaService cozinhaService;
 
     @Autowired
-    private  UsuarioService usuarioService;
+    private UsuarioService usuarioService;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -206,13 +206,13 @@ public class RestauranteService {
     }
 
     @Transactional
-    public void abrirRestaurante(Long restauranteId){
+    public void abrirRestaurante(Long restauranteId) {
         Restaurante restaurante = restauranteRepository.findById(buscarOuFalhar(restauranteId).getId()).get();
         restaurante.abrirRestaurante();
     }
 
     @Transactional
-    public void fecharRestaurante(Long restauranteId){
+    public void fecharRestaurante(Long restauranteId) {
         Restaurante restaurante = restauranteRepository.findById(buscarOuFalhar(restauranteId).getId()).get();
         restaurante.fecharRestaurante();
     }
@@ -236,5 +236,15 @@ public class RestauranteService {
         Usuario usuario = usuarioRepository.findById(usuarioDto.id()).get();
         Restaurante restaurante = restauranteRepository.findById(buscarOuFalhar(restauranteId).getId()).get();
         restaurante.desassociarUsuario(usuario);
+    }
+
+    @Transactional
+    public void ativarMultiplos(List<Long> restaurantesIds) {
+        restaurantesIds.forEach(this::ativar);
+    }
+
+    @Transactional
+    public void desativarMultiplos(List<Long> restaurantesIds) {
+        restaurantesIds.forEach(id -> this.desativar(id));
     }
 }

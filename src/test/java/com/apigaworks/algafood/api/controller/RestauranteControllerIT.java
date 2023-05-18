@@ -2,8 +2,12 @@ package com.apigaworks.algafood.api.controller;
 
 import com.apigaworks.algafood.domain.model.Cozinha;
 import com.apigaworks.algafood.domain.model.Restaurante;
+import com.apigaworks.algafood.domain.model.Usuario;
 import com.apigaworks.algafood.domain.repository.CozinhaRepository;
 import com.apigaworks.algafood.domain.repository.RestauranteRepository;
+import com.apigaworks.algafood.domain.repository.UsuarioRepository;
+import com.apigaworks.algafood.domain.service.RestauranteService;
+import com.apigaworks.algafood.domain.service.UsuarioService;
 import com.apigaworks.algafood.util.DatabaseCleaner;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -39,10 +43,22 @@ public class RestauranteControllerIT {
     @Autowired
     private RestauranteRepository restauranteRepository;
 
+    @Autowired
+    private RestauranteService restauranteService;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private UsuarioService usuarioService;
+
     private String jsonRestauranteCorreto;
     private String jsonRestauranteSemFrete;
     private String jsonRestauranteSemCozinha;
     private String jsonRestauranteComCozinhaInexistente;
+
+    Usuario u1 = new Usuario("u1", "email1@email.com", "12345678");
+    Usuario u2 = new Usuario("u2", "email2@email.com", "12345679");
     Restaurante comidaMineiraRestaurante = new Restaurante();
 
     private Restaurante burgerTopRestaurante;
@@ -115,6 +131,55 @@ public class RestauranteControllerIT {
                 .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
+    @Test
+    void deveRetornarStatus200_QuandoListarUsuarioReponsaveisPeloRestaurantes() {
+        RestAssured.given()
+                .accept(ContentType.JSON)
+                .pathParam("restauranteId", comidaMineiraRestaurante.getId())
+                .when()
+                .get("/{restauranteId}/responsaveis")
+                .then()
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    void deveRetornarCorpoCorretoEStatus200_QuandoListarUsuarioReponsaveisPeloRestaurantes() {
+        RestAssured.given()
+                .accept(ContentType.JSON)
+                .pathParam("restauranteId", comidaMineiraRestaurante.getId())
+                .when()
+                .get("/{restauranteId}/responsaveis")
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("nome", hasItems(u1.getNome()))
+                .body("nome", hasItems(u2.getNome()));
+    }
+
+    @Test
+    void deveRetornarStatus204_AssociarUsuarioAoRestaurante() {
+        RestAssured.given()
+                .accept(ContentType.JSON)
+                .pathParam("restauranteId", comidaMineiraRestaurante.getId())
+                .pathParam("usuarioId", u2.getId())
+                .when()
+                .put("/{restauranteId}/responsaveis/{usuarioId}")
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    void deveRetornarStatus204_DesssociarUsuarioAoRestaurante() {
+        RestAssured.given()
+                .accept(ContentType.JSON)
+                .pathParam("restauranteId", comidaMineiraRestaurante.getId())
+                .pathParam("usuarioId", u2.getId())
+                .when()
+                .delete("/{restauranteId}/responsaveis/{usuarioId}")
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+
     private void prepararDados() {
 
         Cozinha cozinhaBrasileira = new Cozinha();
@@ -129,15 +194,20 @@ public class RestauranteControllerIT {
         burgerTopRestaurante.setNome("Burger Top");
         burgerTopRestaurante.setTaxaFrete(new BigDecimal(10));
         burgerTopRestaurante.setCozinha(cozinhaAmericana);
-        burgerTopRestaurante.setAberto(true);
         restauranteRepository.save(burgerTopRestaurante);
+
 
 //        Restaurante comidaMineiraRestaurante = new Restaurante();
         comidaMineiraRestaurante.setNome("Comida Mineira");
         comidaMineiraRestaurante.setTaxaFrete(new BigDecimal(10));
         comidaMineiraRestaurante.setCozinha(cozinhaBrasileira);
-        comidaMineiraRestaurante.setAberto(true);
-        restauranteRepository.save(comidaMineiraRestaurante);
+
+        u1 = usuarioRepository.save(u1);
+        u2 = usuarioRepository.save(u2);
+        comidaMineiraRestaurante = restauranteRepository.save(comidaMineiraRestaurante);
+
+        restauranteService.associarUsuario(comidaMineiraRestaurante.getId(), u1.getId());
+        restauranteService.associarUsuario(comidaMineiraRestaurante.getId(), u2.getId());
     }
 
 

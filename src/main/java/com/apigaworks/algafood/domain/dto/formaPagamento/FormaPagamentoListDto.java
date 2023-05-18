@@ -2,10 +2,9 @@ package com.apigaworks.algafood.domain.dto.formaPagamento;
 
 import com.apigaworks.algafood.domain.model.FormaPagamento;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.Collection;
 
 public record FormaPagamentoListDto(
         Long id,
@@ -16,7 +15,7 @@ public record FormaPagamentoListDto(
         this(formasPagamento.getId(), formasPagamento.getDescricao());
     }
 
-    public static Set<FormaPagamentoListDto> converterLista(Set<FormaPagamento> formasPagamento) {
-        return formasPagamento.stream().map(FormaPagamentoListDto::new).collect(Collectors.toSet());
+    public static List<FormaPagamentoListDto> converterLista(Collection<FormaPagamento> formasPagamento) {
+        return formasPagamento.stream().map(FormaPagamentoListDto::new).collect(Collectors.toList());
     }
 }

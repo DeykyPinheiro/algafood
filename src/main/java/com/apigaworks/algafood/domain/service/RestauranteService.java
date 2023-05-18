@@ -2,12 +2,16 @@ package com.apigaworks.algafood.domain.service;
 
 import com.apigaworks.algafood.core.validation.ValidacaoExcepiton;
 import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoListDto;
+import com.apigaworks.algafood.domain.dto.usuario.UsuarioDto;
+import com.apigaworks.algafood.domain.dto.usuario.UsuarioListDto;
 import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.apigaworks.algafood.domain.model.FormaPagamento;
 import com.apigaworks.algafood.domain.model.Restaurante;
+import com.apigaworks.algafood.domain.model.Usuario;
 import com.apigaworks.algafood.domain.repository.FormaPagamentoRepository;
 import com.apigaworks.algafood.domain.repository.RestauranteRepository;
+import com.apigaworks.algafood.domain.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +31,6 @@ import org.springframework.validation.SmartValidator;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Service
 public class RestauranteService {
@@ -49,6 +52,12 @@ public class RestauranteService {
 
     @Autowired
     private CozinhaService cozinhaService;
+
+    @Autowired
+    private  UsuarioService usuarioService;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private FormaPagamentoService formaPagamentoService;
@@ -94,8 +103,8 @@ public class RestauranteService {
     }
 
     @Transactional
-    public Restaurante atualizar(Long idRestaurante, Restaurante atualizacoesRestaurante) {
-        Restaurante restauranteASerAtualizado = this.buscarOuFalhar(idRestaurante);
+    public Restaurante atualizar(Long restauranteId, Restaurante atualizacoesRestaurante) {
+        Restaurante restauranteASerAtualizado = this.buscarOuFalhar(restauranteId);
         BeanUtils.copyProperties(atualizacoesRestaurante, restauranteASerAtualizado, "id", "dataCadastro");
         return this.salvar(restauranteASerAtualizado);
     }
@@ -176,36 +185,56 @@ public class RestauranteService {
         }
     }
 
-    public Set<FormaPagamentoListDto> listarFormasPagamento(Long id) {
+    public List<FormaPagamentoListDto> listarFormasPagamento(Long id) {
         Restaurante r = restauranteRepository.findById(buscarOuFalhar(id).getId()).get();
         return FormaPagamentoListDto.converterLista(r.getFormasPagamento());
     }
 
     @Transactional
-    public void desassociarFormaPagamento(Long idRestaurante, Long idFormaPagamento) {
-        Restaurante restaurante = restauranteRepository.findById(buscarOuFalhar(idRestaurante).getId()).get();
+    public void desassociarFormaPagamento(Long restauranteId, Long idFormaPagamento) {
+        Restaurante restaurante = restauranteRepository.findById(buscarOuFalhar(restauranteId).getId()).get();
         FormaPagamento formaPagamento = formaPagamentoRepository.findById(formaPagamentoService.buscarOuFalhar(idFormaPagamento).id()).get();
         restaurante.desassociarFormaPagamento(formaPagamento);
     }
 
 
     @Transactional
-    public void associarFormaPagamento(Long idRestaurante, Long idFormaPagamento) {
-        Restaurante restaurante = restauranteRepository.findById(buscarOuFalhar(idRestaurante).getId()).get();
+    public void associarFormaPagamento(Long restauranteId, Long idFormaPagamento) {
+        Restaurante restaurante = restauranteRepository.findById(buscarOuFalhar(restauranteId).getId()).get();
         FormaPagamento formaPagamento = formaPagamentoRepository.findById(formaPagamentoService.buscarOuFalhar(idFormaPagamento).id()).get();
         restaurante.associarFormaPagamento(formaPagamento);
     }
 
     @Transactional
-    public void abrirRestaurante(Long idRestaurante){
-        Restaurante restaurante = restauranteRepository.findById(buscarOuFalhar(idRestaurante).getId()).get();
+    public void abrirRestaurante(Long restauranteId){
+        Restaurante restaurante = restauranteRepository.findById(buscarOuFalhar(restauranteId).getId()).get();
         restaurante.abrirRestaurante();
     }
 
     @Transactional
-    public void fecharRestaurante(Long idRestaurante){
-        Restaurante restaurante = restauranteRepository.findById(buscarOuFalhar(idRestaurante).getId()).get();
+    public void fecharRestaurante(Long restauranteId){
+        Restaurante restaurante = restauranteRepository.findById(buscarOuFalhar(restauranteId).getId()).get();
         restaurante.fecharRestaurante();
     }
 
+    public List<UsuarioListDto> listarUsuarios(Long restauranteId) {
+        Restaurante restaurante = restauranteRepository.findById(buscarOuFalhar(restauranteId).getId()).get();
+        return UsuarioListDto.converterLista(restaurante.getListaUsuario());
+    }
+
+    @Transactional
+    public void associarUsuario(Long restauranteId, Long usuarioId) {
+        UsuarioDto usuarioDto = usuarioService.buscarOuFalhar(usuarioId);
+        Usuario usuario = usuarioRepository.findById(usuarioDto.id()).get();
+        Restaurante restaurante = restauranteRepository.findById(buscarOuFalhar(restauranteId).getId()).get();
+        restaurante.associarUsuario(usuario);
+    }
+
+    @Transactional
+    public void desassociarUsuario(Long restauranteId, Long usuarioId) {
+        UsuarioDto usuarioDto = usuarioService.buscarOuFalhar(usuarioId);
+        Usuario usuario = usuarioRepository.findById(usuarioDto.id()).get();
+        Restaurante restaurante = restauranteRepository.findById(buscarOuFalhar(restauranteId).getId()).get();
+        restaurante.desassociarUsuario(usuario);
+    }
 }

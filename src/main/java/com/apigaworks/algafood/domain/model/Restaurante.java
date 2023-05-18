@@ -14,6 +14,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @ValorZeroIncluiDescricao(valorField = "taxaFrete", descricaoField = "nome",
@@ -34,8 +36,12 @@ public class Restaurante {
     @NotBlank
     private String nome;
 
-    @ManyToMany(mappedBy = "listaResraurantes")
-    private Set<Usuario> listaUsuario;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "restaurante_usuario_responsavel",
+            joinColumns = @JoinColumn(name = "restaurante_id"),
+            inverseJoinColumns = @JoinColumn(name = "usuario_id"))
+    private Set<Usuario> listaUsuario = new HashSet<>();
 
 
     //    TaxaFrete foi usado apenas para exemplo
@@ -49,7 +55,7 @@ public class Restaurante {
 
     private Boolean ativo = Boolean.TRUE;
 
-//    isso Boolean.TRUE faz com que o padrao seja true, sem precisar incluir nos teste
+    //    isso Boolean.TRUE faz com que o padrao seja true, sem precisar incluir nos teste
     private Boolean aberto = Boolean.TRUE;
 
     @CreationTimestamp
@@ -118,19 +124,19 @@ public class Restaurante {
         setAtivo(false);
     }
 
-    public void associarFormaPagamento(FormaPagamento formaPagamento){
+    public void associarFormaPagamento(FormaPagamento formaPagamento) {
         this.getFormasPagamento().add(formaPagamento);
     }
 
-    public void desassociarFormaPagamento(FormaPagamento formaPagamento){
+    public void desassociarFormaPagamento(FormaPagamento formaPagamento) {
         this.getFormasPagamento().remove(formaPagamento);
     }
 
-    public void adicionarProduto(Produto produto){
+    public void adicionarProduto(Produto produto) {
         this.getListaProdutos().add(produto);
     }
 
-    public void removerProduto(Produto produto){
+    public void removerProduto(Produto produto) {
         this.getListaProdutos().remove(produto);
     }
 
@@ -138,7 +144,22 @@ public class Restaurante {
         setAberto(true);
     }
 
-    public void fecharRestaurante(){
+    public void fecharRestaurante() {
         setAberto(false);
+    }
+
+//    associacoes podem ser feitas assim, contudo, tem que ter
+//    @ManyToMany
+//      @JoinTable(name = "restaurante_usuario_responsavel",
+//      joinColumns = @JoinColumn(name = "restaurante_id"),
+//      inverseJoinColumns = @JoinColumn(name = "usuario_id"))
+//    na model que esta fazendo a associacao, nao sei o pq
+
+    public void associarUsuario(Usuario usuario) {
+        this.getListaUsuario().add(usuario);
+    }
+
+    public void desassociarUsuario(Usuario usuario) {
+        this.getListaUsuario().remove(usuario);
     }
 }

@@ -1,9 +1,9 @@
 package com.apigaworks.algafood.api.controller;
 
-import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoDto;
 import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoListDto;
 import com.apigaworks.algafood.domain.dto.restaurante.RestauranteDto;
 import com.apigaworks.algafood.domain.dto.restaurante.RestauranteUpdateDto;
+import com.apigaworks.algafood.domain.dto.usuario.UsuarioListDto;
 import com.apigaworks.algafood.domain.model.Restaurante;
 import com.apigaworks.algafood.domain.service.RestauranteService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -68,30 +67,47 @@ public class RestauranteController {
     }
 
     @GetMapping("/{id}/formaPagamento")
-    public Set<FormaPagamentoListDto> listarFormasPagamento(@PathVariable Long id) {
+    public List<FormaPagamentoListDto> listarFormasPagamento(@PathVariable Long id) {
         return restauranteService.listarFormasPagamento(id);
     }
 
-    @DeleteMapping("/{idRestaurante}/formaPagamento/{idFormaPagamento}")
-    public void desassociarFormaPagamento(@PathVariable Long idRestaurante, @PathVariable Long idFormaPagamento) {
-        restauranteService.desassociarFormaPagamento(idRestaurante, idFormaPagamento);
+    @DeleteMapping("/{restauranteId}/formaPagamento/{formaPagamentoId}")
+    public void desassociarFormaPagamento(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
+        restauranteService.desassociarFormaPagamento(restauranteId, formaPagamentoId);
     }
 
-    @PutMapping("/{idRestaurante}/formaPagamento/{idFormaPagamento}")
-    public void associarFormaPagamento(@PathVariable Long idRestaurante, @PathVariable Long idFormaPagamento) {
-        restauranteService.associarFormaPagamento(idRestaurante, idFormaPagamento);
+    @PutMapping("/{restauranteId}/formaPagamento/{formaPagamentoId}")
+    public void associarFormaPagamento(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
+        restauranteService.associarFormaPagamento(restauranteId, formaPagamentoId);
     }
 
-    @PutMapping("/{idRestaurante}/abertura")
+    @PutMapping("/{restauranteId}/abertura")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void abrirRestaurante(@PathVariable Long idRestaurante) {
-        restauranteService.abrirRestaurante(idRestaurante);
+    public void abrirRestaurante(@PathVariable Long restauranteId) {
+        restauranteService.abrirRestaurante(restauranteId);
     }
 
-    @DeleteMapping("/{idRestaurante}/fechamento")
+    @DeleteMapping("/{restauranteId}/fechamento")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void fecharRestaurante(@PathVariable Long idRestaurante) {
-        restauranteService.fecharRestaurante(idRestaurante);
+    public void fecharRestaurante(@PathVariable Long restauranteId) {
+        restauranteService.fecharRestaurante(restauranteId);
+    }
+
+    @GetMapping("/{restauranteId}/responsaveis")
+    public List<UsuarioListDto> listarUsuarios(@PathVariable Long restauranteId) {
+        return restauranteService.listarUsuarios(restauranteId);
+    }
+
+    @PutMapping("/{restauranteId}/responsaveis/{usuarioId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void associarUsuario(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
+        restauranteService.associarUsuario(restauranteId, usuarioId);
+    }
+
+    @DeleteMapping("/{restauranteId}/responsaveis/{usuarioId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void desassociarUsuario(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
+        restauranteService.desassociarUsuario(restauranteId, usuarioId);
     }
 
 

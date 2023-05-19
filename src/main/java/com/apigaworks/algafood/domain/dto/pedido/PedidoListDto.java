@@ -21,6 +21,8 @@ public record PedidoListDto(
 
         BigDecimal subtotal,
 
+        BigDecimal taxaFrete,
+
         BigDecimal valorTotal,
 
         StatusPedido statusPedido,
@@ -29,26 +31,15 @@ public record PedidoListDto(
 
         OffsetDateTime dataConfirmacao,
 
-        OffsetDateTime dataCancelamento,
-
         RestaurantePedidoDto restaurante,
 
-        UsuarioDto cliente,
-
-        FormaPagamentoDto formaPagamento,
-
-        EnderecoDto endereco,
-
-        List<ItemPedidoPedidoDto> itens
-
+        UsuarioDto cliente
 ) {
 
     public PedidoListDto(Pedido pedido) {
-        this(pedido.getId(), pedido.getSubtotal(), pedido.getValorTotal(),
-                pedido.getStatusPedido(), pedido.getDataCriacao(), pedido.getDataConfirmacao(), pedido.getDataCancelamento(),
-                new  RestaurantePedidoDto(pedido.getRestaurante()), new UsuarioDto(pedido.getCliente()),
-                new FormaPagamentoDto(pedido.getFormaPagamento()), new EnderecoDto(pedido.getEndereco()),
-                ItemPedidoPedidoDto.converterLista(pedido.getItens()));
+        this(pedido.getId(), pedido.getSubtotal(), pedido.definirFrete(),  pedido.calcularValorTotal(),
+                pedido.getStatusPedido(), pedido.getDataCriacao(), pedido.getDataConfirmacao(),
+                new  RestaurantePedidoDto(pedido.getRestaurante()), new UsuarioDto(pedido.getCliente()));
     }
 
     public static List<PedidoListDto> converterLista(Collection<Pedido> listaPedidos){

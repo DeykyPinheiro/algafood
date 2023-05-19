@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.domain.service;
 
+import com.apigaworks.algafood.domain.dto.pedido.PedidoDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoListDto;
 import com.apigaworks.algafood.domain.exception.PedidoNaoEncontratoException;
 import com.apigaworks.algafood.domain.exception.UsuarioNaoEncontratoException;
@@ -26,9 +27,9 @@ public class PedidoService {
         return PedidoListDto.converterLista(listaPedidos);
     }
 
-    public PedidoListDto buscarOuFalhar(Long pedidoId) {
+    public PedidoDto buscarOuFalhar(Long pedidoId) {
         Pedido pedido = pedidoRepository.findById(pedidoId)
                 .orElseThrow(() -> new PedidoNaoEncontratoException(pedidoId));
-        return new PedidoListDto(pedido);
+        return new PedidoDto(pedido);
     }
 }

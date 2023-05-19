@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.domain.dto.pedido.PedidoDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoListDto;
 import com.apigaworks.algafood.domain.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class PedidoController {
     }
 
     @GetMapping("/{pedidoId}")
-    public PedidoListDto buscar(@PathVariable Long pedidoId){
+    public PedidoDto buscar(@PathVariable Long pedidoId){
         return pedidoService.buscarOuFalhar(pedidoId);
     }
 }

@@ -86,4 +86,22 @@ public class Pedido {
         this.restaurante = restaurante;
         this.formaPagamento = formaPagamento;
     }
+
+    public BigDecimal definirFrete() {
+        setTaxaFrete(getRestaurante().getTaxaFrete());
+        return taxaFrete;
+    }
+
+    public void atribuirPedidoAosItens() {
+        getItens().forEach(item -> item.setPedido(this));
+    }
+
+    public BigDecimal calcularValorTotal() {
+        this.subtotal = getItens().stream()
+                .map(item -> item.getPrecoTotal())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        this.valorTotal = this.subtotal.add(this.taxaFrete);
+        return valorTotal;
+    }
 }

@@ -30,7 +30,7 @@ public class ItemPedido {
     @ManyToOne(fetch = FetchType.LAZY)
     private Produto produto;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Pedido pedido;
 
 

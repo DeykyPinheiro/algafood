@@ -9,7 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Entity
@@ -34,31 +34,32 @@ public class Pedido {
     @JsonIgnore
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
-    private Date dataCriacao;
+    private OffsetDateTime dataCriacao;
 
     @JsonIgnore
     @UpdateTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
-    private Date dataConfirmacao;
+    private OffsetDateTime dataConfirmacao;
 
     @JsonIgnore
     @UpdateTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
-    private Date dataCancelamento;
+    private OffsetDateTime dataCancelamento;
 
     @JsonIgnore
     @UpdateTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
-    private Date dataEntrega;
+    private OffsetDateTime dataEntrega;
 
 
     @OneToMany(mappedBy = "pedido")
     private List<ItemPedido> itens;
 
+    @Enumerated(EnumType.STRING) // adicionar se nao, erro de conversao
     private StatusPedido statusPedido;
 
-//    @Embedded
-//    private Endereco endereco;
+    @Embedded
+    private Endereco endereco;
 
     @ManyToOne
     @JoinColumn(name = "usuario_cliente_id")
@@ -70,4 +71,19 @@ public class Pedido {
     @ManyToOne(fetch = FetchType.LAZY)
     private FormaPagamento formaPagamento;
 
+    public Pedido(BigDecimal subtotal, BigDecimal taxaFrete, BigDecimal valorTotal, OffsetDateTime dataCriacao, OffsetDateTime dataConfirmacao, OffsetDateTime dataCancelamento, OffsetDateTime dataEntrega, List<ItemPedido> itens, StatusPedido statusPedido, Endereco endereco, Usuario cliente, Restaurante restaurante, FormaPagamento formaPagamento) {
+        this.subtotal = subtotal;
+        this.taxaFrete = taxaFrete;
+        this.valorTotal = valorTotal;
+        this.dataCriacao = dataCriacao;
+        this.dataConfirmacao = dataConfirmacao;
+        this.dataCancelamento = dataCancelamento;
+        this.dataEntrega = dataEntrega;
+        this.itens = itens;
+        this.statusPedido = statusPedido;
+        this.endereco = endereco;
+        this.cliente = cliente;
+        this.restaurante = restaurante;
+        this.formaPagamento = formaPagamento;
+    }
 }

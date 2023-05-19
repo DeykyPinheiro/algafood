@@ -18,6 +18,7 @@ public record RestauranteDto(
         CozinhaDto cozinha,
 
         Boolean ativo,
+
         Boolean aberto,
 
         EnderecoDto endereco) {

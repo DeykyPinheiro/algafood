@@ -1,8 +1,5 @@
 package com.apigaworks.algafood.api.controller;
 
-import com.apigaworks.algafood.domain.model.ItemPedido;
-import com.apigaworks.algafood.domain.model.Pedido;
-import com.apigaworks.algafood.domain.model.Produto;
 import com.apigaworks.algafood.domain.repository.PedidoRepository;
 import com.apigaworks.algafood.domain.repository.ProdutoRespository;
 import com.apigaworks.algafood.util.DatabaseCleaner;
@@ -16,14 +13,13 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.jar.JarOutputStream;
+
+import static com.apigaworks.algafood.util.ResourceUtils.getContentFromResource;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
-public class PedidoControllerIt {
+public class PedidoControllerIT {
 
     public static final String CAMINHO_RELATIVO = "src/test/java/com/apigaworks/algafood/json";
 
@@ -39,12 +35,18 @@ public class PedidoControllerIt {
     @Autowired
     private ProdutoRespository produtoRespository;
 
+    private String jsonPedidoValido;
+
 
     @BeforeEach
     void setUp() {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.port = port;
         RestAssured.basePath = "/pedidos";
+
+
+        jsonPedidoValido = getContentFromResource(CAMINHO_RELATIVO +
+                "/correto/pedido-valido.json");
 
         databaseCleaner.clearTables();
         prepararDados();
@@ -58,6 +60,18 @@ public class PedidoControllerIt {
                 .get()
                 .then()
                 .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    void deveRetornarStatus204_QuandoCadastrarUmPedidoValido(){
+        RestAssured.given()
+                .body(jsonPedidoValido)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .when()
+                .post()
+                .then()
+                .statusCode(HttpStatus.CREATED.value());
     }
 
 //

@@ -1,6 +1,8 @@
 package com.apigaworks.algafood.domain.model;
 
 
+import com.apigaworks.algafood.domain.dto.itempedido.ItemPedidoPedidoSaveDto;
+import com.apigaworks.algafood.domain.dto.pedido.PedidoSaveDto;
 import com.apigaworks.algafood.domain.enumerated.StatusPedido;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -10,6 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -71,21 +74,7 @@ public class Pedido {
     @ManyToOne(fetch = FetchType.LAZY)
     private FormaPagamento formaPagamento;
 
-    public Pedido(BigDecimal subtotal, BigDecimal taxaFrete, BigDecimal valorTotal, OffsetDateTime dataCriacao, OffsetDateTime dataConfirmacao, OffsetDateTime dataCancelamento, OffsetDateTime dataEntrega, List<ItemPedido> itens, StatusPedido statusPedido, Endereco endereco, Usuario cliente, Restaurante restaurante, FormaPagamento formaPagamento) {
-        this.subtotal = subtotal;
-        this.taxaFrete = taxaFrete;
-        this.valorTotal = valorTotal;
-        this.dataCriacao = dataCriacao;
-        this.dataConfirmacao = dataConfirmacao;
-        this.dataCancelamento = dataCancelamento;
-        this.dataEntrega = dataEntrega;
-        this.itens = itens;
-        this.statusPedido = statusPedido;
-        this.endereco = endereco;
-        this.cliente = cliente;
-        this.restaurante = restaurante;
-        this.formaPagamento = formaPagamento;
-    }
+    
 
     public BigDecimal definirFrete() {
         setTaxaFrete(getRestaurante().getTaxaFrete());
@@ -96,6 +85,11 @@ public class Pedido {
         getItens().forEach(item -> item.setPedido(this));
     }
 
+    public BigDecimal calcularSubTotal(List<ItemPedido> listaItens) {
+        return listaItens.stream().map(item -> item.getPrecoTotal())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
     public BigDecimal calcularValorTotal() {
         this.subtotal = getItens().stream()
                 .map(item -> item.getPrecoTotal())
@@ -104,4 +98,6 @@ public class Pedido {
         this.valorTotal = this.subtotal.add(this.taxaFrete);
         return valorTotal;
     }
+
+
 }

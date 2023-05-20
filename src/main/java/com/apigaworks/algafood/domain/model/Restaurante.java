@@ -162,4 +162,8 @@ public class Restaurante {
     public void desassociarUsuario(Usuario usuario) {
         this.getListaUsuario().remove(usuario);
     }
+
+    public Boolean ehFormaPagamentoAceita(FormaPagamento formaPagamento) {
+        return getFormasPagamento().contains(formaPagamento);
+    }
 }

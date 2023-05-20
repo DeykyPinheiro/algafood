@@ -1,0 +1,23 @@
+{
+  "restauranteId": 2,
+  "formaPagamentoId": 1,
+  "enderecoEntrega": {
+    "cep": "38400-000",
+    "logradouro": "rua dos tres",
+    "numero": "300",
+    "complemento": "Apto torre 13",
+    "bairro": "bairro dos testes",
+    "cidadeId": 1
+  },
+  "itens": [
+    {
+      "produtoId": 1,
+      "quantidade": 3,
+      "observacao": "sem pimenta"
+    },
+    {
+      "produtoId": 2,
+      "quantidade": 1
+    }
+  ]
+}

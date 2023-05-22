@@ -74,7 +74,13 @@ public class Pedido {
     @ManyToOne(fetch = FetchType.LAZY)
     private FormaPagamento formaPagamento;
 
-    
+    public Pedido(PedidoSaveDto pedidoDto) {
+//        TODO gambairra, mudar depois
+        this.restaurante.setId(pedidoDto.restauranteId());
+        this.formaPagamento.setId(pedidoDto.formaPagamentoId());
+        this.setEndereco(new Endereco(pedidoDto.enderecoEntrega()));
+    }
+
 
     public BigDecimal definirFrete() {
         setTaxaFrete(getRestaurante().getTaxaFrete());
@@ -98,6 +104,9 @@ public class Pedido {
         this.valorTotal = this.subtotal.add(this.taxaFrete);
         return valorTotal;
     }
+
+
+
 
 
 }

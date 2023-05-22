@@ -1,7 +1,13 @@
 package com.apigaworks.algafood.api.controller;
 
-import com.apigaworks.algafood.domain.repository.PedidoRepository;
-import com.apigaworks.algafood.domain.repository.ProdutoRespository;
+import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoDto;
+import com.apigaworks.algafood.domain.dto.produto.ProdutoDto;
+import com.apigaworks.algafood.domain.dto.produto.ProdutoSaveDto;
+import com.apigaworks.algafood.domain.dto.usuario.UsuarioDto;
+import com.apigaworks.algafood.domain.dto.usuario.UsuarioSaveDto;
+import com.apigaworks.algafood.domain.model.*;
+import com.apigaworks.algafood.domain.repository.*;
+import com.apigaworks.algafood.domain.service.*;
 import com.apigaworks.algafood.util.DatabaseCleaner;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -13,6 +19,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 
+import java.math.BigDecimal;
 import java.util.jar.JarOutputStream;
 
 import static com.apigaworks.algafood.util.ResourceUtils.getContentFromResource;
@@ -35,7 +42,51 @@ public class PedidoControllerIT {
     @Autowired
     private ProdutoRespository produtoRespository;
 
+    @Autowired
+    private ProdutoService produtoService;
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private CidadeService cidadeService;
+
+    @Autowired
+    private EstadoService estadoService;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private CozinhaRepository cozinhaRepository;
+
+    @Autowired
+    private CozinhaService cozinhaService;
+
+    @Autowired
+    private RestauranteRepository restauranteRepository;
+
+    @Autowired
+    private RestauranteService restauranteService;
+
+    @Autowired
+    private FormaPagamentoRepository formaPagamentoRepository;
+
+    @Autowired
+    private FormaPagamentoService formaPagamentoService;
+
+
+
+
     private String jsonPedidoValido;
+
+    Estado estado = new Estado("Brasiliariouuu");
+
+    FormaPagamento formaPagamento1 = new FormaPagamento("pix");
+
+    private Usuario usuario1 = new Usuario("nome1", "email1", "12345678");
+
+    private Restaurante restaurante = new Restaurante("Restaurante", new BigDecimal("10.0"));
 
 
     @BeforeEach
@@ -63,7 +114,7 @@ public class PedidoControllerIT {
     }
 
     @Test
-    void deveRetornarStatus204_QuandoCadastrarUmPedidoValido(){
+    void deveRetornarStatus204_QuandoCadastrarUmPedidoValido() {
         RestAssured.given()
                 .body(jsonPedidoValido)
                 .contentType(ContentType.JSON)
@@ -78,6 +129,41 @@ public class PedidoControllerIT {
 
 
     private void prepararDados() {
+        UsuarioSaveDto usuarioDto = new UsuarioSaveDto(usuario1);
+        Long userId = usuarioService.salvar(usuarioDto).id();
+        Usuario usuario = usuarioRepository.findById(userId).get();
+
+        FormaPagamentoDto formaPagamentoDto = new FormaPagamentoDto(formaPagamento1);
+        Long formaPagamentoId = formaPagamentoService.salvar(formaPagamentoDto).id();
+        formaPagamento1 = formaPagamentoRepository.findById(formaPagamentoId).get();
+
+
+        estado = estadoService.salvar(estado);
+        Cidade cidade = new Cidade("cidade teste", estado);
+        cidade = cidadeService.salvar(cidade);
+
+
+        Cozinha cozinhaBrasileira = new Cozinha("Brasileira");
+        cozinhaBrasileira = cozinhaService.salvar(cozinhaBrasileira);
+
+
+
+
+        restaurante.setCozinha(cozinhaBrasileira);
+        restaurante.setTaxaFrete(new BigDecimal("10.99"));
+        restaurante.associarFormaPagamento(formaPagamento1);
+
+        restaurante = restauranteService.salvar(restaurante);
+
+        Produto produto1 = new Produto("produto1", "descricao produto1", new BigDecimal("10"),true);
+        Long produtoId1 = produtoService.salvar(restaurante.getId(), new ProdutoSaveDto(produto1)).id();
+        produto1 = produtoRespository.findById(produtoId1).get();
+
+        Produto produto2 = new Produto("produto2", "descricao produto2", new BigDecimal("20"),true);
+        Long produtoId2 = produtoService.salvar(restaurante.getId(), new ProdutoSaveDto(produto2)).id();
+        produto2 = produtoRespository.findById(produtoId2).get();
+
+
 //        Produto produto1 = new Produto("produto1", "esse é o produto1", new BigDecimal("10"), true);
 //        Produto produto2 = new Produto("produto2", "esse é o produto2", new BigDecimal("20"), true);
 //        produto1 = produtoRespository.save(produto1);

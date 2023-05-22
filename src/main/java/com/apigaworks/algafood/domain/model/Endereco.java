@@ -1,6 +1,7 @@
 package com.apigaworks.algafood.domain.model;
 
 import com.apigaworks.algafood.domain.dto.endereco.EndecoUpdateDto;
+import com.apigaworks.algafood.domain.dto.endereco.EnderecoPedidoDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
@@ -35,5 +36,14 @@ public class Endereco {
     }
 
     public Endereco() {
+    }
+
+    public Endereco(EnderecoPedidoDto endereco) {
+        this.cep = endereco.cep();
+        this.logradouro = endereco.logradouro();
+        this.numero = endereco.numero();
+        this.complemento = endereco.complemento();
+        this.bairro = endereco.bairro();
+        this.cidade = new Cidade(endereco.cidadeId());
     }
 }

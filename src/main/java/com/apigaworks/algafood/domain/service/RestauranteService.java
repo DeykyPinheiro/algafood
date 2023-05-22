@@ -5,8 +5,10 @@ import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoListDto;
 import com.apigaworks.algafood.domain.dto.usuario.UsuarioDto;
 import com.apigaworks.algafood.domain.dto.usuario.UsuarioListDto;
 import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
+import com.apigaworks.algafood.domain.exception.ProdutoNaoEncontratoException;
 import com.apigaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.apigaworks.algafood.domain.model.FormaPagamento;
+import com.apigaworks.algafood.domain.model.Produto;
 import com.apigaworks.algafood.domain.model.Restaurante;
 import com.apigaworks.algafood.domain.model.Usuario;
 import com.apigaworks.algafood.domain.repository.FormaPagamentoRepository;
@@ -101,6 +103,13 @@ public class RestauranteService {
         return restauranteRepository.findById(id)
                 .orElseThrow(() -> new RestauranteNaoEncontradoException(id));
     }
+
+    public Produto encontrarProduto(Long restauranteId, Long produtoId){
+        return restauranteRepository.encontrarProduto(restauranteId, produtoId)
+                .orElseThrow(() -> new ProdutoNaoEncontratoException(produtoId));
+    }
+
+
 
     @Transactional
     public Restaurante atualizar(Long restauranteId, Restaurante atualizacoesRestaurante) {

@@ -35,4 +35,8 @@ public class Estado {
         this.nome = nome;
         this.id = id;
     }
+
+    public Estado(String nome) {
+        this.nome = nome;
+    }
 }

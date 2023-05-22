@@ -6,6 +6,7 @@ import com.apigaworks.algafood.domain.dto.pedido.PedidoSaveDto;
 import com.apigaworks.algafood.domain.service.PedidoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class PedidoController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public PedidoDto salvar(@RequestBody @Valid PedidoSaveDto pedidoDto) {
         return pedidoService.salvar(pedidoDto);
     }

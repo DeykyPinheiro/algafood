@@ -82,7 +82,7 @@ public class Restaurante {
     @JoinTable(name = "restaurante_forma_pagamento",
             joinColumns = {@JoinColumn(name = "restaurante_id")},
             inverseJoinColumns = {@JoinColumn(name = "forma_pagamento_id")})
-    private Set<FormaPagamento> formasPagamento;
+    private Set<FormaPagamento> formasPagamento = new HashSet<>();
 
     @Embedded
 //    @JsonIgnore
@@ -114,6 +114,11 @@ public class Restaurante {
         this.taxaFrete = data.taxaFrete();
         this.cozinha = new Cozinha(data.cozinha());
         this.endereco = new Endereco(data.endereco());
+    }
+
+    public Restaurante(String nome, BigDecimal taxaFrete) {
+        this.nome = nome;
+        this.taxaFrete = taxaFrete;
     }
 
     public void ativar() {
@@ -165,5 +170,9 @@ public class Restaurante {
 
     public Boolean ehFormaPagamentoAceita(FormaPagamento formaPagamento) {
         return getFormasPagamento().contains(formaPagamento);
+    }
+
+    public Boolean produtoExisteNoRestaurante(Produto produto){
+        return this.listaProdutos.contains(produto);
     }
 }

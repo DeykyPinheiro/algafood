@@ -33,4 +33,8 @@ public class Cidade {
     public Cidade(CidadeUpdateDto cidade) {
         this.id = cidade.id();
     }
+
+    public Cidade(Long cidadeId) {
+        this.id = cidadeId;
+    }
 }

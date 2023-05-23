@@ -62,6 +62,10 @@ public class Produto {
         this.preco = produto.preco();
         this.ativo = produto.ativo();
     }
+
+    public Produto(Long produtoId) {
+        this.id = produtoId;
+    }
 //    @ManyToOne
 //    private ItemPedido itemPedido;
 }

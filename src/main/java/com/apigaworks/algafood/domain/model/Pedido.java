@@ -12,6 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -55,8 +56,8 @@ public class Pedido {
     private OffsetDateTime dataEntrega;
 
 
-    @OneToMany(mappedBy = "pedido")
-    private List<ItemPedido> itens;
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private List<ItemPedido> itens = new ArrayList<>();
 
     @Enumerated(EnumType.STRING) // adicionar se nao, erro de conversao
     private StatusPedido statusPedido;
@@ -75,12 +76,11 @@ public class Pedido {
     private FormaPagamento formaPagamento;
 
     public Pedido(PedidoSaveDto pedidoDto) {
-//        TODO gambairra, mudar depois
-        this.restaurante.setId(pedidoDto.restauranteId());
-        this.formaPagamento.setId(pedidoDto.formaPagamentoId());
-        this.setEndereco(new Endereco(pedidoDto.enderecoEntrega()));
+        this.restaurante = new Restaurante(pedidoDto.restauranteId());
+        this.formaPagamento = new FormaPagamento(pedidoDto.formaPagamentoId());
+        this.endereco = new Endereco(pedidoDto.enderecoEntrega());
+        this.itens = ItemPedido.converterLista(pedidoDto.itens());
     }
-
 
     public BigDecimal definirFrete() {
         setTaxaFrete(getRestaurante().getTaxaFrete());
@@ -105,7 +105,11 @@ public class Pedido {
         return valorTotal;
     }
 
-
+    public void adicionarItens(List<ItemPedido> itensPedidos){
+        itensPedidos.forEach(item -> {
+            getItens().add(item);
+        });
+    }
 
 
 

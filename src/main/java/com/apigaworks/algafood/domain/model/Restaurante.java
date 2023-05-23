@@ -121,6 +121,10 @@ public class Restaurante {
         this.taxaFrete = taxaFrete;
     }
 
+    public Restaurante(Long id) {
+        this.id = id;
+    }
+
     public void ativar() {
         setAtivo(true);
     }

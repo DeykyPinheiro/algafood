@@ -34,4 +34,8 @@ public class FormaPagamento {
     public FormaPagamento(FormaPagamentoDto formaPagamento) {
         this.descricao = formaPagamento.descricao();
     }
+
+    public FormaPagamento(Long formaPagamentoId) {
+        this.id = formaPagamentoId;
+    }
 }

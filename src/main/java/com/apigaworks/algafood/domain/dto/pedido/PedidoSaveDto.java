@@ -26,7 +26,6 @@ public record PedidoSaveDto(
         @Size(min = 1)
         List<ItemPedidoPedidoSaveDto> itens
 
-
 ) {
 
 

@@ -68,7 +68,12 @@ public class PedidoService {
 
     @Transactional
     public PedidoDto salvar(PedidoSaveDto pedidoDto) {
-//      uso o cliente 1 pq  vou mudar mais pra fente
+
+
+        Pedido pedido = new Pedido(pedidoDto);
+
+
+//      TODO uso o cliente 1 pq  vou mudar mais pra fente
         Usuario cliente = usuarioRepository.findById(usuarioService.buscarOuFalhar(1L).id()).get();
 
         Restaurante restaurante = restauranteService.buscarOuFalhar(pedidoDto.restauranteId());
@@ -76,19 +81,17 @@ public class PedidoService {
         Cidade cidade = cidadeService.buscarPorId(pedidoDto.enderecoEntrega().cidadeId());
 
 
+
         if (!restaurante.ehFormaPagamentoAceita(formaPagamento)) {
             throw new NegocioException("meio de pagamento nao aceito pelo restaurante");
         }
-        Pedido pedido = new Pedido();
 
-
-        List<ItemPedido> listaItensPedidos = ItemPedido.converterLista(pedidoDto.itens());
-        validarPedido(restaurante, listaItensPedidos, pedido);
+        validarPedido(pedido);
 
 
 //        TODO gambiarra, mudar quando tiver passando nos testes
         pedido.setCliente(cliente);
-        pedido.setItens(listaItensPedidos);
+
         pedido.setRestaurante(restaurante);
         pedido.setEndereco(new Endereco(pedidoDto.enderecoEntrega()));
         pedido.setFormaPagamento(formaPagamento);
@@ -96,30 +99,31 @@ public class PedidoService {
         pedido.setTaxaFrete(restaurante.getTaxaFrete());
         pedido.setValorTotal(new BigDecimal("10"));
 
-
+//
+//
         pedidoRepository.save(pedido);
 
-//        return new PedidoDto(pedido);
-        return null;
+        return new PedidoDto(pedido);
     }
 
 
-    public void validarPedido(Restaurante restaurante, List<ItemPedido> listaItensPedidos, Pedido pedido) {
-        listaItensPedidos.forEach(item ->
+    public void validarPedido( Pedido pedido) {
+        pedido.getItens().forEach(item ->
                 {
-                    Produto produto = restauranteService.encontrarProduto(restaurante.getId(), item.getId());
+                    Produto produto = restauranteService.encontrarProduto(pedido.getRestaurante().getId(), item.getProduto().getId());
 
                     item.setPedido(pedido);
                     item.setProduto(produto);
                     item.setPrecoUnitario(produto.getPreco());
-                }
-        );
+//                    TODO gambiarrra, remover e alterara
+                    item.setPrecoTotal(produto.getPreco());
+                });
     }
 }
 
-//-[] converte o que recebeu para pedido
+//-[x] converte o que recebeu para pedido
 //-[x] valida restaurante
 //-[x] valida forma de pagamento
-//-[] valido endereco de entrega
+//-[x] valido endereco de entrega
 //-[x] valido items por restaurante
 //-[x] mensagens de erro

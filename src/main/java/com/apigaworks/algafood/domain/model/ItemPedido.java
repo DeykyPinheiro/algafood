@@ -38,7 +38,7 @@ public class ItemPedido {
 
 
     public ItemPedido(ItemPedidoPedidoSaveDto pedido) {
-        this.id = pedido.produtoId();
+        this.produto = new Produto(pedido.produtoId());
         this.quantidade = pedido.quantidade();
         this.observacao = pedido.observacao();
     }

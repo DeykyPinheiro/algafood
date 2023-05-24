@@ -222,7 +222,16 @@ public class PedidoControllerIT {
 //    Actual: <[10.5, 20.1]>
 
 
-//
+    @Test
+    void deveRetornarStatus204_QuandoAlterarStatusParaConfirmado() {
+        RestAssured.given()
+                .accept(ContentType.JSON)
+                .pathParam("pedidoId", pedidoId)
+                .when()
+                .put("/{pedidoId}/confirmacao")
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
 
 
     private void prepararDados() {

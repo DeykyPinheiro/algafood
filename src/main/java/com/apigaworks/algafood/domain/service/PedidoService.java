@@ -3,6 +3,7 @@ package com.apigaworks.algafood.domain.service;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoListDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoSaveDto;
+import com.apigaworks.algafood.domain.enumerated.StatusPedido;
 import com.apigaworks.algafood.domain.exception.NegocioException;
 import com.apigaworks.algafood.domain.exception.PedidoNaoEncontratoException;
 import com.apigaworks.algafood.domain.exception.UsuarioNaoEncontratoException;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.PrimitiveIterator;
 
@@ -106,6 +108,19 @@ public class PedidoService {
             item.setProduto(produto);
             item.setPrecoUnitario(produto.getPreco());
         });
+    }
+
+    @Transactional
+    public void confirmarPedido(Long pedidoId) {
+        Pedido pedido = pedidoRepository.findById(buscarOuFalhar(pedidoId).id()).get();
+        if (!pedido.getStatusPedido().equals(StatusPedido.CRIADO)) {
+            throw new NegocioException(
+                    String.format("nao pode mudar status do pedido de %s para %s",
+                            pedido.getStatusPedido(), StatusPedido.CRIADO)
+            );
+        }
+        pedido.setDataConfirmacao(OffsetDateTime.now());
+        pedido.setStatusPedido(StatusPedido.CONFIRMADO);
     }
 }
 

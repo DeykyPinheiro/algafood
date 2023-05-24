@@ -34,5 +34,12 @@ public class PedidoController {
         return pedidoService.salvar(pedidoDto);
     }
 
+    @PutMapping("/{pedidoId}/confirmacao")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void confirmarPedido(@PathVariable Long pedidoId) {
+         pedidoService.confirmarPedido(pedidoId);
+    }
+
+
 
 }

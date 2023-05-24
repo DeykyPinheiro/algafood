@@ -158,6 +158,8 @@ public class PedidoControllerIT {
                 .statusCode(HttpStatus.CREATED.value());
     }
 
+//   -[] TODO falta validar o corpo na criacao de um pedido
+
     @Test
     void deveRetornarQuantidadeIgualAPedidosCadastrados_QuandoListarPedidos() {
         RestAssured.given()

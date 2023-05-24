@@ -60,7 +60,7 @@ public class Pedido {
     private List<ItemPedido> itens = new ArrayList<>();
 
     @Enumerated(EnumType.STRING) // adicionar se nao, erro de conversao
-    private StatusPedido statusPedido;
+    private StatusPedido statusPedido = StatusPedido.CRIADO;
 
     @Embedded
     private Endereco endereco;

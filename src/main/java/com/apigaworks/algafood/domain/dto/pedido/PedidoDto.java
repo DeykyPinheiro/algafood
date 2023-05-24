@@ -46,7 +46,7 @@ public record PedidoDto(
 
 //    TODO nao esquecer colocar valores dinamicos
     public PedidoDto(Pedido pedido) {
-        this(pedido.getId(),  new BigDecimal("0"), new BigDecimal("0"),  new BigDecimal("0"),
+        this(pedido.getId(),  pedido.getSubtotal(),pedido.getTaxaFrete(),  pedido.getValorTotal(),
                 pedido.getStatusPedido(), pedido.getDataCriacao(), pedido.getDataConfirmacao(), pedido.getDataCancelamento(),
                 new  RestaurantePedidoDto(pedido.getRestaurante()), new UsuarioDto(pedido.getCliente()),
                 new FormaPagamentoDto(pedido.getFormaPagamento()), new EnderecoDto(pedido.getEndereco()),

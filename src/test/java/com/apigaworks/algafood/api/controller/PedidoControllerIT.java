@@ -4,9 +4,8 @@ import com.apigaworks.algafood.domain.dto.endereco.EnderecoPedidoDto;
 import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoDto;
 import com.apigaworks.algafood.domain.dto.itempedido.ItemPedidoPedidoSaveDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoSaveDto;
-import com.apigaworks.algafood.domain.dto.produto.ProdutoDto;
 import com.apigaworks.algafood.domain.dto.produto.ProdutoSaveDto;
-import com.apigaworks.algafood.domain.dto.usuario.UsuarioDto;
+import com.apigaworks.algafood.domain.dto.restaurante.RestaurantePedidoDto;
 import com.apigaworks.algafood.domain.dto.usuario.UsuarioSaveDto;
 import com.apigaworks.algafood.domain.model.*;
 import com.apigaworks.algafood.domain.repository.*;
@@ -23,9 +22,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.jar.JarOutputStream;
+import java.util.Locale;
 
 import static com.apigaworks.algafood.util.ResourceUtils.getContentFromResource;
 import static org.hamcrest.Matchers.*;
@@ -108,6 +109,18 @@ public class PedidoControllerIT {
 
     ItemPedidoPedidoSaveDto itemPedidoB;
 
+    Float precoTotalItemA;
+
+    Float precoTotalItemB;
+
+    Float valorTotalPedido;
+
+    Float subtotalPedido;
+
+    Locale locale = Locale.US;
+
+    DecimalFormat decimalFormat = new DecimalFormat("#.##", DecimalFormatSymbols.getInstance(locale));
+
 
     @BeforeEach
     void setUp() {
@@ -166,7 +179,7 @@ public class PedidoControllerIT {
                 .statusCode(HttpStatus.OK.value());
     }
 
-//    TODO
+    //    TODO
 //    terminar de testar todasa as hipoteses
     @Test
     void deveRetornarRespostaComItensSalvosValidos_QuandoConsultarPedidoExistente() {
@@ -177,15 +190,27 @@ public class PedidoControllerIT {
                 .get("/{pedidoId}")
                 .then()
                 .statusCode(HttpStatus.OK.value())
+                .body("id", equalTo(pedidoId.intValue()))
+                .body("itens.produtoNome", hasItems(produto1.getNome(), produto2.getNome()))
                 .body("itens.produtoNome", hasItems(produto1.getNome(), produto2.getNome()))
                 .body("itens.quantidade", hasItems(itemPedidoA.quantidade(), itemPedidoB.quantidade()))
-                .body("", hasEntry("itens.precoUnitario",produto1.getPreco().doubleValue()))
-                .body("itens.precoUnitario", hasItems(produto1.getPreco(), produto2.getPreco()))
-                .body("itens.precoTotal", hasItems(produto1.getPreco(), produto2.getPreco()))
-                .body("subtotal", equalTo(new BigDecimal("10")))
-                .body("taxaFrete", equalTo(new BigDecimal("10")))
-                .body("valorTotal", equalTo(new BigDecimal("10")));
-
+                .body("itens[0].precoUnitario", equalTo(produto1.getPreco().floatValue()))
+                .body("itens[1].precoUnitario", equalTo(produto2.getPreco().floatValue()))
+                .body("itens[1].precoUnitario", equalTo(produto2.getPreco().floatValue()))
+                .body("itens[0].observacao", equalTo(itemPedidoA.observacao()))
+                .body("itens[1].observacao", equalTo(itemPedidoB.observacao()))
+                .body("itens[0].precoTotal", equalTo(precoTotalItemA))
+                .body("itens[1].precoTotal", equalTo(precoTotalItemB))
+                .body("subtotal", equalTo(subtotalPedido))
+                .body("taxaFrete", equalTo(restaurante.getTaxaFrete().floatValue()))
+                .body("valorTotal", equalTo(valorTotalPedido))
+                .body("restaurante.id", equalTo((restaurante.getId().intValue())))
+                .body("restaurante.nome", equalTo((restaurante.getNome())))
+                .body("formaPagamento.id", equalTo((formaPagamento1.getId().intValue())))
+                .body("formaPagamento.descricao", equalTo((formaPagamento1.getDescricao())))
+                .body("cliente.id", equalTo((usuario1.getId().intValue())))
+                .body("cliente.nome", equalTo((usuario1.getNome())))
+                .body("cliente.email", equalTo((usuario1.getEmail())));
     }
 
 //    TODO TESTAR com uma casa decimal e com duas
@@ -201,7 +226,7 @@ public class PedidoControllerIT {
     private void prepararDados() {
         UsuarioSaveDto usuarioDto = new UsuarioSaveDto(usuario1);
         Long userId = usuarioService.salvar(usuarioDto).id();
-        Usuario usuario = usuarioRepository.findById(userId).get();
+        usuario1 = usuarioRepository.findById(userId).get();
 
         FormaPagamentoDto formaPagamentoDto = new FormaPagamentoDto(formaPagamento1);
         Long formaPagamentoId = formaPagamentoService.salvar(formaPagamentoDto).id();
@@ -218,7 +243,7 @@ public class PedidoControllerIT {
 
 
         restaurante.setCozinha(cozinhaBrasileira);
-        restaurante.setTaxaFrete(new BigDecimal("10.99"));
+        restaurante.setTaxaFrete(new BigDecimal("10.09"));
         restaurante.associarFormaPagamento(formaPagamento1);
 
         restaurante = restauranteService.salvar(restaurante);
@@ -246,6 +271,18 @@ public class PedidoControllerIT {
 
         pedidoId = pedidoService.salvar(pedidoDto).id();
         Pedido pedido = pedidoRepository.findById(pedidoId).get();
+
+//        colocar o decimal com duas casas no max
+        decimalFormat.setMaximumFractionDigits(2);
+
+        String aux = decimalFormat.format((itemPedidoA.quantidade() * produto1.getPreco().floatValue()));
+        precoTotalItemA = Float.parseFloat(aux);
+
+        aux = decimalFormat.format((itemPedidoB.quantidade() * produto2.getPreco().floatValue()));
+        precoTotalItemB = Float.parseFloat(aux);
+
+        subtotalPedido = precoTotalItemA + precoTotalItemB;
+        valorTotalPedido = subtotalPedido.floatValue() + restaurante.getTaxaFrete().floatValue();
 
         quatidadePedidosCadastrados = (int) pedidoRepository.count();
     }

@@ -81,7 +81,6 @@ public class PedidoService {
         Cidade cidade = cidadeService.buscarPorId(pedidoDto.enderecoEntrega().cidadeId());
 
 
-
         if (!restaurante.ehFormaPagamentoAceita(formaPagamento)) {
             throw new NegocioException("meio de pagamento nao aceito pelo restaurante");
         }
@@ -95,29 +94,30 @@ public class PedidoService {
         pedido.setRestaurante(restaurante);
         pedido.setEndereco(new Endereco(pedidoDto.enderecoEntrega()));
         pedido.setFormaPagamento(formaPagamento);
-        pedido.setSubtotal(new BigDecimal("10"));
+//        pedido.setSubtotal(new BigDecimal("10"));
         pedido.setTaxaFrete(restaurante.getTaxaFrete());
-        pedido.setValorTotal(new BigDecimal("10"));
+
 
 //
 //
+        pedido.calcularValorTotal();
         pedidoRepository.save(pedido);
 
         return new PedidoDto(pedido);
     }
 
 
-    public void validarPedido( Pedido pedido) {
+    public void validarPedido(Pedido pedido) {
         pedido.getItens().forEach(item ->
-                {
-                    Produto produto = restauranteService.encontrarProduto(pedido.getRestaurante().getId(), item.getProduto().getId());
+        {
+            Produto produto = restauranteService.encontrarProduto(pedido.getRestaurante().getId(), item.getProduto().getId());
 
-                    item.setPedido(pedido);
-                    item.setProduto(produto);
-                    item.setPrecoUnitario(produto.getPreco());
+            item.setPedido(pedido);
+            item.setProduto(produto);
+            item.setPrecoUnitario(produto.getPreco());
 //                    TODO gambiarrra, remover e alterara
-                    item.setPrecoTotal(produto.getPreco());
-                });
+            item.setPrecoTotal(produto.getPreco());
+        });
     }
 }
 

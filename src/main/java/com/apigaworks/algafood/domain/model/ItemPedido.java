@@ -47,6 +47,11 @@ public class ItemPedido {
         return  lista.stream().map(ItemPedido::new).collect(Collectors.toList());
     }
 
+    public BigDecimal getPrecoTotal() {
+        calcularPrecoTotal();
+        return precoTotal;
+    }
+
     public void calcularPrecoTotal() {
         BigDecimal precoUnitario = this.getPrecoUnitario();
         Integer quantidade = this.getQuantidade();

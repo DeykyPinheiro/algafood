@@ -91,10 +91,7 @@ public class Pedido {
         getItens().forEach(item -> item.setPedido(this));
     }
 
-    public BigDecimal calcularSubTotal(List<ItemPedido> listaItens) {
-        return listaItens.stream().map(item -> item.getPrecoTotal())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
+
 
     public BigDecimal calcularValorTotal() {
         this.subtotal = getItens().stream()

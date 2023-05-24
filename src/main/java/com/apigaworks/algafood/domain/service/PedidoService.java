@@ -86,21 +86,11 @@ public class PedidoService {
         }
 
         validarPedido(pedido);
-
-
-//        TODO gambiarra, mudar quando tiver passando nos testes
         pedido.setCliente(cliente);
-
-        pedido.setRestaurante(restaurante);
-        pedido.setEndereco(new Endereco(pedidoDto.enderecoEntrega()));
-        pedido.setFormaPagamento(formaPagamento);
-//        pedido.setSubtotal(new BigDecimal("10"));
         pedido.setTaxaFrete(restaurante.getTaxaFrete());
-
-
-//
-//
         pedido.calcularValorTotal();
+
+
         pedidoRepository.save(pedido);
 
         return new PedidoDto(pedido);
@@ -115,8 +105,6 @@ public class PedidoService {
             item.setPedido(pedido);
             item.setProduto(produto);
             item.setPrecoUnitario(produto.getPreco());
-//                    TODO gambiarrra, remover e alterara
-            item.setPrecoTotal(produto.getPreco());
         });
     }
 }

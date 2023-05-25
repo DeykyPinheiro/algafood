@@ -113,14 +113,19 @@ public class PedidoService {
     @Transactional
     public void confirmarPedido(Long pedidoId) {
         Pedido pedido = pedidoRepository.findById(buscarOuFalhar(pedidoId).id()).get();
-        if (!pedido.getStatusPedido().equals(StatusPedido.CRIADO)) {
-            throw new NegocioException(
-                    String.format("nao pode mudar status do pedido de %s para %s",
-                            pedido.getStatusPedido(), StatusPedido.CRIADO)
-            );
-        }
-        pedido.setDataConfirmacao(OffsetDateTime.now());
-        pedido.setStatusPedido(StatusPedido.CONFIRMADO);
+        pedido.confirmarPedido();
+    }
+
+    @Transactional
+    public void entregarPedido(Long pedidoId) {
+        Pedido pedido = pedidoRepository.findById(buscarOuFalhar(pedidoId).id()).get();
+        pedido.entregarPedido();
+    }
+
+    @Transactional
+    public void cancelarPedido(Long pedidoId) {
+        Pedido pedido = pedidoRepository.findById(buscarOuFalhar(pedidoId).id()).get();
+        pedido.cancelarPedido();
     }
 }
 

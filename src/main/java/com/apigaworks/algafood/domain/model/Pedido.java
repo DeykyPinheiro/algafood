@@ -4,6 +4,7 @@ package com.apigaworks.algafood.domain.model;
 import com.apigaworks.algafood.domain.dto.itempedido.ItemPedidoPedidoSaveDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoSaveDto;
 import com.apigaworks.algafood.domain.enumerated.StatusPedido;
+import com.apigaworks.algafood.domain.exception.NegocioException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -92,7 +93,6 @@ public class Pedido {
     }
 
 
-
     public BigDecimal calcularValorTotal() {
         this.subtotal = getItens().stream()
                 .map(item -> item.getPrecoTotal())
@@ -102,12 +102,35 @@ public class Pedido {
         return valorTotal;
     }
 
-    public void adicionarItens(List<ItemPedido> itensPedidos){
+    public void adicionarItens(List<ItemPedido> itensPedidos) {
         itensPedidos.forEach(item -> {
             getItens().add(item);
         });
     }
 
+    public void confirmarPedido() {
+        setStatusPedido(StatusPedido.CONFIRMADO);
+        setDataConfirmacao(OffsetDateTime.now());
+    }
+
+    public void entregarPedido() {
+        setStatusPedido(StatusPedido.ENTREGUE);
+        setDataEntrega(OffsetDateTime.now());
+    }
+
+    public void cancelarPedido() {
+        setStatusPedido(StatusPedido.CANCELADO);
+        setDataCancelamento(OffsetDateTime.now());
+    }
+
+    private void setStatusPedido(StatusPedido novoStatus) {
+        if (getStatusPedido().naoPodeAlterarStatus(novoStatus)) {
+            throw new NegocioException(
+                    String.format("nao pode mudar status do pedido de %s para %s",
+                            getStatusPedido(), novoStatus.getDescricao()));
+        }
+        this.statusPedido = novoStatus;
+    }
 
 
 }

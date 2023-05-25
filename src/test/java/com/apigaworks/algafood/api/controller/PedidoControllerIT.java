@@ -5,8 +5,8 @@ import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoDto;
 import com.apigaworks.algafood.domain.dto.itempedido.ItemPedidoPedidoSaveDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoSaveDto;
 import com.apigaworks.algafood.domain.dto.produto.ProdutoSaveDto;
-import com.apigaworks.algafood.domain.dto.restaurante.RestaurantePedidoDto;
 import com.apigaworks.algafood.domain.dto.usuario.UsuarioSaveDto;
+import com.apigaworks.algafood.domain.enumerated.StatusPedido;
 import com.apigaworks.algafood.domain.model.*;
 import com.apigaworks.algafood.domain.repository.*;
 import com.apigaworks.algafood.domain.service.*;
@@ -87,9 +87,17 @@ public class PedidoControllerIT {
 
     private int quatidadePedidosCadastrados = 0;
 
-    private Long pedidoId;
+    private Long pedidoId1;
 
-    PedidoSaveDto pedidoDto;
+    PedidoSaveDto pedidoDto1;
+
+    private Long pedidoId2;
+
+    private Long pedidoId3;
+
+    private Long pedidoId4;
+
+    PedidoSaveDto pedidoDto2;
 
     private String jsonPedidoValido;
 
@@ -174,7 +182,7 @@ public class PedidoControllerIT {
     void deveRetornarRespostaEStatus_QuandoConsultarPedidoExistente() {
         RestAssured.given()
                 .accept(ContentType.JSON)
-                .pathParam("pedidoId", pedidoId)
+                .pathParam("pedidoId", pedidoId1)
                 .when()
                 .get("/{pedidoId}")
                 .then()
@@ -187,12 +195,12 @@ public class PedidoControllerIT {
     void deveRetornarRespostaComItensSalvosValidos_QuandoConsultarPedidoExistente() {
         RestAssured.given()
                 .accept(ContentType.JSON)
-                .pathParam("pedidoId", pedidoId)
+                .pathParam("pedidoId", pedidoId1)
                 .when()
                 .get("/{pedidoId}")
                 .then()
                 .statusCode(HttpStatus.OK.value())
-                .body("id", equalTo(pedidoId.intValue()))
+                .body("id", equalTo(pedidoId1.intValue()))
                 .body("itens.produtoNome", hasItems(produto1.getNome(), produto2.getNome()))
                 .body("itens.produtoNome", hasItems(produto1.getNome(), produto2.getNome()))
                 .body("itens.quantidade", hasItems(itemPedidoA.quantidade(), itemPedidoB.quantidade()))
@@ -226,12 +234,69 @@ public class PedidoControllerIT {
     void deveRetornarStatus204_QuandoAlterarStatusParaConfirmado() {
         RestAssured.given()
                 .accept(ContentType.JSON)
-                .pathParam("pedidoId", pedidoId)
+                .pathParam("pedidoId", pedidoId1)
                 .when()
                 .put("/{pedidoId}/confirmacao")
                 .then()
                 .statusCode(HttpStatus.NO_CONTENT.value());
     }
+
+    @Test
+    void deveRetornarStatus400_QuandoAlterarStatusParaConfirmado() {
+        RestAssured.given()
+                .accept(ContentType.JSON)
+                .pathParam("pedidoId", pedidoId2)
+                .when()
+                .put("/{pedidoId}/confirmacao")
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    void deveRetornarStatus204_QuandoAlterarDeConfimadoParaEntregue(){
+        RestAssured.given()
+                .accept(ContentType.JSON)
+                .pathParam("pedidoId", pedidoId2)
+                .when()
+                .put("/{pedidoId}/entrega")
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    void deveRetornarStatus400_QuandoAlterarDeCriadoParaEntregue(){
+        RestAssured.given()
+                .accept(ContentType.JSON)
+                .pathParam("pedidoId", pedidoId1)
+                .when()
+                .put("/{pedidoId}/entrega")
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    void deveRetornarStatus204_QuandoAlterarDeCriadoParaCancelado(){
+        RestAssured.given()
+                .accept(ContentType.JSON)
+                .pathParam("pedidoId", pedidoId1)
+                .when()
+                .put("/{pedidoId}/cancelamento")
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    //    como agora posso cancelar se tiver confirmado, esse teste teve que ser comentado
+//    @Test
+//    void deveRetornarStatus404_QuandoAlterarDeConfirmadoParaCancelado(){
+//        RestAssured.given()
+//                .accept(ContentType.JSON)
+//                .pathParam("pedidoId", pedidoId2)
+//                .when()
+//                .put("/{pedidoId}/cancelamento")
+//                .then()
+//                .statusCode(HttpStatus.NOT_FOUND.value());
+//    }
+
 
 
     private void prepararDados() {
@@ -278,10 +343,15 @@ public class PedidoControllerIT {
 
 
         EnderecoPedidoDto enderecoDto = new EnderecoPedidoDto("040000000", "rua dos testes", "404", "apt", "vilas dos erros", cidade.getId());
-        pedidoDto = new PedidoSaveDto(restaurante.getId(), formaPagamentoId, enderecoDto, listaPedidos);
+        pedidoDto1 = new PedidoSaveDto(restaurante.getId(), formaPagamentoId, enderecoDto, listaPedidos);
 
-        pedidoId = pedidoService.salvar(pedidoDto).id();
-        Pedido pedido = pedidoRepository.findById(pedidoId).get();
+        pedidoId1 = pedidoService.salvar(pedidoDto1).id();
+        Pedido pedido = pedidoRepository.findById(pedidoId1).get();
+
+        Pedido pedido2 =  pedidoRepository.findById(pedidoService.salvar(pedidoDto1).id()).get();
+        pedido2.confirmarPedido();
+        pedidoRepository.save(pedido2);
+        pedidoId2 = pedido2.getId();
 
 //        colocar o decimal com duas casas no max
         decimalFormat.setMaximumFractionDigits(2);
@@ -299,5 +369,5 @@ public class PedidoControllerIT {
     }
 
 
-    // -[]    consulta e listagem de pedidos em PEDIDOS
+    // -[]    TODO consulta e listagem de pedidos em PEDIDOS
 }

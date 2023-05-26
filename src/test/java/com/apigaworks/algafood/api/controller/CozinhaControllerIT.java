@@ -44,7 +44,6 @@ class CozinhaControllerIT {
     int quantidadeCozinhasCadastradas = 0;
 
 
-
     @BeforeEach
     public void setUp() {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
@@ -72,8 +71,9 @@ class CozinhaControllerIT {
                 .when()
                 .get()
                 .then()
-                .body("", hasSize(quantidadeCozinhasCadastradas))
-                .body("nome", hasItems("Indiana", "Tailandesa"));
+                .body("content", hasSize(quantidadeCozinhasCadastradas))
+                .body("content[0].nome", equalTo("Tailandesa"))
+                .body("content[1].nome", equalTo("Indiana"));
     }
 
     @Test

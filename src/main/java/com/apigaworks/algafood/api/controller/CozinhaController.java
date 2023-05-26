@@ -3,6 +3,8 @@ package com.apigaworks.algafood.api.controller;
 import com.apigaworks.algafood.domain.model.Cozinha;
 import com.apigaworks.algafood.domain.service.CozinhaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +19,8 @@ public class CozinhaController {
     private CozinhaService cozinhaService;
 
     @GetMapping
-    public List<Cozinha> listar() {
-        return cozinhaService.listar();
+    public Page<Cozinha> listar(Pageable pageable) {
+        return cozinhaService.listar(pageable);
     }
 
     @GetMapping("/{id}")

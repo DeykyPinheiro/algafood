@@ -55,6 +55,8 @@ public class ProdutoControllerIT {
 
     private  int quantidadeTotalCadastrados;
 
+    private  int quantidadeAtivosCadastrados;
+
 
 
     private String jsonProdutoValido;
@@ -136,7 +138,7 @@ public class ProdutoControllerIT {
                 .when()
                 .get("/{idRestaurante}/produtos")
                 .then()
-                .body("", hasSize(quantidadeTotalCadastrados));
+                .body("", hasSize(quantidadeAtivosCadastrados));
     }
 
     @Test
@@ -214,6 +216,7 @@ public class ProdutoControllerIT {
 
 
         quantidadeTotalCadastrados = (int) produtoRespository.count();
+        quantidadeAtivosCadastrados = (int) produtoRespository.findAtivosByRestaurante(restaurantePreCadastrado).stream().count();
 
     }
 

@@ -50,9 +50,10 @@ public class RestauranteServiceTest {
     @Test
     @DisplayName("lista restaurante")
     public void testListarRestaurante() {
-        List<Restaurante> l = restaurenteService.listar();
-        Assertions.assertEquals(this.listaRestaurentes, l);
-        Assertions.assertEquals(2, l.size());
+        List<Restaurante> listaRestaurentes = restauranteRepository.findAll();
+
+        Assertions.assertEquals(this.listaRestaurentes, listaRestaurentes);
+        Assertions.assertEquals(2, listaRestaurentes.size());
     }
 
     @Test

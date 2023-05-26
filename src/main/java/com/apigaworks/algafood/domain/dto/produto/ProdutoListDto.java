@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,7 +29,7 @@ public record ProdutoListDto(
         this(produto.getId(), produto.getNome(), produto.getDescricao(), produto.getPreco(), produto.getAtivo());
     }
 
-    public static List<ProdutoListDto> converterLista(Set<Produto> listaProdutos) {
+    public static List<ProdutoListDto> converterLista(Collection<Produto> listaProdutos) {
         return listaProdutos.stream().map(ProdutoListDto::new).collect(Collectors.toList());
     }
 }

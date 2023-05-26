@@ -27,28 +27,31 @@ public class ProdutoController {
         return produtoService.salvar(idRestaurante, produto);
     }
 
+    //    RequestParam é quando vc passa no caminho depois de "?"
     @GetMapping
-    public List<ProdutoListDto> listar(@PathVariable Long idRestaurante){
-        return  produtoService.listarPorId(idRestaurante);
+    public List<ProdutoListDto> listar(@PathVariable Long idRestaurante, @RequestParam(required = false) Boolean incluirInativos) {
+        if (incluirInativos == null) {
+            incluirInativos = false;
+        }
+        return produtoService.listarPorId(idRestaurante, incluirInativos);
     }
 
     @PutMapping("/{idProduto}")
-    public ProdutoDto atualizar(@PathVariable Long idRestaurante, @PathVariable Long idProduto,  @RequestBody @Valid ProdutoUpdateDto produto){
+    public ProdutoDto atualizar(@PathVariable Long idRestaurante, @PathVariable Long idProduto, @RequestBody @Valid ProdutoUpdateDto produto) {
         return produtoService.atualizar(idRestaurante, idProduto, produto);
     }
 
     @DeleteMapping("/{idProduto}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(@PathVariable Long idRestaurante, @PathVariable Long idProduto){
+    public void remover(@PathVariable Long idRestaurante, @PathVariable Long idProduto) {
         produtoService.remover(idRestaurante, idProduto);
     }
 
-//    consulta mais diferente, pq tenho que relacionar produto e restaurante
+    //    consulta mais diferente, pq tenho que relacionar produto e restaurante
     @GetMapping("/{idProduto}")
-    public ProdutoDto buscarProdutoPorId(@PathVariable Long idRestaurante, @PathVariable Long idProduto){
+    public ProdutoDto buscarProdutoPorId(@PathVariable Long idRestaurante, @PathVariable Long idProduto) {
         return produtoService.buscarProdutoPorIdPorRestaurante(idRestaurante, idProduto);
     }
-
 
 
 }

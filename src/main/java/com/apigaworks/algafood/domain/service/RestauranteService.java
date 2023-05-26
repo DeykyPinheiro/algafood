@@ -2,6 +2,7 @@ package com.apigaworks.algafood.domain.service;
 
 import com.apigaworks.algafood.core.validation.ValidacaoExcepiton;
 import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoListDto;
+import com.apigaworks.algafood.domain.dto.restaurante.RestauranteListDto;
 import com.apigaworks.algafood.domain.dto.usuario.UsuarioDto;
 import com.apigaworks.algafood.domain.dto.usuario.UsuarioListDto;
 import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
@@ -12,6 +13,7 @@ import com.apigaworks.algafood.domain.model.Produto;
 import com.apigaworks.algafood.domain.model.Restaurante;
 import com.apigaworks.algafood.domain.model.Usuario;
 import com.apigaworks.algafood.domain.repository.FormaPagamentoRepository;
+import com.apigaworks.algafood.domain.repository.ProdutoRespository;
 import com.apigaworks.algafood.domain.repository.RestauranteRepository;
 import com.apigaworks.algafood.domain.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -44,6 +46,9 @@ public class RestauranteService {
             = "restaurante de código %d não pode ser removido, pois está em uso";
 
     private RestauranteRepository restauranteRepository;
+
+    @Autowired
+    private ProdutoRespository produtoRespository;
 
     @Autowired
     private FormaPagamentoRepository formaPagamentoRepository;
@@ -82,8 +87,9 @@ public class RestauranteService {
         return restauranteRepository.save(restaurante);
     }
 
-    public List<Restaurante> listar() {
-        return restauranteRepository.findAll();
+    public List<RestauranteListDto> listar() {
+        List<Restaurante> lista = restauranteRepository.findAll();
+        return RestauranteListDto.converterLista(lista);
     }
 
     @Transactional
@@ -105,7 +111,7 @@ public class RestauranteService {
     }
 
     public Produto encontrarProduto(Long restauranteId, Long produtoId){
-        return restauranteRepository.encontrarProduto(restauranteId, produtoId)
+        return produtoRespository.encontrarProduto(restauranteId, produtoId)
                 .orElseThrow(() -> new ProdutoNaoEncontratoException(produtoId));
     }
 

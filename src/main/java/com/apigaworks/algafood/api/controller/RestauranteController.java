@@ -2,6 +2,7 @@ package com.apigaworks.algafood.api.controller;
 
 import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoListDto;
 import com.apigaworks.algafood.domain.dto.restaurante.RestauranteDto;
+import com.apigaworks.algafood.domain.dto.restaurante.RestauranteListDto;
 import com.apigaworks.algafood.domain.dto.restaurante.RestauranteUpdateDto;
 import com.apigaworks.algafood.domain.dto.usuario.UsuarioListDto;
 import com.apigaworks.algafood.domain.model.Restaurante;
@@ -23,7 +24,7 @@ public class RestauranteController {
     private RestauranteService restauranteService;
 
     @GetMapping
-    public List<Restaurante> listar() {
+    public List<RestauranteListDto> listar() {
         return restauranteService.listar();
     }
 

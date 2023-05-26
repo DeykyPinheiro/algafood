@@ -18,6 +18,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -53,9 +54,18 @@ public class ProdutoService {
     }
 
 
-    public List<ProdutoListDto> listarPorId(Long idRestaurante) {
-        Restaurante r = restauranteService.buscarOuFalhar(idRestaurante);
-        return ProdutoListDto.converterLista(r.getListaProdutos());
+    public List<ProdutoListDto> listarPorId(Long idRestaurante, Boolean incluirInativos) {
+        Restaurante restaurante = restauranteService.buscarOuFalhar(idRestaurante);
+
+        Collection<Produto> listaProdutos;
+        if (incluirInativos == true || incluirInativos.equals(null)) {
+            listaProdutos = produtoRespository.findAll();
+        } else {
+            listaProdutos = produtoRespository.findAtivosByRestaurante(restaurante);
+        }
+
+
+        return ProdutoListDto.converterLista(listaProdutos);
     }
 
     @Transactional
@@ -85,15 +95,15 @@ public class ProdutoService {
 
 //        verifico se os dois id existem, tanto produto, quando restaurante
 
-            restauranteService.buscarOuFalhar(idRestaurante);
-            this.buscarProdutoPorId(idRestaurante, idProduto);
+        restauranteService.buscarOuFalhar(idRestaurante);
+        this.buscarProdutoPorId(idRestaurante, idProduto);
 
 //            caso existam, eu vou usar uma funcao que eu mesmo implemento por meio de uma
 //            interface, clica em cima que vai pra ela
-            Produto produto = produtoRespository.buscarProdutoPorIdPorRestaurante(idRestaurante, idProduto)
-                    .orElseThrow(() -> new ProdutoNaoEncontratoException(idRestaurante, idProduto));
+        Produto produto = produtoRespository.buscarProdutoPorIdPorRestaurante(idRestaurante, idProduto)
+                .orElseThrow(() -> new ProdutoNaoEncontratoException(idRestaurante, idProduto));
 
-            return new ProdutoDto(produto);
+        return new ProdutoDto(produto);
 
     }
 

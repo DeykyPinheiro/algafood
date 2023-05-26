@@ -57,7 +57,7 @@ public class Pedido {
     private OffsetDateTime dataEntrega;
 
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ItemPedido> itens = new ArrayList<>();
 
     @Enumerated(EnumType.STRING) // adicionar se nao, erro de conversao

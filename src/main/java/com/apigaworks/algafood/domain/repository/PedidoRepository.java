@@ -2,11 +2,14 @@ package com.apigaworks.algafood.domain.repository;
 
 import com.apigaworks.algafood.domain.model.Pedido;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface PedidoRepository extends JpaRepository<Pedido, Long> {
+//JpaSpecificationExecutor<Pedido> isso é para aceitar specs
+public interface PedidoRepository extends JpaRepository<Pedido, Long>,
+        JpaSpecificationExecutor<Pedido> {
 
     @Override
     @Query("from Pedido p join fetch p.cliente join fetch p.restaurante r join fetch r.cozinha")

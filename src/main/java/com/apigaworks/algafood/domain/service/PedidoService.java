@@ -3,21 +3,18 @@ package com.apigaworks.algafood.domain.service;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoListDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoSaveDto;
-import com.apigaworks.algafood.domain.enumerated.StatusPedido;
 import com.apigaworks.algafood.domain.exception.NegocioException;
 import com.apigaworks.algafood.domain.exception.PedidoNaoEncontratoException;
-import com.apigaworks.algafood.domain.exception.UsuarioNaoEncontratoException;
 import com.apigaworks.algafood.domain.model.*;
 import com.apigaworks.algafood.domain.repository.*;
+import com.apigaworks.algafood.domain.repository.filter.PedidoFilter;
+import com.apigaworks.algafood.infrastructure.spec.PedidoSpecs;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.PrimitiveIterator;
 
 @Service
 public class PedidoService {
@@ -57,8 +54,8 @@ public class PedidoService {
     }
 
 
-    public List<PedidoListDto> listar() {
-        List<Pedido> listaPedidos = pedidoRepository.findAll();
+    public List<PedidoListDto> buscar(PedidoFilter filter) {
+        List<Pedido> listaPedidos = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filter));
         return PedidoListDto.converterLista(listaPedidos);
     }
 

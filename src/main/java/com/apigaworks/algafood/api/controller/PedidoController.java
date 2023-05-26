@@ -3,6 +3,7 @@ package com.apigaworks.algafood.api.controller;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoListDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoSaveDto;
+import com.apigaworks.algafood.domain.repository.filter.PedidoFilter;
 import com.apigaworks.algafood.domain.service.PedidoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,9 @@ public class PedidoController {
     private PedidoService pedidoService;
 
     @GetMapping
-    public List<PedidoListDto> listar() {
-        return pedidoService.listar();
+//    só de por ali no campo o spring ja gerencia e pega da requestParam
+    public List<PedidoListDto> pesquisar(PedidoFilter pedidoFilter) {
+        return pedidoService.buscar(pedidoFilter);
     }
 
     @GetMapping("/{pedidoId}")

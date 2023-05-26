@@ -7,6 +7,8 @@ import com.apigaworks.algafood.domain.repository.filter.PedidoFilter;
 import com.apigaworks.algafood.domain.service.PedidoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +23,8 @@ public class PedidoController {
 
     @GetMapping
 //    só de por ali no campo o spring ja gerencia e pega da requestParam
-    public List<PedidoListDto> pesquisar(PedidoFilter pedidoFilter) {
-        return pedidoService.buscar(pedidoFilter);
+    public Page<PedidoListDto> buscar(PedidoFilter pedidoFilter, Pageable pageable) {
+        return pedidoService.buscar(pedidoFilter, pageable);
     }
 
     @GetMapping("/{pedidoId}")

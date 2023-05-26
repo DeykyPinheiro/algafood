@@ -12,6 +12,9 @@ import com.apigaworks.algafood.infrastructure.spec.PedidoSpecs;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,9 +57,10 @@ public class PedidoService {
     }
 
 
-    public List<PedidoListDto> buscar(PedidoFilter filter) {
-        List<Pedido> listaPedidos = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filter));
-        return PedidoListDto.converterLista(listaPedidos);
+    public Page<PedidoListDto> buscar(PedidoFilter filter, Pageable pageable) {
+        Page<Pedido> paginaPedido = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filter), pageable);
+        List<PedidoListDto> listaPedidos = PedidoListDto.converterLista(paginaPedido.getContent());
+        return new PageImpl<>(listaPedidos, pageable, paginaPedido.getTotalElements());
     }
 
     public PedidoDto buscarOuFalhar(Long pedidoId) {

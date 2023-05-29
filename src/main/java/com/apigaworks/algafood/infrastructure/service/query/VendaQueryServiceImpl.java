@@ -1,4 +1,4 @@
-package com.apigaworks.algafood.infrastructure.service;
+package com.apigaworks.algafood.infrastructure.service.query;
 
 import com.apigaworks.algafood.domain.enumerated.StatusPedido;
 import com.apigaworks.algafood.domain.filter.VendaDiariaFilter;

@@ -58,8 +58,8 @@ public class ProdutoService {
         Restaurante restaurante = restauranteService.buscarOuFalhar(idRestaurante);
 
         Collection<Produto> listaProdutos;
-        if (incluirInativos == true || incluirInativos.equals(null)) {
-            listaProdutos = produtoRespository.findAll();
+        if (incluirInativos == true) {
+            listaProdutos = restaurante.getListaProdutos();
         } else {
             listaProdutos = produtoRespository.findAtivosByRestaurante(restaurante);
         }

@@ -29,10 +29,8 @@ public class ProdutoController {
 
     //    RequestParam é quando vc passa no caminho depois de "?"
     @GetMapping
-    public List<ProdutoListDto> listar(@PathVariable Long idRestaurante, @RequestParam(required = false) Boolean incluirInativos) {
-        if (incluirInativos == null) {
-            incluirInativos = false;
-        }
+    public List<ProdutoListDto> listar(@PathVariable Long idRestaurante,
+                                       @RequestParam(required = false, defaultValue = "false") Boolean incluirInativos) {
         return produtoService.listarPorId(idRestaurante, incluirInativos);
     }
 

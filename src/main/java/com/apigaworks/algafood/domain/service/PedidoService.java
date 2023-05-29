@@ -7,7 +7,7 @@ import com.apigaworks.algafood.domain.exception.NegocioException;
 import com.apigaworks.algafood.domain.exception.PedidoNaoEncontratoException;
 import com.apigaworks.algafood.domain.model.*;
 import com.apigaworks.algafood.domain.repository.*;
-import com.apigaworks.algafood.domain.repository.filter.PedidoFilter;
+import com.apigaworks.algafood.domain.filter.PedidoFilter;
 import com.apigaworks.algafood.infrastructure.spec.PedidoSpecs;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;

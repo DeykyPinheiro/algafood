@@ -1,7 +1,7 @@
 package com.apigaworks.algafood.infrastructure.spec;
 
 import com.apigaworks.algafood.domain.model.Pedido;
-import com.apigaworks.algafood.domain.repository.filter.PedidoFilter;
+import com.apigaworks.algafood.domain.filter.PedidoFilter;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 

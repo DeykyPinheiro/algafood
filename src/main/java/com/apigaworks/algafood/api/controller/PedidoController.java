@@ -3,7 +3,7 @@ package com.apigaworks.algafood.api.controller;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoListDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoSaveDto;
-import com.apigaworks.algafood.domain.repository.filter.PedidoFilter;
+import com.apigaworks.algafood.domain.filter.PedidoFilter;
 import com.apigaworks.algafood.domain.service.PedidoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/pedidos")

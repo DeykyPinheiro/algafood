@@ -1,13 +1,10 @@
-package com.apigaworks.algafood.domain.repository.filter;
+package com.apigaworks.algafood.domain.filter;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.OffsetDateTime;
 
-public record PedidoFilter(
-
-        Long clienteId,
+public record VendaDiariaFilter(
 
         Long restauranteId,
 

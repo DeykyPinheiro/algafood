@@ -25,8 +25,8 @@ public class PdfVendaReportServiceImpl implements VendaReportService {
     @Override
     public byte[] emitirVendarDiarias(VendaDiariaFilter filter) throws JRException {
         try {
-//            var inputStrem = this.getClass().
-//                    getResourceAsStream("src/main/resources/relatorios/vendas-diarias.jasper");
+            var inputStrem = this.getClass().
+                    getResourceAsStream("src/main/resources/relatorios/vendas-diarias.jasper");
 
             String pathToFile = "src/main/resources/relatorios/vendas-diarias.jasper";
             JasperReport inputStrem = (JasperReport) JRLoader.loadObjectFromFile(pathToFile);

@@ -4,6 +4,7 @@ import com.apigaworks.algafood.domain.filter.VendaDiariaFilter;
 import com.apigaworks.algafood.domain.model.dto.VendaDiaria;
 import com.apigaworks.algafood.domain.service.VendaQueryService;
 import com.apigaworks.algafood.domain.service.VendaReportService;
+import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -33,16 +34,17 @@ public class EstatisticaController {
 
     //    isso aqui é chamado quando o user aceita application/pdf
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> consulVendaDiariasPdf(VendaDiariaFilter filter) {
+    public ResponseEntity<byte[]> consulVendaDiariasPdf(VendaDiariaFilter filter) throws JRException {
         byte[] bytesPdf = VendaReportService.emitirVendarDiarias(filter);
-
+//
         var headers = new HttpHeaders();
 //        attachment -> isso serve pra baixar direto
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=vendas-diarias.pdf");
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_PDF)
-                .headers(headers)
-                .body(bytesPdf);
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.APPLICATION_PDF)
+//                .headers(headers)
+//                .body(bytesPdf);
+        return null;
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -35,7 +36,7 @@ public class VendaQueryServiceImpl implements VendaQueryService {
 
 //        estou acessando a funcao do banco sql, 1º funcao, 2º o que deve retornar,
 //        3º qual o campo usar
-        var functionDateDataCriacao = builder.function("date", LocalDate.class,
+        var functionDateDataCriacao = builder.function("date", Date.class,
                 root.get("dataCriacao"));
 
 //        aqui é o select primeiro eu digo o que vai retornar,

@@ -1,6 +1,7 @@
 package com.apigaworks.algafood.api.controller;
 
 import com.apigaworks.algafood.domain.dto.foto.FotoDto;
+import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +19,7 @@ public class RestauranteProdutoFotoController {
 //    posso receber com @requesparam do tipo MULTIPART_FORM_DATA_VALUE ou do jeito que fiz
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void atualizarFoto(@PathVariable Long restauranteId,
-                              @PathVariable Long produtoId, FotoDto arquivoDto)  {
+                              @PathVariable Long produtoId, @Valid FotoDto arquivoDto)  {
 
         var nomeArquivo = UUID.randomUUID().toString() + "_" + arquivoDto.arquivo().getOriginalFilename();
 

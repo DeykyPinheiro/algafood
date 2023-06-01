@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/restaurantes/{idRestaurante}/produtos")
+@RequestMapping("/restaurantes/{restauranteId}/produtos")
 public class ProdutoController {
 
     @Autowired
@@ -23,33 +23,31 @@ public class ProdutoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProdutoDto salvar(@PathVariable Long idRestaurante, @RequestBody @Valid ProdutoSaveDto produto) {
-        return produtoService.salvar(idRestaurante, produto);
+    public ProdutoDto salvar(@PathVariable Long restauranteId, @RequestBody @Valid ProdutoSaveDto produto) {
+        return produtoService.salvar(restauranteId, produto);
     }
 
     //    RequestParam é quando vc passa no caminho depois de "?"
     @GetMapping
-    public List<ProdutoListDto> listar(@PathVariable Long idRestaurante,
+    public List<ProdutoListDto> listar(@PathVariable Long restauranteId,
                                        @RequestParam(required = false, defaultValue = "false") Boolean incluirInativos) {
-        return produtoService.listarPorId(idRestaurante, incluirInativos);
+        return produtoService.listarPorId(restauranteId, incluirInativos);
     }
 
-    @PutMapping("/{idProduto}")
-    public ProdutoDto atualizar(@PathVariable Long idRestaurante, @PathVariable Long idProduto, @RequestBody @Valid ProdutoUpdateDto produto) {
-        return produtoService.atualizar(idRestaurante, idProduto, produto);
+    @PutMapping("/{produtoId}")
+    public ProdutoDto atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId, @RequestBody @Valid ProdutoUpdateDto produto) {
+        return produtoService.atualizar(restauranteId, produtoId, produto);
     }
 
-    @DeleteMapping("/{idProduto}")
+    @DeleteMapping("/{produtoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(@PathVariable Long idRestaurante, @PathVariable Long idProduto) {
-        produtoService.remover(idRestaurante, idProduto);
+    public void remover(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+        produtoService.remover(restauranteId, produtoId);
     }
 
     //    consulta mais diferente, pq tenho que relacionar produto e restaurante
-    @GetMapping("/{idProduto}")
-    public ProdutoDto buscarProdutoPorId(@PathVariable Long idRestaurante, @PathVariable Long idProduto) {
-        return produtoService.buscarProdutoPorIdPorRestaurante(idRestaurante, idProduto);
+    @GetMapping("/{produtoId}")
+    public ProdutoDto buscarProdutoPorId(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+        return produtoService.buscarProdutoPorIdPorRestaurante(restauranteId, produtoId);
     }
-
-
 }

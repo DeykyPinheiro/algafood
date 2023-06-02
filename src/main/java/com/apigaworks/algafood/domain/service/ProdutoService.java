@@ -42,8 +42,8 @@ public class ProdutoService {
     }
 
     @Transactional
-    public ProdutoDto salvar(Long idRestaurante, @Valid ProdutoSaveDto produtoDto) {
-        Restaurante restaurante = restauranteService.buscarOuFalhar(idRestaurante);
+    public ProdutoDto salvar(Long restauranteId, @Valid ProdutoSaveDto produtoDto) {
+        Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
         Produto produto = produtoRespository.save(new Produto(produtoDto));
         produto.setRestaurante(restaurante);
 
@@ -54,8 +54,8 @@ public class ProdutoService {
     }
 
 
-    public List<ProdutoListDto> listarPorId(Long idRestaurante, Boolean incluirInativos) {
-        Restaurante restaurante = restauranteService.buscarOuFalhar(idRestaurante);
+    public List<ProdutoListDto> listarPorId(Long restauranteId, Boolean incluirInativos) {
+        Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
 
         Collection<Produto> listaProdutos;
         if (incluirInativos == true) {
@@ -69,10 +69,10 @@ public class ProdutoService {
     }
 
     @Transactional
-    public ProdutoDto atualizar(Long idRestaurante, Long idProduto, ProdutoUpdateDto produtoDto) {
+    public ProdutoDto atualizar(Long restauranteId, Long produtoId, ProdutoUpdateDto produtoDto) {
 
-        restauranteService.buscarOuFalhar(idRestaurante);
-        ProdutoDto produtoAtualDto = buscarProdutoPorId(idRestaurante, idProduto);
+        restauranteService.buscarOuFalhar(restauranteId);
+        ProdutoDto produtoAtualDto = buscarProdutoPorId(restauranteId, produtoId);
         Produto produtoAtual = produtoRespository.findById(produtoAtualDto.id()).get();
 
 
@@ -84,47 +84,47 @@ public class ProdutoService {
         return new ProdutoDto(produtoAtual);
     }
 
-    public ProdutoDto buscarProdutoPorId(Long idRestaurante, Long idProduto) {
-        restauranteService.buscarOuFalhar(idRestaurante);
-        Produto produto = produtoRespository.findById(idProduto)
-                .orElseThrow(() -> new ProdutoNaoEncontratoException(idProduto));
+    public ProdutoDto buscarProdutoPorId(Long restauranteId, Long produtoId) {
+        restauranteService.buscarOuFalhar(restauranteId);
+        Produto produto = produtoRespository.findById(produtoId)
+                .orElseThrow(() -> new ProdutoNaoEncontratoException(produtoId));
         return new ProdutoDto(produto);
     }
 
-    public ProdutoDto buscarProdutoPorIdPorRestaurante(Long idRestaurante, Long idProduto) {
+    public ProdutoDto buscarProdutoPorIdPorRestaurante(Long restauranteId, Long produtoId) {
 
 //        verifico se os dois id existem, tanto produto, quando restaurante
 
-        restauranteService.buscarOuFalhar(idRestaurante);
-        this.buscarProdutoPorId(idRestaurante, idProduto);
+        restauranteService.buscarOuFalhar(restauranteId);
+        this.buscarProdutoPorId(restauranteId, produtoId);
 
 //            caso existam, eu vou usar uma funcao que eu mesmo implemento por meio de uma
 //            interface, clica em cima que vai pra ela
-        Produto produto = produtoRespository.buscarProdutoPorIdPorRestaurante(idRestaurante, idProduto)
-                .orElseThrow(() -> new ProdutoNaoEncontratoException(idRestaurante, idProduto));
+        Produto produto = produtoRespository.buscarProdutoPorIdPorRestaurante(restauranteId, produtoId)
+                .orElseThrow(() -> new ProdutoNaoEncontratoException(restauranteId, produtoId));
 
         return new ProdutoDto(produto);
 
     }
 
     @Transactional
-    public void remover(Long idRestaurante, Long idProduto) {
+    public void remover(Long restauranteId, Long produtoId) {
         try {
-            restauranteService.buscarOuFalhar(idRestaurante);
-            this.buscarProdutoPorId(idRestaurante, idProduto);
-            Produto produto = new Produto(buscarProdutoPorIdPorRestaurante(idRestaurante, idProduto));
+            restauranteService.buscarOuFalhar(restauranteId);
+            this.buscarProdutoPorId(restauranteId, produtoId);
+            Produto produto = new Produto(buscarProdutoPorIdPorRestaurante(restauranteId, produtoId));
 
             produtoRespository.delete(produto);
             produtoRespository.flush();
         } catch (EmptyResultDataAccessException e) {
-            throw new ProdutoNaoEncontratoException(idProduto);
+            throw new ProdutoNaoEncontratoException(produtoId);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
-                    String.format(MSG_PRODUTO_EM_USO, idProduto));
+                    String.format(MSG_PRODUTO_EM_USO, produtoId));
         }
     }
 
-//    public ProdutoDto buscarProdutoPorId(Long idRestaurante, Long idProduto) {
-//        produtoRespository.buscarProdutoPorId(idRestaurante, idProduto);
+//    public ProdutoDto buscarProdutoPorId(Long restauranteId, Long produtoId) {
+//        produtoRespository.buscarProdutoPorId(restauranteId, produtoId);
 //        return null;
 }

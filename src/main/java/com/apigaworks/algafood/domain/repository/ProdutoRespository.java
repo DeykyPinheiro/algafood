@@ -11,7 +11,8 @@ import java.util.Optional;
 
 //extendendo duas interfaces uma o JPA padrao e outra com minhas
 // queries customizadas
-public interface ProdutoRespository extends JpaRepository<Produto, Long>, CustomProdutoRespository {
+public interface ProdutoRespository extends JpaRepository<Produto, Long>,
+        CustomProdutoRespository, ProdutoRepositoryQueries {
 
     @Query("from Produto where restaurante.id = :restauranteId and id = :produtoId")
     Optional<Produto> encontrarProduto(Long restauranteId, Long produtoId);

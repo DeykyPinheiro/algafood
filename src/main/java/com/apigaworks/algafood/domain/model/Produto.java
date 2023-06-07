@@ -30,6 +30,9 @@ public class Produto {
 
     private Boolean ativo;
 
+    @Embedded
+    private FotoProduto fotoProduto = new FotoProduto();
+
     @ManyToOne
     @JoinColumn(name = "restaurante_id")
     private Restaurante restaurante;

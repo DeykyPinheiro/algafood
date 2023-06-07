@@ -1,30 +1,21 @@
 package com.apigaworks.algafood.domain.model;
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.data.util.Lazy;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import lombok.Data;
 
-@Entity
-@Table
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(of = "id")
+@Embeddable
+@Data
 public class FotoProduto {
-    @Id
-    @Column(name = "produto_id")
-    private  Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId //diz que é mapeada pelo id
-    private Produto produto;
+    @Column(name = "nome_arquivo_foto")
+    private String nomeArquivo = "sem arquivo";
 
-    private String nomeArquivo;
+    @Column(name = "content_type_foto")
+    private String contentType = "sem arquivo";
 
-    private String descricao;
+    @Column(name = "tamanho_foto")
+    private Long tamanho = 0L;
 
-    private String contentType;
 
-    private Long tamanho;
 }

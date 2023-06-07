@@ -54,7 +54,7 @@ public class RestauranteProdutoFotoController {
         MultipartFile arquivo  = arquivoDto.arquivo();
 
         FotoProduto foto = new FotoProduto();
-        foto.setProduto(produto);
+//        foto.setProduto(produto);
         foto.setContentType(arquivo.getContentType());
         foto.setTamanho(arquivo.getSize());
         foto.setNomeArquivo(arquivo.getOriginalFilename());

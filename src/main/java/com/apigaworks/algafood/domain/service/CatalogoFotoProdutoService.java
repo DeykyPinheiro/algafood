@@ -1,6 +1,7 @@
 package com.apigaworks.algafood.domain.service;
 
 import com.apigaworks.algafood.domain.model.FotoProduto;
+import com.apigaworks.algafood.domain.model.Produto;
 import com.apigaworks.algafood.domain.repository.ProdutoRespository;
 
 import jakarta.transaction.Transactional;
@@ -21,8 +22,8 @@ public class CatalogoFotoProdutoService {
 //    pra esse save funcionar eu tive que implementar um novo seric edentro do mesmo repository,
 //    produto no caso
     @Transactional
-    public FotoProduto salvar(FotoProduto foto) {
-        return produtoRespository.save(foto);
+    public Produto salvar(Produto produto) {
+        return produtoRespository.save(produto);
     }
 
 

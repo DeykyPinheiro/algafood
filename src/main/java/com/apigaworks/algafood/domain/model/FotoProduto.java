@@ -1,11 +1,18 @@
 package com.apigaworks.algafood.domain.model;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Embeddable
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class FotoProduto {
 
     @Column(name = "nome_arquivo_foto")
@@ -18,4 +25,11 @@ public class FotoProduto {
     private Long tamanho = 0L;
 
 
+
+
+    public FotoProduto(Produto produto) {
+        this.nomeArquivo = produto.getFotoProduto().getNomeArquivo();
+        this.contentType =  produto.getFotoProduto().contentType;
+        this.tamanho =  produto.getFotoProduto().tamanho;
+    }
 }

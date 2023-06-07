@@ -13,9 +13,7 @@ public record FotoDto(
         @NotNull
         @FileSize(max = "500KB")
         @FileContentType(allowed = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
-        MultipartFile arquivo,
+        MultipartFile arquivo
 
-        @NotBlank
-        String descricao
 ) {
 }

@@ -66,9 +66,20 @@ public class Produto {
         this.ativo = produto.ativo();
     }
 
+
+
     public Produto(Long produtoId) {
         this.id = produtoId;
     }
-//    @ManyToOne
+
+    public FotoProduto getFotoProduto() {
+        return fotoProduto;
+    }
+
+    public void setFotoProduto(FotoProduto foto) {
+        this.fotoProduto = foto;
+    }
+
+    //    @ManyToOne
 //    private ItemPedido itemPedido;
 }

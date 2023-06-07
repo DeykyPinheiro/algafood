@@ -11,12 +11,14 @@ import java.nio.file.Path;
 @Service
 public class LocalFotoStorageService implements FotoStorageService {
 
-    @Value("%{algafood.storage.local}")
+    @Value("${algafood.storage.local.diretorio-fotos}")
     private Path pathLocal;
 
     private Path getSaveLocalPath(NovaFoto foto) {
 //        isso concatena o nome com a string da variavel
-        return pathLocal.resolve(Path.of(foto.nomeArquivo()));
+//        return pathLocal.resolve
+        return pathLocal.resolve(Path.of(foto.getNomeArquivo()));
+//        return Path.of("C:/Users/pinheiro/Downloads/download_testes/", foto.getNomeArquivo());
     }
 
     @Override
@@ -27,7 +29,7 @@ public class LocalFotoStorageService implements FotoStorageService {
 //            copia tal qual o transferTo, só que aqui fazemos a conversao e mandando o stream direto
 //            para o diretorio local
 //            param: daonde copiar, para onde vai
-            FileCopyUtils.copy(novaFoto.inputStream(), Files.newOutputStream(arquivoPath));
+            FileCopyUtils.copy(novaFoto.getInputStream(), Files.newOutputStream(arquivoPath));
         } catch (Exception ex) {
             throw new StorageException("Nao foi possivel armazenar o arquivo", ex);
         }

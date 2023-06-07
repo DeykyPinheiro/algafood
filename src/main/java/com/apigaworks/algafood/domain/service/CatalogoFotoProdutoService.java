@@ -6,10 +6,14 @@ import com.apigaworks.algafood.domain.model.FotoProduto;
 import com.apigaworks.algafood.domain.model.Produto;
 import com.apigaworks.algafood.domain.repository.ProdutoRespository;
 
+import com.apigaworks.algafood.infrastructure.service.storage.StorageException;
 import jakarta.transaction.Transactional;
+import jdk.dynalink.NamedOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Service
 public class CatalogoFotoProdutoService {
@@ -25,16 +29,19 @@ public class CatalogoFotoProdutoService {
         this.produtoRespository = produtoRespository;
     }
 
-//    pra esse save funcionar eu tive que implementar um novo seric edentro do mesmo repository,
+    //    pra esse save funcionar eu tive que implementar um novo seric edentro do mesmo repository,
 //    produto no caso
     @Transactional
     public Produto salvar(Produto produto) {
         return produtoRespository.save(produto);
     }
 
+    @Autowired
+    private FotoStorageService fotoStorageService;
+
 
     @Transactional
-    public Produto salvar(Long restauranteId, Long produtoId, FotoDto arquivoDto) {
+    public Produto salvar(Long restauranteId, Long produtoId, FotoDto arquivoDto) throws IOException {
 //        verifica os parametros sao validos e busca o produto
         ProdutoDto produtoAtualDto = produtoService.buscarProdutoPorIdPorRestaurante(restauranteId, produtoId);
         Produto produto = produtoRespository.findById(produtoAtualDto.id()).get();
@@ -49,6 +56,15 @@ public class CatalogoFotoProdutoService {
         foto.setTamanho(arquivo.getSize());
         foto.setNomeArquivo(arquivo.getOriginalFilename());
         produto.setFotoProduto(foto);
+
+
+        FotoStorageService.NovaFoto novaFoto = FotoStorageService.NovaFoto.builder()
+                .nomeArquivo(foto.getNomeArquivo())
+                .inputStream(arquivo.getInputStream())
+                .build();
+
+        fotoStorageService.armazenar(novaFoto);
+
 
         return produto;
     }

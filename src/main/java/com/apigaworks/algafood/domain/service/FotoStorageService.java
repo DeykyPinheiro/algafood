@@ -1,17 +1,23 @@
 package com.apigaworks.algafood.domain.service;
 
+import lombok.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 
 public interface FotoStorageService {
+    void armazenar(NovaFoto novaFoto);
 
-    void armazenar(NovaFoto novaFoto) throws IOException;
 
-    record NovaFoto(
-            String nomeArquivo,
+    @Getter
+    @Builder
+    class NovaFoto {
 
-            InputStream inputStream
+        String nomeArquivo;
 
-    ) {
+        InputStream inputStream;
+
+
     }
+
 }

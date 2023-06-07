@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
 public class RestauranteProdutoFotoController {
@@ -44,7 +46,7 @@ public class RestauranteProdutoFotoController {
     @Transactional
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public FotoProduto atualizarFoto(@PathVariable Long restauranteId,
-                                     @PathVariable Long produtoId, @Valid FotoDto arquivoDto) {
+                                     @PathVariable Long produtoId, @Valid FotoDto arquivoDto) throws IOException {
         return new FotoProduto(catalogoFotoProdutoService.salvar(restauranteId, produtoId, arquivoDto));
     }
 }

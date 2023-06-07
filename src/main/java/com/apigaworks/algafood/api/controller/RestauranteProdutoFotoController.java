@@ -44,27 +44,8 @@ public class RestauranteProdutoFotoController {
     @Transactional
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public FotoProduto atualizarFoto(@PathVariable Long restauranteId,
-                                     @PathVariable Long produtoId, @Valid FotoDto arquivoDto)  {
-
-
-        ProdutoDto produtoAtualDto = produtoService.buscarProdutoPorIdPorRestaurante(restauranteId, produtoId);
-        Produto produto = produtoRespository.findById(produtoAtualDto.id()).get();
-
-
-        MultipartFile arquivo  = arquivoDto.arquivo();
-
-
-
-        FotoProduto foto = new FotoProduto();
-        foto.setContentType(arquivo.getContentType());
-        foto.setTamanho(arquivo.getSize());
-        foto.setNomeArquivo(arquivo.getOriginalFilename());
-
-        produto.setFotoProduto(foto);
-
-        FotoProduto a  = new FotoProduto(produto);
-        return a;
-
+                                     @PathVariable Long produtoId, @Valid FotoDto arquivoDto) {
+        return new FotoProduto(catalogoFotoProdutoService.salvar(restauranteId, produtoId, arquivoDto));
     }
 }
 

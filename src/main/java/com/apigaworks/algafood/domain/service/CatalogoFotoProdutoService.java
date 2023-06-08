@@ -45,6 +45,8 @@ public class CatalogoFotoProdutoService {
 //        verifica os parametros sao validos e busca o produto
         ProdutoDto produtoAtualDto = produtoService.buscarProdutoPorIdPorRestaurante(restauranteId, produtoId);
         Produto produto = produtoRespository.findById(produtoAtualDto.id()).get();
+        String novoNomeArquivo = fotoStorageService.gerarNomeArquivo(arquivoDto.arquivo().getOriginalFilename());
+
 
 //        pega o arquivo
         MultipartFile arquivo = arquivoDto.arquivo();
@@ -54,12 +56,15 @@ public class CatalogoFotoProdutoService {
         FotoProduto foto = new FotoProduto();
         foto.setContentType(arquivo.getContentType());
         foto.setTamanho(arquivo.getSize());
-        foto.setNomeArquivo(arquivo.getOriginalFilename());
+        foto.setNomeArquivo(novoNomeArquivo);
         produto.setFotoProduto(foto);
 
 
+//        isso é feito caso dar algum erro pra salvar ele seja descarregado
+//        antes que a foto seja efetivamente armazenada
+        produtoRespository.flush();
         FotoStorageService.NovaFoto novaFoto = FotoStorageService.NovaFoto.builder()
-                .nomeArquivo(foto.getNomeArquivo())
+                .nomeArquivo(novoNomeArquivo)
                 .inputStream(arquivo.getInputStream())
                 .build();
 

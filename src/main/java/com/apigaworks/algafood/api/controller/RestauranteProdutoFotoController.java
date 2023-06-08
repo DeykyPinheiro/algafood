@@ -99,6 +99,12 @@ public class RestauranteProdutoFotoController {
 
     }
 
+    @DeleteMapping
+    public void deletarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+        catalogoFotoProdutoService.deletarFoto(restauranteId, produtoId);
+    }
+
+
 
 }
 

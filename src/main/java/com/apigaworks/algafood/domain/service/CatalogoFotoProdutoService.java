@@ -86,4 +86,12 @@ public class CatalogoFotoProdutoService {
         Produto produto = produtoRespository.findById(produtoAtualDto.id()).get();
         return  fotoStorageService.recuperar(produto.getFotoProduto().getNomeArquivo());
     }
+
+    public void deletarFoto(Long restauranteId, Long produtoId) {
+        ProdutoDto produtoAtualDto = produtoService.buscarProdutoPorIdPorRestaurante(restauranteId, produtoId);
+        Produto produto = produtoRespository.findById(produtoAtualDto.id()).get();
+
+        fotoStorageService.remover(produto.getFotoProduto().getNomeArquivo());
+        produto.setFotoProduto(new FotoProduto());
+    }
 }

@@ -16,11 +16,13 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
@@ -50,18 +52,29 @@ public class RestauranteProdutoFotoController {
         return new FotoProduto(catalogoFotoProdutoService.salvar(restauranteId, produtoId, arquivoDto));
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public FotoProduto buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         return catalogoFotoProdutoService.buscarFoto(restauranteId, produtoId);
     }
 
-    @GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping
 //    InputStreamResource isso serve para servir a foto em uma requisicao
-    public ResponseEntity<InputStreamResource> buscarBinarioImage(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+    public ResponseEntity<InputStreamResource> buscarBinarioImage(@PathVariable Long restauranteId, @PathVariable Long produtoId,
+                                                                  @RequestHeader(name = "accept") String acceptHeadder) throws HttpMediaTypeNotAcceptableException {
 //        o try/catch serve pq é lancada uma exception em catalogoFotoProdutoService.buscarBinarioImage, quando nao é encontrado
 //        mas como o formato é errado ele nao é lancado corretamente, com o try/catch funciona
+        InputStream inputStreamFoto = catalogoFotoProdutoService.buscarBinarioImage(restauranteId, produtoId);
+        var foto = catalogoFotoProdutoService.buscarFoto(restauranteId, produtoId);
+
+//        pega a media type do arquivo atual, o de baixo lista as medias types compativeis, e verifica se é compativel,
+//        se nao estoura uma exception
+
+        MediaType mediaTypeFoto = MediaType.parseMediaType(foto.getContentType());
+        List<MediaType> listaMediaTypesAceitas = MediaType.parseMediaTypes(acceptHeadder);
+        verificarMediaTypeAceitas(mediaTypeFoto, listaMediaTypesAceitas);
+
         try {
-            InputStream inputStreamFoto = catalogoFotoProdutoService.buscarBinarioImage(restauranteId, produtoId);
+
 //                colocando o fluxo dentro de uma ResponseEntity<InputStreamResource>
             return ResponseEntity.ok()
                     .contentType(MediaType.IMAGE_JPEG)
@@ -69,6 +82,19 @@ public class RestauranteProdutoFotoController {
 
         } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.notFound().build();
+        }
+
+    }
+
+    private void verificarMediaTypeAceitas(MediaType mediaTypeFoto,
+                                           List<MediaType> listaMediaTypesAceitas) throws HttpMediaTypeNotAcceptableException {
+//        aqui ele compara se qualquer uma estiver na lista ele vai returnar verdadeiro
+        Boolean compativel = listaMediaTypesAceitas.stream()
+                .anyMatch(mediaTypeAceita -> mediaTypeAceita.isCompatibleWith(mediaTypeFoto));
+
+//        to usando o construtor onde coloco a lista de MediaTypes aceitas
+        if (!compativel) {
+            throw new HttpMediaTypeNotAcceptableException(listaMediaTypesAceitas);
         }
 
     }

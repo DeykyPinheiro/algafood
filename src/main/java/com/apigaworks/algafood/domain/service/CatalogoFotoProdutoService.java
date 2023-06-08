@@ -47,6 +47,9 @@ public class CatalogoFotoProdutoService {
         Produto produto = produtoRespository.findById(produtoAtualDto.id()).get();
         String novoNomeArquivo = fotoStorageService.gerarNomeArquivo(arquivoDto.arquivo().getOriginalFilename());
 
+//        deleta a foto se existir
+        fotoStorageService.remover(produto.getFotoProduto().getNomeArquivo());
+
 
 //        pega o arquivo
         MultipartFile arquivo = arquivoDto.arquivo();
@@ -58,6 +61,8 @@ public class CatalogoFotoProdutoService {
         foto.setTamanho(arquivo.getSize());
         foto.setNomeArquivo(novoNomeArquivo);
         produto.setFotoProduto(foto);
+
+
 
 
 //        isso é feito caso dar algum erro pra salvar ele seja descarregado

@@ -50,10 +50,8 @@ public class CatalogoFotoProdutoService {
 //        deleta a foto se existir
         fotoStorageService.remover(produto.getFotoProduto().getNomeArquivo());
 
-
 //        pega o arquivo
         MultipartFile arquivo = arquivoDto.arquivo();
-
 
 //        seta os dados da foto embedada
         FotoProduto foto = new FotoProduto();
@@ -61,9 +59,6 @@ public class CatalogoFotoProdutoService {
         foto.setTamanho(arquivo.getSize());
         foto.setNomeArquivo(novoNomeArquivo);
         produto.setFotoProduto(foto);
-
-
-
 
 //        isso é feito caso dar algum erro pra salvar ele seja descarregado
 //        antes que a foto seja efetivamente armazenada
@@ -74,8 +69,15 @@ public class CatalogoFotoProdutoService {
                 .build();
 
         fotoStorageService.armazenar(novaFoto);
-
-
         return produto;
     }
+
+    public FotoProduto buscarFoto(Long restauranteId, Long produtoId) {
+        ProdutoDto produtoAtualDto = produtoService.buscarProdutoPorIdPorRestaurante(restauranteId, produtoId);
+        Produto produto = produtoRespository.findById(produtoAtualDto.id()).get();
+
+        return new FotoProduto(produto);
+    }
+
+
 }

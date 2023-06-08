@@ -2,6 +2,7 @@ package com.apigaworks.algafood.api.controller;
 
 import com.apigaworks.algafood.domain.dto.foto.FotoDto;
 import com.apigaworks.algafood.domain.dto.produto.ProdutoDto;
+import com.apigaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.apigaworks.algafood.domain.model.FotoProduto;
 import com.apigaworks.algafood.domain.model.Produto;
 import com.apigaworks.algafood.domain.repository.ProdutoRespository;
@@ -11,12 +12,15 @@ import com.apigaworks.algafood.domain.service.ProdutoService;
 import com.apigaworks.algafood.domain.service.RestauranteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
@@ -47,8 +51,26 @@ public class RestauranteProdutoFotoController {
     }
 
     @GetMapping
-    public FotoProduto atualizarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+    public FotoProduto buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         return catalogoFotoProdutoService.buscarFoto(restauranteId, produtoId);
+    }
+
+    @GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
+//    InputStreamResource isso serve para servir a foto em uma requisicao
+    public ResponseEntity<InputStreamResource> buscarBinarioImage(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+//        o try/catch serve pq é lancada uma exception em catalogoFotoProdutoService.buscarBinarioImage, quando nao é encontrado
+//        mas como o formato é errado ele nao é lancado corretamente, com o try/catch funciona
+        try {
+            InputStream inputStreamFoto = catalogoFotoProdutoService.buscarBinarioImage(restauranteId, produtoId);
+//                colocando o fluxo dentro de uma ResponseEntity<InputStreamResource>
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(new InputStreamResource(inputStreamFoto));
+
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
 

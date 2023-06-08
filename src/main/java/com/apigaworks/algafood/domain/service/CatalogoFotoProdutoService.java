@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 @Service
 public class CatalogoFotoProdutoService {
@@ -80,4 +81,9 @@ public class CatalogoFotoProdutoService {
     }
 
 
+    public InputStream buscarBinarioImage(Long restauranteId, Long produtoId) {
+        ProdutoDto produtoAtualDto = produtoService.buscarProdutoPorIdPorRestaurante(restauranteId, produtoId);
+        Produto produto = produtoRespository.findById(produtoAtualDto.id()).get();
+        return  fotoStorageService.recuperar(produto.getFotoProduto().getNomeArquivo());
+    }
 }

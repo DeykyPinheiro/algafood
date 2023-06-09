@@ -1,4 +1,4 @@
-package com.apigaworks.algafood.core.jackson;
+package com.apigaworks.algafood.common.jackson;
 
 import com.apigaworks.algafood.domain.model.Restaurante;
 import com.apigaworks.algafood.domain.model.mixin.RestauranteMixin;

@@ -1,6 +1,6 @@
 package com.apigaworks.algafood.api.exceptionhandler;
 
-import com.apigaworks.algafood.core.validation.ValidacaoExcepiton;
+import com.apigaworks.algafood.common.validation.ValidacaoExcepiton;
 import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.apigaworks.algafood.domain.exception.NegocioException;

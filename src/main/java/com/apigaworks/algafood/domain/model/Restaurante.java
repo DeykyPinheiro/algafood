@@ -1,8 +1,7 @@
 package com.apigaworks.algafood.domain.model;
 
-import com.apigaworks.algafood.core.validation.Multiplo;
-import com.apigaworks.algafood.core.validation.TaxaFrete;
-import com.apigaworks.algafood.core.validation.ValorZeroIncluiDescricao;
+import com.apigaworks.algafood.common.validation.TaxaFrete;
+import com.apigaworks.algafood.common.validation.ValorZeroIncluiDescricao;
 import com.apigaworks.algafood.domain.dto.restaurante.RestauranteUpdateDto;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
@@ -15,7 +14,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 @ValorZeroIncluiDescricao(valorField = "taxaFrete", descricaoField = "nome",

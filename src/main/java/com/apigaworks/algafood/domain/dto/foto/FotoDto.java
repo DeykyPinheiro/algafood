@@ -1,8 +1,7 @@
 package com.apigaworks.algafood.domain.dto.foto;
 
-import com.apigaworks.algafood.core.validation.FileContentType;
-import com.apigaworks.algafood.core.validation.FileSize;
-import jakarta.validation.constraints.NotBlank;
+import com.apigaworks.algafood.common.validation.FileContentType;
+import com.apigaworks.algafood.common.validation.FileSize;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;

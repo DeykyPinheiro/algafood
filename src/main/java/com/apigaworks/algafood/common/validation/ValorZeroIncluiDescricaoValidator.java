@@ -1,11 +1,10 @@
-package com.apigaworks.algafood.core.validation;
+package com.apigaworks.algafood.common.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.ValidationException;
 import org.springframework.beans.BeanUtils;
 
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 
 //Object pq posso validar qualquer coisa e nao só restaurante

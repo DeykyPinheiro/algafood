@@ -1,6 +1,6 @@
 package com.apigaworks.algafood.domain.service;
 
-import com.apigaworks.algafood.core.validation.ValidacaoExcepiton;
+import com.apigaworks.algafood.common.validation.ValidacaoExcepiton;
 import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoListDto;
 import com.apigaworks.algafood.domain.dto.restaurante.RestauranteListDto;
 import com.apigaworks.algafood.domain.dto.usuario.UsuarioDto;

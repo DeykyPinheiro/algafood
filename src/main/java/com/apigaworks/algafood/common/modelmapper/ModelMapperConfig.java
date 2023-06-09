@@ -1,9 +1,6 @@
-package com.apigaworks.algafood.core.modelmapper;
+package com.apigaworks.algafood.common.modelmapper;
 
-import com.apigaworks.algafood.domain.model.Usuario;
-import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

@@ -1,7 +1,9 @@
-package com.apigaworks.algafood.core.validation;
+package com.apigaworks.algafood.common.validation;
 
 import jakarta.validation.Constraint;
+import jakarta.validation.OverridesAttribute;
 import jakarta.validation.Payload;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,16 +12,15 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
-//aqui vinculamos quem faz a validacao
-@Constraint(validatedBy = {FileSizeValidator.class})
-public @interface FileSize {
+@Constraint(validatedBy = {})
+@PositiveOrZero
+public @interface TaxaFrete {
 
-
-    String message() default "tamanho do arquivo invalido";
+    //    OverridesAttribute essa anotacao serve pra substituir a mensagem
+    @OverridesAttribute(constraint = PositiveOrZero.class, name = "message")
+    String message() default "{TaxaFrete.invalida}";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
-
-    String max();
 }

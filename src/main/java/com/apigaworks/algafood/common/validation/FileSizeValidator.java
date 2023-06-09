@@ -1,11 +1,9 @@
-package com.apigaworks.algafood.core.validation;
+package com.apigaworks.algafood.common.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.util.unit.DataSize;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.math.BigDecimal;
 
 public class FileSizeValidator implements ConstraintValidator<FileSize, MultipartFile> {
 

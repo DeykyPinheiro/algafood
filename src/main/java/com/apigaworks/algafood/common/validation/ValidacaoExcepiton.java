@@ -1,6 +1,5 @@
-package com.apigaworks.algafood.core.validation;
+package com.apigaworks.algafood.common.validation;
 
-import com.apigaworks.algafood.domain.exception.NegocioException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.validation.BindingResult;

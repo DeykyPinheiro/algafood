@@ -4,6 +4,7 @@ package com.apigaworks.algafood.domain.model;
 import com.apigaworks.algafood.domain.dto.itempedido.ItemPedidoPedidoSaveDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoSaveDto;
 import com.apigaworks.algafood.domain.enumerated.StatusPedido;
+import com.apigaworks.algafood.domain.event.PedidoCanceladoEvent;
 import com.apigaworks.algafood.domain.event.PedidoConfirmadoEvent;
 import com.apigaworks.algafood.domain.exception.NegocioException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -127,6 +128,7 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
     public void cancelarPedido() {
         setStatusPedido(StatusPedido.CANCELADO);
         setDataCancelamento(OffsetDateTime.now());
+        registerEvent(new PedidoCanceladoEvent(this));
     }
 
     private void setStatusPedido(StatusPedido novoStatus) {

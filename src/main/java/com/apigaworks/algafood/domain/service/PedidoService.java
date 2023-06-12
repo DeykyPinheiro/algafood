@@ -145,6 +145,10 @@ public class PedidoService {
     public void cancelarPedido(Long pedidoId) {
         Pedido pedido = pedidoRepository.findById(buscarOuFalhar(pedidoId).id()).get();
         pedido.cancelarPedido();
+
+        //        aqui ele é chamado para dispar a publicacao do pedido, que só é dada quando
+//        o objeto é salvo, mas o spring data requer, entao chamamos
+        pedidoRepository.save(pedido);
     }
 }
 

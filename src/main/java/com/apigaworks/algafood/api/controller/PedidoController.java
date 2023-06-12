@@ -5,6 +5,7 @@ import com.apigaworks.algafood.domain.dto.pedido.PedidoListDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoSaveDto;
 import com.apigaworks.algafood.domain.filter.PedidoFilter;
 import com.apigaworks.algafood.domain.service.PedidoService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,7 +39,7 @@ public class PedidoController {
 
     @PutMapping("/{pedidoId}/confirmacao")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void confirmarPedido(@PathVariable Long pedidoId) {
+    public void confirmarPedido(@PathVariable Long pedidoId) throws MessagingException {
         pedidoService.confirmarPedido(pedidoId);
     }
 

@@ -9,6 +9,7 @@ import com.apigaworks.algafood.domain.model.*;
 import com.apigaworks.algafood.domain.repository.*;
 import com.apigaworks.algafood.domain.filter.PedidoFilter;
 import com.apigaworks.algafood.infrastructure.spec.PedidoSpecs;
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,9 @@ public class PedidoService {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    EnvioEmailService envioEmailService;
 
     @Autowired
     public PedidoService(PedidoRepository pedidoRepository) {
@@ -112,9 +116,18 @@ public class PedidoService {
     }
 
     @Transactional
-    public void confirmarPedido(Long pedidoId) {
+    public void confirmarPedido(Long pedidoId) throws MessagingException {
         Pedido pedido = pedidoRepository.findById(buscarOuFalhar(pedidoId).id()).get();
         pedido.confirmarPedido();
+
+//        enviar e-mail
+        var mensagem = EnvioEmailService.Mensagem.builder()
+                .assunto(pedido.getRestaurante().getNome() + " - pedido confirmado")
+                .corpo("O pedido de codigo <strong> " + pedido.getId() + "</strong> foi confirmado")
+                .destinatario(pedido.getCliente().getEmail())
+                .build();
+
+        envioEmailService.enviar(mensagem);
     }
 
     @Transactional

@@ -120,14 +120,19 @@ public class PedidoService {
         Pedido pedido = pedidoRepository.findById(buscarOuFalhar(pedidoId).id()).get();
         pedido.confirmarPedido();
 
-//        enviar e-mail
-        var mensagem = EnvioEmailService.Mensagem.builder()
-                .assunto(pedido.getRestaurante().getNome() + " - pedido confirmado")
-                .corpo("O pedido de codigo <strong> " + pedido.getId() + "</strong> foi confirmado")
-                .destinatario(pedido.getCliente().getEmail())
-                .build();
 
-        envioEmailService.enviar(mensagem);
+//        aqui ele é chamado para dispar a publicacao do pedido, que só é dada quando
+//        o objeto é salvo, mas o spring data requer, entao chamamos
+        pedidoRepository.save(pedido);
+
+//        enviar e-mail
+//        var mensagem = EnvioEmailService.Mensagem.builder()
+//                .assunto(pedido.getRestaurante().getNome() + " - pedido confirmado")
+//                .corpo("O pedido de codigo <strong> " + pedido.getId() + "</strong> foi confirmado")
+//                .destinatario(pedido.getCliente().getEmail())
+//                .build();
+//
+//        envioEmailService.enviar(mensagem);
     }
 
     @Transactional

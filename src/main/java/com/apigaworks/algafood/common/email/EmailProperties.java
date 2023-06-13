@@ -27,4 +27,7 @@ public class EmailProperties {
     //    ja retorno a instancia da funcao de email que sera usada
     private Implementacao impl = Implementacao.FAKE;
 
+//    criei dentro de uma classe, pq ficar entendivel, pelo apricaion properfeites
+    private Sandbox sandbox = new Sandbox();
+
 }

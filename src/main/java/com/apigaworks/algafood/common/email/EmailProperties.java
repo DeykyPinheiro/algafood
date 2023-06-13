@@ -1,5 +1,7 @@
 package com.apigaworks.algafood.common.email;
 
+import com.apigaworks.algafood.domain.service.EnvioEmailService;
+import com.apigaworks.algafood.infrastructure.service.email.SmtpEnvioEmailService;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +19,12 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties("algafood.email")
 public class EmailProperties {
 
+//    feito automatico o bind das propriedades ques estaou com esse prefixo, e o resto dos nomes
     @NotNull
     private String remetente;
+
+    //    puxa a implementacao do applicaction.properties, se nao tiver ele deixa com defautl(FAKE)
+    //    ja retorno a instancia da funcao de email que sera usada
+    private Implementacao impl = Implementacao.FAKE;
+
 }

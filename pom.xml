@@ -100,7 +100,7 @@
             <version>3.0.0</version>
         </dependency>
 
-<!--        api spring para envio de emails -->
+        <!--        api spring para envio de emails -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
@@ -111,6 +111,26 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
+
+        <!--        Squiggly Filter com Spring Boot-->
+        <!--        deixei documentadada caso precise mais pra frente-->
+        <!--        essa é uma lib que eu nao implementei que serve pra filtro de campos no payload -->
+        <!--        video de ref -->
+        <!--        https://www.youtube.com/watch?v=tnfemlp369E-->
+
+        <!--        lib para documentar -->
+        <!--        tem que ser esse ao invez do swagger e nao spring-->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.0.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>3.0.0</version>
+        </dependency>
 
 
     </dependencies>

@@ -15,8 +15,9 @@ public class PedidoSpecs {
     public static Specification<Pedido> usandoFiltro(PedidoFilter filtro) {
         return ((root, query, builder) -> {
 
-            root.fetch("restaurante").fetch("cozinha");
-            root.fetch("cliente");
+//quando comento para de dar erro em pages
+//            root.fetch("restaurante").fetch("cozinha");
+//            root.fetch("cliente");
 
             List<Predicate> predicates = new ArrayList<Predicate>();
 

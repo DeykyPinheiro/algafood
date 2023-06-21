@@ -6,6 +6,7 @@ import com.apigaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.apigaworks.algafood.domain.exception.NegocioException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
 //estou herdadndo ResponseEntityExceptionHandler que é uma implementacao
 // padrao que ja trata as excepections do spring
 @ControllerAdvice
+@Slf4j // lib para logar msg
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     //    serve para manipular a msg que chegam
@@ -48,6 +50,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
         String details = ex.getMessage();
+
+        log.error(ex.getMessage(), ex); // logar msg de erro, se precisar de log separado pesquisar por appender
 
         ProblemType problemType = ProblemType.RECURSO_NAO_ENCONTRADO;
         Problem problem = createProblemBuilder(httpStatus, problemType, details).build();

@@ -31,6 +31,17 @@
             <version>3.0.0</version>
         </dependency>
 
+        <!--        adicionando seguranca -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- usado para o flyway fazer a gestado do sql-->
         <dependency>
             <groupId>org.flywaydb</groupId>

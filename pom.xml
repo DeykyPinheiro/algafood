@@ -37,6 +37,12 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
+        <!--        faz parte da nova stack do spring security  -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
+
 
         <!-- usado para o flyway fazer a gestado do sql-->
         <dependency>

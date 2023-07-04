@@ -30,7 +30,7 @@ public class ResourceServerConfig {
                 )
 //                .cors(cors -> cors.) VOU PRECISAR, MAS DEIXA COMENTADO POR HORA
 //                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::opaqueToken); // ativando opaque token
-                .oauth2ResourceServer().opaqueToken();
+                .oauth2ResourceServer().jwt();
         return http.build();
 
     }

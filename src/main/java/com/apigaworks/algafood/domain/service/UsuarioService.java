@@ -16,6 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,9 @@ public class UsuarioService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private static final String MSG_USUARIO_EM_USO
             = "Usuario de código %d não pode ser removido, pois está em uso";
@@ -54,7 +58,10 @@ public class UsuarioService {
         if (usuarioExistente.isPresent()) {
             throw new NegocioException("Já existe um usuario com o e-mail informado");
         }
-        Usuario usuario = usuarioRepository.save(new Usuario(usuarioDto));
+
+        String password = passwordEncoder.encode(usuarioDto.senha());
+        Usuario usuario = new Usuario(usuarioDto.nome(), usuarioDto.email(), password);
+        usuario = usuarioRepository.save(usuario);
         return new UsuarioDto(usuario);
     }
 
@@ -116,7 +123,8 @@ public class UsuarioService {
         Usuario atualizacoes = new Usuario(usuario);
 
 
-        if (usuarioAtual.getSenha().equals(usuario.senhaAtual())) {
+        if (!passwordEncoder.matches(atualizacoes.getSenha(), usuarioAtual.getSenha())) {
+            atualizacoes.setSenha(passwordEncoder.encode(atualizacoes.getSenha()));
             modelMapper.map(atualizacoes, usuarioAtual);
         } else {
             throw new NegocioException("Senha atual informada não coincide com a senha do usuário");

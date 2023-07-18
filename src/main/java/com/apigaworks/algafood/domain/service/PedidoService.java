@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.domain.service;
 
+import com.apigaworks.algafood.common.security.AlgaSecurity;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoListDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoSaveDto;
@@ -53,7 +54,10 @@ public class PedidoService {
     private UsuarioService usuarioService;
 
     @Autowired
-    EnvioEmailService envioEmailService;
+    private EnvioEmailService envioEmailService;
+
+    @Autowired
+    private AlgaSecurity algaSecurity;
 
     @Autowired
     public PedidoService(PedidoRepository pedidoRepository) {
@@ -80,8 +84,7 @@ public class PedidoService {
         Pedido pedido = new Pedido(pedidoDto);
 
 
-//      TODO uso o cliente 1 pq  vou mudar mais pra fente
-        Usuario cliente = usuarioRepository.findById(usuarioService.buscarOuFalhar(1L).id()).get();
+        Usuario cliente = usuarioRepository.findById(usuarioService.buscarOuFalhar(algaSecurity.getUsuarioId()).id()).get();
 
         Restaurante restaurante = restauranteService.buscarOuFalhar(pedidoDto.restauranteId());
         FormaPagamento formaPagamento = formaPagamentoRepository.findById(formaPagamentoService.buscarOuFalhar(pedidoDto.formaPagamentoId()).id()).get();
@@ -96,7 +99,6 @@ public class PedidoService {
         pedido.setCliente(cliente);
         pedido.setTaxaFrete(restaurante.getTaxaFrete());
         pedido.calcularValorTotal();
-
 
         pedidoRepository.save(pedido);
 

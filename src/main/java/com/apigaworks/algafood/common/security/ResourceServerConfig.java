@@ -11,7 +11,17 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.w3c.dom.html.HTMLTableColElement;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 // isso está deprecado EnableGlobalMethodSecurity  esse substitui EnableMethodSecurity
@@ -31,8 +41,35 @@ public class ResourceServerConfig {
                 )
 //                .cors(cors -> cors.) VOU PRECISAR, MAS DEIXA COMENTADO POR HORA
 //                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::opaqueToken); // ativando opaque token
-                .oauth2ResourceServer().jwt();
-        return http.formLogin(Customizer.withDefaults()).build();
+//                .oauth2ResourceServer().jwt(); LINHA SEM O CONVERSOR DE JWT
+                .oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
 
+        return http.formLogin(Customizer.withDefaults()).build();
+    }
+
+    private JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+
+//        converte as autorizacoes que eu criei
+        converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+            List<String> authorityList = jwt.getClaimAsStringList("authorities");
+            if (authorityList == null) {
+                return Collections.emptyList();
+            }
+
+//            converte os escopos em granted authority
+            JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
+            Collection<GrantedAuthority> grantedAuthorityList = authoritiesConverter.convert(jwt);
+
+//            concatenando as duas lista de autorizacoes
+            grantedAuthorityList.addAll(
+                    authorityList.stream()
+                            .map(SimpleGrantedAuthority::new)
+                            .collect(Collectors.toList()));
+
+            return grantedAuthorityList;
+        });
+
+        return converter;
     }
 }

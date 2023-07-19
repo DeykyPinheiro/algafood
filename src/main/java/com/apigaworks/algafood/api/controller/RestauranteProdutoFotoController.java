@@ -1,10 +1,9 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.common.security.CheckSecurity;
 import com.apigaworks.algafood.domain.dto.foto.FotoDto;
-import com.apigaworks.algafood.domain.dto.produto.ProdutoDto;
 import com.apigaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.apigaworks.algafood.domain.model.FotoProduto;
-import com.apigaworks.algafood.domain.model.Produto;
 import com.apigaworks.algafood.domain.repository.ProdutoRespository;
 import com.apigaworks.algafood.domain.repository.RestauranteRepository;
 import com.apigaworks.algafood.domain.service.CatalogoFotoProdutoService;
@@ -15,10 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,12 +43,14 @@ public class RestauranteProdutoFotoController {
     //    MultipartFile esse é o formato que recebemos o binarios
 //    MULTIPART_FORM_DATA_VALUE só cai na requisicao se for put e se tiver esse formato
 //    posso receber com @requesparam do tipo MULTIPART_FORM_DATA_VALUE ou do jeito que fiz
+    @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public FotoProduto atualizarFoto(@PathVariable Long restauranteId,
                                      @PathVariable Long produtoId, @Valid FotoDto arquivoDto) throws IOException {
         return new FotoProduto(catalogoFotoProdutoService.salvar(restauranteId, produtoId, arquivoDto));
     }
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public FotoProduto buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         return catalogoFotoProdutoService.buscarFoto(restauranteId, produtoId);
@@ -100,6 +99,7 @@ public class RestauranteProdutoFotoController {
     }
 
     @DeleteMapping
+    @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     public void deletarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         catalogoFotoProdutoService.deletarFoto(restauranteId, produtoId);
     }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class CozinhaController {
     @Autowired
     private CozinhaService cozinhaService;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public Page<Cozinha> listar(Pageable pageable) {
         return cozinhaService.listar(pageable);
@@ -28,6 +30,7 @@ public class CozinhaController {
         return cozinhaService.buscarOuFalhar(id);
     }
 
+    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Cozinha salvar(@RequestBody Cozinha cozinha) {

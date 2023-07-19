@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -172,6 +173,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternal(ex, problem, header, HttpStatus.NOT_FOUND, request);
     }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex, WebRequest request){
+        HttpHeaders header = new HttpHeaders();
+        HttpStatus httpStatus = HttpStatus.FORBIDDEN;
+        String details = ex.getMessage();
+        Problem problem = createProblemBuilder(httpStatus, ProblemType.ACESSO_NEGADO, details).build();
+
+
+        return handleExceptionInternal(ex, problem, header, HttpStatus.NOT_FOUND, request);
+    }
+
 
 ////    midias nao suportadas
 //    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)

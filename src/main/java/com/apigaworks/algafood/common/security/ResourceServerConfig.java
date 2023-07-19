@@ -34,15 +34,17 @@ public class ResourceServerConfig {
                 .csrf(csrf -> csrf.disable()) // desabilita csrf para evitar ataques de path ja autenticado
 //                politica de autorizacoes
 
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/oauth2/**").permitAll() //precisa esta autenticado
-                        .requestMatchers("/login/**").permitAll()
-                        .anyRequest().authenticated()
-                )
+//                retirei tudo pq, vou controlar o acesso nos endpoits
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers("/oauth2/**").permitAll() //precisa esta autenticado
+//                        .requestMatchers("/login/**").permitAll()
+//                        .anyRequest().authenticated()
+//                )
 //                .cors(cors -> cors.) VOU PRECISAR, MAS DEIXA COMENTADO POR HORA
 //                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::opaqueToken); // ativando opaque token
 //                .oauth2ResourceServer().jwt(); LINHA SEM O CONVERSOR DE JWT
-                .oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
+                .oauth2ResourceServer()
+                .jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
 
         return http.formLogin(Customizer.withDefaults()).build();
     }

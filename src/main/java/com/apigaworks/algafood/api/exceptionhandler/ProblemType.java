@@ -18,7 +18,7 @@ public enum ProblemType {
     ERRO_DE_SISTEMA("/erro-de-sistema", "erro de sistema"),
 
     DADOS_INVALIDOS("/dados-invalidos", "dados da invalidos"),
-    
+
     ACESSO_NEGADO("/acesso-invalido", "acesso invalido");
 
     private String title;

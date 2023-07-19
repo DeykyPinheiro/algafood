@@ -1,5 +1,8 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.common.security.CheckSecurity;
+import com.apigaworks.algafood.common.security.PodeConsultarCozinhas;
+import com.apigaworks.algafood.common.security.PodeEditarCozinhas;
 import com.apigaworks.algafood.domain.model.Cozinha;
 import com.apigaworks.algafood.domain.service.CozinhaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,24 +22,28 @@ public class CozinhaController {
     @Autowired
     private CozinhaService cozinhaService;
 
-    @PreAuthorize("isAuthenticated()")
+//    @PreAuthorize("isAuthenticated()")
+//    @PodeConsultarCozinhas coloquei do jeito que ta em baixo
+    @CheckSecurity.Cozinhas.PodeConsultar
     @GetMapping
     public Page<Cozinha> listar(Pageable pageable) {
         return cozinhaService.listar(pageable);
     }
 
+    @CheckSecurity.Cozinhas.PodeConsultar
     @GetMapping("/{id}")
     public Cozinha buscar(@PathVariable Long id) {
         return cozinhaService.buscarOuFalhar(id);
     }
 
-    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+    @CheckSecurity.Cozinhas.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Cozinha salvar(@RequestBody Cozinha cozinha) {
         return cozinhaService.salvar(cozinha);
     }
 
+    @CheckSecurity.Cozinhas.PodeEditar
     @PutMapping("/{id}")
     public Cozinha atualizar(@PathVariable Long id, @RequestBody Cozinha cozinha) {
 //        faco isso apra verificar se a cozinha existe e caso nao, estouro uma exception
@@ -44,6 +51,7 @@ public class CozinhaController {
         return cozinhaService.atualizar(id, cozinha);
     }
 
+    @CheckSecurity.Cozinhas.PodeEditar
     @DeleteMapping("/{id}")
     public void remover(@PathVariable Long id) {
         cozinhaService.remover(id);

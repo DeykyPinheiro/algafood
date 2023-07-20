@@ -41,6 +41,7 @@ public class PedidoController {
     }
 
     @PutMapping("/{pedidoId}/confirmacao")
+    @CheckSecurity.Pedidos.PodeGerenciarPedido
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void confirmarPedido(@PathVariable Long pedidoId) throws MessagingException {
         pedidoService.confirmarPedido(pedidoId);
@@ -48,11 +49,13 @@ public class PedidoController {
 
     @PutMapping("/{pedidoId}/entrega")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CheckSecurity.Pedidos.PodeGerenciarPedido
     public void entregarPedido(@PathVariable Long pedidoId) {
         pedidoService.entregarPedido(pedidoId);
     }
 
     @PutMapping("/{pedidoId}/cancelamento")
+    @CheckSecurity.Pedidos.PodeGerenciarPedido
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void cancelarPedido(@PathVariable Long pedidoId) {
         pedidoService.cancelarPedido(pedidoId);

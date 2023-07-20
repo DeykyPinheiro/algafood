@@ -78,6 +78,14 @@ public @interface CheckSecurity {
         @Target(ElementType.METHOD)
         public @interface PodePesquisar {
         }
+
+        @PreAuthorize("isAuthenticated()")
+        @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or " + // é o admin geral
+                "@algaSecurity.gerenciaRestauranteDoPedido(#pedidoId)") // é gerenciado pelo user
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        public @interface PodeGerenciarPedido {
+        }
     }
 
 

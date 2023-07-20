@@ -1,6 +1,10 @@
 package com.apigaworks.algafood.common.security;
 
+import com.apigaworks.algafood.domain.dto.pedido.PedidoDto;
+import com.apigaworks.algafood.domain.model.Restaurante;
+import com.apigaworks.algafood.domain.repository.PedidoRepository;
 import com.apigaworks.algafood.domain.repository.RestauranteRepository;
+import com.apigaworks.algafood.domain.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,6 +16,9 @@ public class AlgaSecurity {
 
     @Autowired
     private RestauranteRepository restauranteRepository;
+
+    @Autowired
+    private PedidoService pedidoService;
 
     //    busca e retorna o contexto
     public Authentication getAuthentication() {
@@ -41,5 +48,10 @@ public class AlgaSecurity {
 //    public boolean gerenciaRestauranteDoPedido(Long pedidoId){
 //        return true;
 //    }
+
+     public boolean gerenciaRestauranteDoPedido(Long pedidoId){
+         Long restauranteId = pedidoService.buscarOuFalhar(pedidoId).restaurante().id();
+         return restauranteRepository.existsResponvavel(restauranteId, getUsuarioId());
+     }
 
 }

@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.common.security.CheckSecurity;
 import com.apigaworks.algafood.domain.dto.permissao.PermissaoDto;
 import com.apigaworks.algafood.domain.dto.permissao.PermissaoListDto;
 import com.apigaworks.algafood.domain.dto.permissao.PermissaoSaveDto;
@@ -23,26 +24,31 @@ public class PermissaoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @CheckSecurity.UsuarioGruposPermissoes.PodeEditar
     public PermissaoDto salvar(@RequestBody @Valid PermissaoSaveDto permissaoDto) {
         return permissaoService.salvar(permissaoDto);
     }
 
     @GetMapping("/{permissaoId}")
+    @CheckSecurity.UsuarioGruposPermissoes.PodeConsultar
     public PermissaoDto buscar(@PathVariable Long permissaoId) {
         return permissaoService.buscarOuFalhar(permissaoId);
     }
 
     @GetMapping
+    @CheckSecurity.UsuarioGruposPermissoes.PodeConsultar
     public List<PermissaoListDto> listar() {
         return permissaoService.listar();
     }
 
     @PutMapping("/{permissaoId}")
+    @CheckSecurity.UsuarioGruposPermissoes.PodeEditar
     public PermissaoDto atualizar(@PathVariable Long permissaoId, @RequestBody @Valid PermissaoUpdateDto permissaoDto) {
         return permissaoService.atualizar(permissaoId, permissaoDto);
     }
 
     @DeleteMapping("/{permissaoId}")
+    @CheckSecurity.UsuarioGruposPermissoes.PodeEditar
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long permissaoId) {
         permissaoService.remover(permissaoId);

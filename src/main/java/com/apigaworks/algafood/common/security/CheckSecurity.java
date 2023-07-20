@@ -88,7 +88,7 @@ public @interface CheckSecurity {
         }
     }
 
-    public @interface  FormaPagamento{
+    public @interface FormaPagamento {
 
         @PreAuthorize("isAuthenticated()")
         @Retention(RetentionPolicy.RUNTIME)
@@ -104,7 +104,7 @@ public @interface CheckSecurity {
 
     }
 
-    public @interface  Cidade{
+    public @interface Cidade {
 
         @PreAuthorize("isAuthenticated()")
         @Retention(RetentionPolicy.RUNTIME)
@@ -120,9 +120,9 @@ public @interface CheckSecurity {
 
     }
 
-    public @interface  Estado{
+    public @interface Estado {
 
-        @PreAuthorize("isAuthenticated()")
+        @PreAuthorize("isAuthenticated() ")
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
         public @interface PodeConsultar {
@@ -136,7 +136,33 @@ public @interface CheckSecurity {
 
     }
 
+    public @interface UsuarioGruposPermissoes {
 
+        @PreAuthorize("isAuthenticated() and @algaSecurity.getUsuarioId() == #id")
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        public @interface PodeAlterarPropriaSenha {
+        }
+
+        @PreAuthorize("hasAuthority('EDITAR_USUARIOS_GRUPOS_PERMISSOES') or " +
+                "@algaSecurity.getUsuarioId() == #id")
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        public @interface PodeAlterarUsuario {
+        }
+
+        @PreAuthorize("hasAuthority('EDITAR_USUARIOS_GRUPOS_PERMISSOES')")
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        public @interface PodeEditar {
+        }
+
+        @PreAuthorize("hasAuthority('CONSULTAR_USUARIOS_GRUPOS_PERMISSOES')")
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        public @interface PodeConsultar {
+        }
+    }
 
 
 }

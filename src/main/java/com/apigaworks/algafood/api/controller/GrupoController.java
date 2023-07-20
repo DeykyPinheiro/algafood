@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.common.security.CheckSecurity;
 import com.apigaworks.algafood.domain.dto.grupo.GrupoDto;
 import com.apigaworks.algafood.domain.dto.grupo.GrupoListDto;
 import com.apigaworks.algafood.domain.dto.grupo.GrupoSaveDto;
@@ -24,21 +25,25 @@ public class GrupoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @CheckSecurity.UsuarioGruposPermissoes.PodeEditar
     public GrupoDto adicionar(@RequestBody @Valid GrupoSaveDto grupo) {
         return grupoService.salvar(grupo);
     }
 
     @GetMapping
+    @CheckSecurity.UsuarioGruposPermissoes.PodeConsultar
     public List<GrupoListDto> listar() {
         return grupoService.listar();
     }
 
     @GetMapping("/{id}")
+    @CheckSecurity.UsuarioGruposPermissoes.PodeConsultar
     public GrupoDto buscar(@PathVariable Long id) {
         return grupoService.buscarOuFalhar(id);
     }
 
     @PutMapping("/{id}")
+    @CheckSecurity.UsuarioGruposPermissoes.PodeEditar
     public GrupoDto atualizar(@PathVariable Long id, @RequestBody @Valid GrupoUpdateDto grupo) {
         GrupoDto g = grupoService.atualizar(id, grupo);
         return g;
@@ -46,6 +51,7 @@ public class GrupoController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CheckSecurity.UsuarioGruposPermissoes.PodeEditar
     public void remover(@PathVariable Long id) {
         grupoService.remover(id);
     }

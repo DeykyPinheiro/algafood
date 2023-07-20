@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.common.security;
 
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.lang.annotation.ElementType;
@@ -37,7 +38,7 @@ public @interface CheckSecurity {
         public @interface PodeConsultar {
         }
 
-//         tem um bean chamado "AlgaSecurity" que o spring esta injetando
+        //         tem um bean chamado "AlgaSecurity" que o spring esta injetando
 //        restauranteId vem da funcao onde é chamado, dai eu passo o valor pra funcao
         @PreAuthorize("hasAuthority('EDITAR_RESTAURANTES') or" +
                 "@algaSecurity.gerenciaRestaurante(#restauranteId)")
@@ -46,5 +47,29 @@ public @interface CheckSecurity {
         public @interface PodeGerenciarFuncionamento {
         }
     }
+
+    public @interface Pedidos {
+
+////        isso é só pra saber que da pra fazer desse jeito
+//        @PreAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or " +
+////                "@algaSecurity.clienteDoPedido(#pedidoId) or" +
+////                "@algaSecurity.gerenciaRestauranteDoPedido(#pedidoId)")
+////        @Retention(RetentionPolicy.RUNTIME)
+////        @Target(ElementType.METHOD)
+////        public @interface PodeBuscar {
+////        }
+////    }
+
+//        o postauthroize checa depois da execucao do metodo
+        @PreAuthorize("isAuthenticated()")
+        @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or " + // é o admin geral
+                "@algaSecurity.getUsuarioId() == returnObject.cliente.id or" + //é do usuario
+                "@algaSecurity.gerenciaRestaurante(returnObject.restaurante.id)") // é gerenciado pelo user
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        public @interface PodeBuscar {
+        }
+    }
+
 
 }

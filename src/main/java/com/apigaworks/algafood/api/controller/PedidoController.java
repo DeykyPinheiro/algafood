@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.common.security.CheckSecurity;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoListDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoSaveDto;
@@ -27,6 +28,7 @@ public class PedidoController {
     }
 
     @GetMapping("/{pedidoId}")
+    @CheckSecurity.Pedidos.PodeBuscar
     public PedidoDto buscar(@PathVariable Long pedidoId) {
         return pedidoService.buscarOuFalhar(pedidoId);
     }

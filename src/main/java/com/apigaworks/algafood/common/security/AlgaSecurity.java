@@ -32,4 +32,14 @@ public class AlgaSecurity {
     public boolean gerenciaRestaurante(Long restauranteId) {
         return restauranteRepository.existsResponvavel(restauranteId, getUsuarioId());
     }
+
+//    nao usaremos essas funcoes
+//    public boolean clienteDoPedido(Long pedidoId){
+//        return true;
+//    }
+//
+//    public boolean gerenciaRestauranteDoPedido(Long pedidoId){
+//        return true;
+//    }
+
 }

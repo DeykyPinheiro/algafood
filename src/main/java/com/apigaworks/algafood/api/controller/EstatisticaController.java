@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.common.security.CheckSecurity;
 import com.apigaworks.algafood.domain.filter.VendaDiariaFilter;
 import com.apigaworks.algafood.domain.model.dto.VendaDiaria;
 import com.apigaworks.algafood.domain.service.VendaQueryService;
@@ -27,6 +28,7 @@ public class EstatisticaController {
     private VendaReportService VendaReportService;
 
     //    isso aqui é chamado quando o user aceita application/json
+    @CheckSecurity.Estatistica.PodeConsultar
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
 //    @GetMapping(value = "/vendas-diarias")
     public List<VendaDiaria> consulVendaDiarias(VendaDiariaFilter filter) {
@@ -34,6 +36,7 @@ public class EstatisticaController {
     }
 
     //    isso aqui é chamado quando o user aceita application/pdf
+    @CheckSecurity.Estatistica.PodeConsultar
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
 //    @GetMapping(value = "/vendas-diarias-pdf")
     public ResponseEntity<byte[]> consulVendaDiariasPdf(VendaDiariaFilter filter) throws JRException {

@@ -165,4 +165,14 @@ public @interface CheckSecurity {
     }
 
 
+    public @interface Estatistica {
+
+        @PreAuthorize("hasAuthority('GERAR_RELATORIOS')")
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        public @interface PodeConsultar {
+        }
+
+    }
+
 }

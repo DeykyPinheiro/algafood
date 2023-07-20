@@ -60,7 +60,7 @@ public @interface CheckSecurity {
 ////        }
 ////    }
 
-//        o postauthroize checa depois da execucao do metodo
+        //        o postauthroize checa depois da execucao do metodo
         @PreAuthorize("isAuthenticated()")
         @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or " + // é o admin geral
                 "@algaSecurity.getUsuarioId() == returnObject.cliente.id or" + //é do usuario
@@ -69,7 +69,18 @@ public @interface CheckSecurity {
         @Target(ElementType.METHOD)
         public @interface PodeBuscar {
         }
+
+        @PreAuthorize("isAuthenticated()")
+        @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or " + // é o admin geral
+                "@algaSecurity.getUsuarioId() == #pedidoFilter.clienteId or" + //é do usuario
+                "@algaSecurity.gerenciaRestaurante(#pedidoFilter.restauranteId)") // é gerenciado pelo user
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        public @interface PodePesquisar {
+        }
     }
+
+
 
 
 }

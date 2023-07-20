@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.common.security.CheckSecurity;
 import com.apigaworks.algafood.domain.model.Cidade;
 import com.apigaworks.algafood.domain.service.CidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +17,19 @@ public class CidadeController {
     private CidadeService cidadeService;
 
     @GetMapping("/{id}")
+    @CheckSecurity.Cidade.PodeConsultar
     public Cidade buscar(@PathVariable Long id) {
         return cidadeService.buscarOuFalhar(id);
     }
 
     @GetMapping
+    @CheckSecurity.Cidade.PodeConsultar
     public List<Cidade> listar() {
         return cidadeService.listar();
     }
 
     @PostMapping
+    @CheckSecurity.Cidade.PodeEditar
     public Cidade adicionar(@RequestBody Cidade cidade) {
         return cidadeService.salvar(cidade);
     }
@@ -33,12 +37,14 @@ public class CidadeController {
     //    padrao na hora de atualizar é receber o id no path e os
 //    dados a serem atualizados todos no body
     @PutMapping("/{id}")
+    @CheckSecurity.Cidade.PodeEditar
     public Cidade atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
         cidade = cidadeService.atualizar(id, cidade);
         return cidade;
     }
 
     @DeleteMapping("/{id}")
+    @CheckSecurity.Cidade.PodeEditar
     public void excluir(@PathVariable Long id) {
         cidadeService.remover(id);
     }

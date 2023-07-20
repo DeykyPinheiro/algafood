@@ -104,6 +104,38 @@ public @interface CheckSecurity {
 
     }
 
+    public @interface  Cidade{
+
+        @PreAuthorize("isAuthenticated()")
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        public @interface PodeConsultar {
+        }
+
+        @PreAuthorize("isAuthenticated() and hasAuthority('EDITAR_CIDADES')")
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        public @interface PodeEditar {
+        }
+
+    }
+
+    public @interface  Estado{
+
+        @PreAuthorize("isAuthenticated()")
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        public @interface PodeConsultar {
+        }
+
+        @PreAuthorize("isAuthenticated() and hasAuthority('EDITAR_ESTADOS')")
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        public @interface PodeEditar {
+        }
+
+    }
+
 
 
 

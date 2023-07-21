@@ -49,10 +49,14 @@ public class AlgaSecurity {
 //        return true;
 //    }
 
-    public boolean gerenciaRestauranteDoPedido(Long pedidoId) {
+    public Boolean gerenciaRestauranteDoPedido(Long pedidoId) {
         Long restauranteId = pedidoRepository.findById(pedidoId).get().getRestaurante().getId();
         return restauranteRepository.existsResponvavel(restauranteId, getUsuarioId());
+    }
 
+    public Boolean usuarioAutenticadoIgual(Long usuarioId){
+        return getUsuarioId() != null && usuarioId != null &&
+                getUsuarioId().equals(usuarioId);
     }
 
 }

@@ -24,6 +24,7 @@ public class PedidoController {
     @GetMapping
 //    @CheckSecurity.Pedidos.PodePesquisar
 //    só de por ali no campo o spring ja gerencia e pega da requestParam
+    @CheckSecurity.Pedidos.PodeBuscar
     public Page<PedidoListDto> buscar(PedidoFilter pedidoFilter, Pageable pageable) {
         return pedidoService.buscar(pedidoFilter, pageable);
     }

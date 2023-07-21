@@ -62,10 +62,10 @@ public @interface CheckSecurity {
 
         //        o postauthroize checa depois da execucao do metodo
 //        returnObject é o objeto padrao de retorno
-        @PreAuthorize("isAuthenticated()")
-        @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or " + // é o admin geral
-                "@algaSecurity.getUsuarioId() == returnObject.cliente.id or" + //é do usuario
-                "@algaSecurity.gerenciaRestaurante(#pedidoId)") // é gerenciado pelo user
+
+        @PreAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or " + // é o admin geral
+                "@algaSecurity.usuarioAutenticadoIgual(#pedidoFilter.clienteId)  or" + //é do usuario
+                "@algaSecurity.gerenciaRestaurante(#pedidoFilter.restauranteId)") // é gerenciado pelo user
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
         public @interface PodeBuscar {
@@ -73,7 +73,7 @@ public @interface CheckSecurity {
 
         @PreAuthorize("isAuthenticated()")
         @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or " + // é o admin geral
-                "@algaSecurity.getUsuarioId() == #pedidoFilter.clienteId or" + //é do usuario
+                "@algaSecurity.usuarioAutenticadoIgual( #pedidoFilter.clienteId) or" + //é do usuario
                 "@algaSecurity.gerenciaRestaurante(#pedidoId)") // é gerenciado pelo user
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
@@ -139,14 +139,14 @@ public @interface CheckSecurity {
 
     public @interface UsuarioGruposPermissoes {
 
-        @PreAuthorize("isAuthenticated() and @algaSecurity.getUsuarioId() == #id")
+        @PreAuthorize("isAuthenticated() and @algaSecurity.usuarioAutenticadoIgual(#id)")
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
         public @interface PodeAlterarPropriaSenha {
         }
 
         @PreAuthorize("hasAuthority('EDITAR_USUARIOS_GRUPOS_PERMISSOES') or " +
-                "@algaSecurity.getUsuarioId() == #id")
+                "@algaSecurity.usuarioAutenticadoIgual(#id)")
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
         public @interface PodeAlterarUsuario {

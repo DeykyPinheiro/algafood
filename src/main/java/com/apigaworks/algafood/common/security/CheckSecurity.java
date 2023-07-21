@@ -61,10 +61,11 @@ public @interface CheckSecurity {
 ////    }
 
         //        o postauthroize checa depois da execucao do metodo
+//        returnObject é o objeto padrao de retorno
         @PreAuthorize("isAuthenticated()")
         @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or " + // é o admin geral
                 "@algaSecurity.getUsuarioId() == returnObject.cliente.id or" + //é do usuario
-                "@algaSecurity.gerenciaRestaurante(returnObject.restaurante.id)") // é gerenciado pelo user
+                "@algaSecurity.gerenciaRestaurante(#pedidoId)") // é gerenciado pelo user
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
         public @interface PodeBuscar {
@@ -73,7 +74,7 @@ public @interface CheckSecurity {
         @PreAuthorize("isAuthenticated()")
         @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or " + // é o admin geral
                 "@algaSecurity.getUsuarioId() == #pedidoFilter.clienteId or" + //é do usuario
-                "@algaSecurity.gerenciaRestaurante(#pedidoFilter.restauranteId)") // é gerenciado pelo user
+                "@algaSecurity.gerenciaRestaurante(#pedidoId)") // é gerenciado pelo user
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
         public @interface PodePesquisar {
@@ -81,7 +82,7 @@ public @interface CheckSecurity {
 
         @PreAuthorize("isAuthenticated()")
         @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or " + // é o admin geral
-                "@algaSecurity.gerenciaRestauranteDoPedido(#pedidoId)") // é gerenciado pelo user
+                "@algaSecurity.gerenciaRestauranteDoPedido(#pedidoId") // é gerenciado pelo user
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
         public @interface PodeGerenciarPedido {

@@ -18,7 +18,7 @@ public class AlgaSecurity {
     private RestauranteRepository restauranteRepository;
 
     @Autowired
-    private PedidoService pedidoService;
+    private PedidoRepository pedidoRepository;
 
     //    busca e retorna o contexto
     public Authentication getAuthentication() {
@@ -49,9 +49,10 @@ public class AlgaSecurity {
 //        return true;
 //    }
 
-     public boolean gerenciaRestauranteDoPedido(Long pedidoId){
-         Long restauranteId = pedidoService.buscarOuFalhar(pedidoId).restaurante().id();
-         return restauranteRepository.existsResponvavel(restauranteId, getUsuarioId());
-     }
+    public boolean gerenciaRestauranteDoPedido(Long pedidoId) {
+        Long restauranteId = pedidoRepository.findById(pedidoId).get().getRestaurante().getId();
+        return restauranteRepository.existsResponvavel(restauranteId, getUsuarioId());
+
+    }
 
 }

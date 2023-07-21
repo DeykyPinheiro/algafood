@@ -22,7 +22,7 @@ public class PedidoController {
     private PedidoService pedidoService;
 
     @GetMapping
-    @CheckSecurity.Pedidos.PodePesquisar
+//    @CheckSecurity.Pedidos.PodePesquisar
 //    só de por ali no campo o spring ja gerencia e pega da requestParam
     public Page<PedidoListDto> buscar(PedidoFilter pedidoFilter, Pageable pageable) {
         return pedidoService.buscar(pedidoFilter, pageable);
@@ -36,6 +36,7 @@ public class PedidoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+        @CheckSecurity.Pedidos.PodeGerenciarPedido
     public PedidoDto salvar(@RequestBody @Valid PedidoSaveDto pedidoDto) {
         return pedidoService.salvar(pedidoDto);
     }

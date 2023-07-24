@@ -23,6 +23,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+//public class ResourceServerConfig {}
+
 @Configuration
 // isso está deprecado EnableGlobalMethodSecurity  esse substitui EnableMethodSecurity
 @EnableMethodSecurity(securedEnabled = true) // padrao é true, eu nao precisava colocar, mas pra deixar didatico ta ai
@@ -31,6 +34,8 @@ public class ResourceServerConfig {
     @Bean
     public SecurityFilterChain resourceServerFilterChain(HttpSecurity http) throws Exception {
         http
+//                .sessionManagement((session) -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(csrf -> csrf.disable()) // desabilita csrf para evitar ataques de path ja autenticado
 //                politica de autorizacoes
 
@@ -43,8 +48,16 @@ public class ResourceServerConfig {
 //                .cors(cors -> cors.) VOU PRECISAR, MAS DEIXA COMENTADO POR HORA
 //                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::opaqueToken); // ativando opaque token
 //                .oauth2ResourceServer().jwt(); LINHA SEM O CONVERSOR DE JWT
-                .oauth2ResourceServer()
-                .jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
+
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/oauth2/**").authenticated()
+                        .anyRequest().authenticated())
+//                .oauth2ResourceServer() // deprecado
+//                .jwt().jwtAuthenticationConverter(jwtAuthenticationConverter()); // deprecado
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter())));
+
 
         return http.formLogin(Customizer.withDefaults()).build();
     }

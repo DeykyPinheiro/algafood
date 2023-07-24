@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.4</version>
+        <version>3.1.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.apigaworks</groupId>
@@ -35,6 +35,19 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-authorization-server</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+
+        <dependency><!--tive que adicicionar pq o spring security ainda nao tinha migrado toda a seguranca-->
+            <groupId>org.springframework.security</groupId> <!--mas esse vai ser deprecado-->
+            <artifactId>spring-security-oauth2-authorization-server</artifactId>
+            <version>1.1.1</version>
         </dependency>
 
         <!--        faz parte da nova stack do spring security  -->
@@ -42,6 +55,8 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
+
+
 
 
         <!-- usado para o flyway fazer a gestado do sql-->

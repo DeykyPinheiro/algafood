@@ -1,5 +1,6 @@
 package com.apigaworks.algafood;
 
+import com.apigaworks.algafood.common.io.Base64ProtocolResolver;
 import com.apigaworks.algafood.infrastructure.CustomJpaRepositoryImpl;
 
 import java.util.TimeZone;
@@ -16,7 +17,13 @@ public class AlgafoodApplication {
 
     public static void main(String[] args) {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-        SpringApplication.run(AlgafoodApplication.class, args);
+
+        var app = new SpringApplication(AlgafoodApplication.class);
+        app.addListeners(new Base64ProtocolResolver()); // adivionando o listner que eu registrei
+        app.run(args);
+
+
+//        SpringApplication.run(AlgafoodApplication.class, args);
     }
 
 }

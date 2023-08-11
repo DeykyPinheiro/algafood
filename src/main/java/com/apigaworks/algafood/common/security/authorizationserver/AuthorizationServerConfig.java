@@ -79,71 +79,73 @@ public class AuthorizationServerConfig {
     public RegisteredClientRepository registeredClientRepository(JdbcOperations jdbcOperations,
                                                                  PasswordEncoder passwordEncoder) {
 
-        RegisteredClient registeredClient = RegisteredClient
-                .withId("1")
-                .clientId("client") // identificacao do cliente(quem vai chamar esse servico)
-                .clientSecret(passwordEncoder.encode("123"))
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC) //basica autentication nome:senha em base64
-                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS) // equivale ao password flow, é fluxo mais simples de autenticacao
-                .scope("READ") // escopo de leitura apenas
-//                configuracoes dos tokens
-                .tokenSettings(TokenSettings.builder()
-                        .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED) // tem dois tipos, o reference é um token opaco e o JWT é o seltf_contained
-                        .accessTokenTimeToLive(Duration.ofMinutes(30)) // duracao de 30 minutos dos tokens
-                        .build())
-                .build();
+//        RegisteredClient registeredClient = RegisteredClient
+//                .withId("1")
+//                .clientId("client") // identificacao do cliente(quem vai chamar esse servico)
+//                .clientSecret(passwordEncoder.encode("123"))
+//                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC) //basica autentication nome:senha em base64
+//                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS) // equivale ao password flow, é fluxo mais simples de autenticacao
+//                .scope("READ") // escopo de leitura apenas
+////                configuracoes dos tokens
+//                .tokenSettings(TokenSettings.builder()
+//                        .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED) // tem dois tipos, o reference é um token opaco e o JWT é o seltf_contained
+//                        .accessTokenTimeToLive(Duration.ofMinutes(30)) // duracao de 30 minutos dos tokens
+//                        .build())
+//                .build();
+//
+//////        authorization code com refresh token, pkce funciona por padrao, passando os campos ele vai usar
+//        RegisteredClient autorizationcode = RegisteredClient
+//                .withId("2")
+//                .clientId("autorizationcode")
+//                .clientSecret(passwordEncoder.encode("123"))
+//                .scope("READ")
+//                .redirectUri("https://oidcdebugger.com/debug")
+//                .redirectUri("https://oauthdebugger.com/debug")
+//                .redirectUri("http://127.0.0.1:8080/swagger-ui/oauth2-redirect.html")
+//                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+//                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+//                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+//                .tokenSettings(TokenSettings.builder()
+//                        .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED)
+//                        .accessTokenTimeToLive(Duration.ofMinutes(30))
+//                        .refreshTokenTimeToLive(Duration.ofMinutes(30))
+//                        .reuseRefreshTokens(false)
+//                        .build())
+//                .clientSettings(ClientSettings.builder()
+//                        .requireAuthorizationConsent(false)  //obriga a tela de consentimento aparecer
+//                        .requireProofKey(false)
+//                        .build())
+//                .build();
+//
+//        RegisteredClient custompassword = RegisteredClient
+//                .withId("5")
+//                .clientId("custompassword")
+//                .clientSecret(passwordEncoder.encode("123"))
+//                .scope("READ")
+//                .redirectUri("https://oidcdebugger.com/debug")
+//                .redirectUri("https://oauthdebugger.com/debug")
+//                .redirectUri("http://127.0.0.1:8080/swagger-ui/oauth2-redirect.html")
+//                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+//                .authorizationGrantType(new AuthorizationGrantType("custom_password"))
+//                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+//                .tokenSettings(TokenSettings.builder()
+//                        .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED)
+//                        .accessTokenTimeToLive(Duration.ofMinutes(30))
+//                        .refreshTokenTimeToLive(Duration.ofMinutes(30))
+//                        .reuseRefreshTokens(false)
+//                        .build())
+//                .clientSettings(ClientSettings.builder()
+//                        .requireAuthorizationConsent(false)  //obriga a tela de consentimento aparecer
+//                        .requireProofKey(false)
+//                        .build())
+//                .build();
 
-////        authorization code com refresh token, pkce funciona por padrao, passando os campos ele vai usar
-        RegisteredClient autorizationcode = RegisteredClient
-                .withId("2")
-                .clientId("autorizationcode")
-                .clientSecret(passwordEncoder.encode("123"))
-                .scope("READ")
-                .redirectUri("https://oidcdebugger.com/debug")
-                .redirectUri("https://oauthdebugger.com/debug")
-                .redirectUri("http://127.0.0.1:8080/swagger-ui/oauth2-redirect.html")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .tokenSettings(TokenSettings.builder()
-                        .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED)
-                        .accessTokenTimeToLive(Duration.ofMinutes(30))
-                        .refreshTokenTimeToLive(Duration.ofMinutes(30))
-                        .reuseRefreshTokens(false)
-                        .build())
-                .clientSettings(ClientSettings.builder()
-                        .requireAuthorizationConsent(false)  //obriga a tela de consentimento aparecer
-                        .requireProofKey(false)
-                        .build())
-                .build();
+//        salva em memoria
+//        return new InMemoryRegisteredClientRepository(custompassword, autorizationcode, registeredClient);
 
-        RegisteredClient custompassword = RegisteredClient
-                .withId("3")
-                .clientId("custompassword")
-                .clientSecret(passwordEncoder.encode("123"))
-                .scope("READ")
-                .redirectUri("https://oidcdebugger.com/debug")
-                .redirectUri("https://oauthdebugger.com/debug")
-                .redirectUri("http://127.0.0.1:8080/swagger-ui/oauth2-redirect.html")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .authorizationGrantType(new AuthorizationGrantType("custom_password"))
-                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .tokenSettings(TokenSettings.builder()
-                        .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED)
-                        .accessTokenTimeToLive(Duration.ofMinutes(30))
-                        .refreshTokenTimeToLive(Duration.ofMinutes(30))
-                        .reuseRefreshTokens(false)
-                        .build())
-                .clientSettings(ClientSettings.builder()
-                        .requireAuthorizationConsent(false)  //obriga a tela de consentimento aparecer
-                        .requireProofKey(false)
-                        .build())
-                .build();
-
-
-//        JdbcRegisteredClientRepository jdbcRegisteredClientRepository = new JdbcRegisteredClientRepository(jdbcOperations);
-//        return jdbcRegisteredClientRepository;
-        return new InMemoryRegisteredClientRepository(custompassword, autorizationcode, registeredClient);
+//        consulta do banco
+        JdbcRegisteredClientRepository jdbcRegisteredClientRepository = new JdbcRegisteredClientRepository(jdbcOperations);
+        return jdbcRegisteredClientRepository;
     }
 
 

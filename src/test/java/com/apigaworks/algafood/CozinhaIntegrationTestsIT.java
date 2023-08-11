@@ -1,5 +1,6 @@
 package com.apigaworks.algafood;
 
+import com.apigaworks.algafood.common.io.Base64ProtocolResolver;
 import com.apigaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.apigaworks.algafood.domain.model.Cozinha;
 import com.apigaworks.algafood.domain.service.CozinhaService;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.NoSuchElementException;
 
@@ -15,6 +17,7 @@ import java.util.NoSuchElementException;
 // de como pegas as excepition de um teste de integracao
 // esse inclusive foi apagado no modulo do curso
 @SpringBootTest
+@ContextConfiguration(initializers = Base64ProtocolResolver.class)
 class CozinhaIntegrationTestsIT {
 
     @Autowired

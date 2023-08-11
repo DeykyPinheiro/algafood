@@ -19,7 +19,8 @@ public class AlgafoodApplication {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 
         var app = new SpringApplication(AlgafoodApplication.class);
-        app.addListeners(new Base64ProtocolResolver()); // adivionando o listner que eu registrei
+//        app.addListeners(new Base64ProtocolResolver()); // adivionando o listner que eu registrei, que é como tinha feito antes
+        app.addInitializers(new Base64ProtocolResolver()); // adivionando o listner que eu registrei
         app.run(args);
 
 

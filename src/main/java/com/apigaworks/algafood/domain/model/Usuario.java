@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -40,7 +41,7 @@ public class Usuario {
     @JoinTable(name = "usuario_grupo",
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "grupo_id"))
-    private Set<Grupo> listaGrupos;
+    private Set<Grupo> listaGrupos = new HashSet<>();
 
 //    @ManyToMany
 //    @JoinTable(name = "restaurante_usuario_responsavel",
@@ -51,7 +52,7 @@ public class Usuario {
 
 
     @OneToMany(mappedBy = "cliente")
-    private List<Pedido> listaPedidos;
+    private List<Pedido> listaPedidos = new ArrayList<>();
 
     public Usuario(UsuarioSaveDto usuarioDto) {
         this.nome = usuarioDto.nome();

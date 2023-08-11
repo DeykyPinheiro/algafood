@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.common.io.Base64ProtocolResolver;
 import com.apigaworks.algafood.domain.dto.endereco.EnderecoPedidoDto;
 import com.apigaworks.algafood.domain.dto.formaPagamento.FormaPagamentoDto;
 import com.apigaworks.algafood.domain.dto.itempedido.ItemPedidoPedidoSaveDto;
@@ -11,6 +12,7 @@ import com.apigaworks.algafood.domain.model.*;
 import com.apigaworks.algafood.domain.repository.*;
 import com.apigaworks.algafood.domain.service.*;
 import com.apigaworks.algafood.util.DatabaseCleaner;
+import com.apigaworks.algafood.util.UserLogin;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,20 +21,46 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
+import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
+import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import static com.apigaworks.algafood.util.ResourceUtils.getContentFromResource;
 import static org.hamcrest.Matchers.*;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.auth0.jwt.JWT;
+
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtDecoders;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
+@ContextConfiguration(initializers = Base64ProtocolResolver.class) //preciso de initializar quando adicionei na inicializacao
 public class PedidoControllerIT {
 
     public static final String CAMINHO_RELATIVO = "src/test/java/com/apigaworks/algafood/json";
@@ -130,8 +158,73 @@ public class PedidoControllerIT {
     DecimalFormat decimalFormat = new DecimalFormat("#.##", DecimalFormatSymbols.getInstance(locale));
 
 
+    @Autowired
+    private GrupoRepository grupoRepository;
+
+    @Autowired
+    private GrupoService grupoService;
+
+    @Autowired
+    private PermissaoRepository permissaoRepository;
+
+
+    private UserLogin login;
+
+    private String tokenGer;
+
+    private Jwt reverseTokenJwt(String jwt, int port){
+        JwtDecoder jwtDecoder = NimbusJwtDecoder.withJwkSetUri("http://localhost:" + port + "/oauth2/jwks").build();
+        return jwtDecoder.decode(jwt);
+    }
+
+    @Autowired
+    private RegisteredClientRepository registeredClientRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
+        databaseCleaner.clearTables();
+
+        RegisteredClient registeredClient = RegisteredClient
+                .withId("5")
+                .clientId("autorizationcode")
+                .clientSecret(passwordEncoder.encode("123"))
+                .scope("READ")
+                .redirectUri("https://oidcdebugger.com/debug")
+                .redirectUri("https://oauthdebugger.com/debug")
+                .redirectUri("http://127.0.0.1:8080/swagger-ui/oauth2-redirect.html")
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(new AuthorizationGrantType("custom_password"))
+                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                .tokenSettings(TokenSettings.builder()
+                        .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED)
+                        .accessTokenTimeToLive(Duration.ofMinutes(30))
+                        .refreshTokenTimeToLive(Duration.ofMinutes(30))
+                        .reuseRefreshTokens(false)
+                        .build())
+                .clientSettings(ClientSettings.builder()
+                        .requireAuthorizationConsent(false)
+                        .requireProofKey(false)
+                        .build())
+                .build();
+        registeredClientRepository.save(registeredClient);
+
+        login = new UserLogin(grupoRepository, permissaoRepository, usuarioService, usuarioRepository, grupoService);
+        this.login.salvarUsuariosComGruposEPermissoes();
+        tokenGer = login.logarGer(port);
+
+
+        Jwt jwt = reverseTokenJwt(tokenGer, port);
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(jwt,null);
+
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(authentication);
+        SecurityContextHolder.setContext(securityContext);
+
+
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.port = port;
         RestAssured.basePath = "/pedidos";
@@ -140,7 +233,8 @@ public class PedidoControllerIT {
         jsonPedidoValido = getContentFromResource(CAMINHO_RELATIVO +
                 "/correto/pedido-valido.json");
 
-        databaseCleaner.clearTables();
+
+
         prepararDados();
     }
 
@@ -148,6 +242,7 @@ public class PedidoControllerIT {
     void deveRetornarStatus200_QuandoListarPedidos() {
         RestAssured.given()
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer "+ tokenGer)
                 .when()
                 .get()
                 .then()
@@ -159,6 +254,7 @@ public class PedidoControllerIT {
         RestAssured.given()
                 .body(jsonPedidoValido)
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer "+ tokenGer)
                 .accept(ContentType.JSON)
                 .when()
                 .post()
@@ -184,6 +280,7 @@ public class PedidoControllerIT {
     void deveRetornarRespostaEStatus_QuandoConsultarPedidoExistente() {
         RestAssured.given()
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer "+ tokenGer)
                 .pathParam("pedidoId", pedidoId1)
                 .when()
                 .get("/{pedidoId}")
@@ -197,6 +294,7 @@ public class PedidoControllerIT {
     void deveRetornarRespostaComItensSalvosValidos_QuandoConsultarPedidoExistente() {
         RestAssured.given()
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer "+ tokenGer)
                 .pathParam("pedidoId", pedidoId1)
                 .when()
                 .get("/{pedidoId}")
@@ -236,6 +334,7 @@ public class PedidoControllerIT {
     void deveRetornarStatus204_QuandoAlterarStatusParaConfirmado() {
         RestAssured.given()
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer "+ tokenGer)
                 .pathParam("pedidoId", pedidoId1)
                 .when()
                 .put("/{pedidoId}/confirmacao")
@@ -247,6 +346,7 @@ public class PedidoControllerIT {
     void deveRetornarStatus400_QuandoAlterarStatusParaConfirmado() {
         RestAssured.given()
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer "+ tokenGer)
                 .pathParam("pedidoId", pedidoId2)
                 .when()
                 .put("/{pedidoId}/confirmacao")
@@ -258,6 +358,7 @@ public class PedidoControllerIT {
     void deveRetornarStatus204_QuandoAlterarDeConfimadoParaEntregue(){
         RestAssured.given()
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer "+ tokenGer)
                 .pathParam("pedidoId", pedidoId2)
                 .when()
                 .put("/{pedidoId}/entrega")
@@ -269,6 +370,7 @@ public class PedidoControllerIT {
     void deveRetornarStatus400_QuandoAlterarDeCriadoParaEntregue(){
         RestAssured.given()
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer "+ tokenGer)
                 .pathParam("pedidoId", pedidoId1)
                 .when()
                 .put("/{pedidoId}/entrega")
@@ -280,6 +382,7 @@ public class PedidoControllerIT {
     void deveRetornarStatus204_QuandoAlterarDeCriadoParaCancelado(){
         RestAssured.given()
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer "+ tokenGer)
                 .pathParam("pedidoId", pedidoId1)
                 .when()
                 .put("/{pedidoId}/cancelamento")
@@ -301,10 +404,13 @@ public class PedidoControllerIT {
 
 
 
-    private void prepararDados() {
-        UsuarioSaveDto usuarioDto = new UsuarioSaveDto(usuario1);
-        Long userId = usuarioService.salvar(usuarioDto).id();
-        usuario1 = usuarioRepository.findById(userId).get();
+    private void prepararDados()  {
+//        this.login.salvarUsuariosComGruposEPermissoes();
+//        tokenGer = login.logarGer(port);
+
+//        UsuarioSaveDto usuarioDto = new UsuarioSaveDto(usuario1);
+//        Long userId = usuarioService.salvar(usuarioDto).id();
+        usuario1 = usuarioRepository.findById(1L).get();
 
         FormaPagamentoDto formaPagamentoDto = new FormaPagamentoDto(formaPagamento1);
         Long formaPagamentoId = formaPagamentoService.salvar(formaPagamentoDto).id();
@@ -368,6 +474,9 @@ public class PedidoControllerIT {
         valorTotalPedido = subtotalPedido.floatValue() + restaurante.getTaxaFrete().floatValue();
 
         quatidadePedidosCadastrados = (int) pedidoRepository.count();
+
+
+
     }
 
 

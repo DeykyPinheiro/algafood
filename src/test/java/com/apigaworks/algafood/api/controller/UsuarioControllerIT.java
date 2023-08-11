@@ -1,13 +1,16 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.common.io.Base64ProtocolResolver;
 import com.apigaworks.algafood.domain.dto.grupo.GrupoSaveDto;
 import com.apigaworks.algafood.domain.model.Grupo;
 import com.apigaworks.algafood.domain.model.Usuario;
 import com.apigaworks.algafood.domain.repository.GrupoRepository;
+import com.apigaworks.algafood.domain.repository.PermissaoRepository;
 import com.apigaworks.algafood.domain.repository.UsuarioRepository;
 import com.apigaworks.algafood.domain.service.GrupoService;
 import com.apigaworks.algafood.domain.service.UsuarioService;
 import com.apigaworks.algafood.util.DatabaseCleaner;
+import com.apigaworks.algafood.util.UserLogin;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,13 +19,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
+import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
+import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
+
+import java.time.Duration;
 
 import static com.apigaworks.algafood.util.ResourceUtils.getContentFromResource;
 import static org.hamcrest.Matchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
+@ContextConfiguration(initializers = Base64ProtocolResolver.class)
 public class UsuarioControllerIT {
 
     public static final String CAMINHO_RELATIVO = "src/test/java/com/apigaworks/algafood/json";
@@ -79,8 +94,53 @@ public class UsuarioControllerIT {
     private int quantidadeUsuariosCadastrados = 0;
 
 
+    @Autowired
+    private PermissaoRepository permissaoRepository;
+
+
+    private UserLogin login;
+
+    private String tokenGer;
+
+    @Autowired
+    private RegisteredClientRepository registeredClientRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
+
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
+        databaseCleaner.clearTables();
+
+        RegisteredClient registeredClient = RegisteredClient
+                .withId("5")
+                .clientId("autorizationcode")
+                .clientSecret(passwordEncoder.encode("123"))
+                .scope("READ")
+                .redirectUri("https://oidcdebugger.com/debug")
+                .redirectUri("https://oauthdebugger.com/debug")
+                .redirectUri("http://127.0.0.1:8080/swagger-ui/oauth2-redirect.html")
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(new AuthorizationGrantType("custom_password"))
+                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                .tokenSettings(TokenSettings.builder()
+                        .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED)
+                        .accessTokenTimeToLive(Duration.ofMinutes(30))
+                        .refreshTokenTimeToLive(Duration.ofMinutes(30))
+                        .reuseRefreshTokens(false)
+                        .build())
+                .clientSettings(ClientSettings.builder()
+                        .requireAuthorizationConsent(false)
+                        .requireProofKey(false)
+                        .build())
+                .build();
+        registeredClientRepository.save(registeredClient);
+        registeredClientRepository.save(registeredClient);
+
+        login = new UserLogin(grupoRepository, permissaoRepository, usuarioService, usuarioRepository, grupoService);
+
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.port = port;
         RestAssured.basePath = "/usuarios";
@@ -120,8 +180,10 @@ public class UsuarioControllerIT {
         jsonusuarioUpdateEmailInvalido = getContentFromResource(CAMINHO_RELATIVO +
                 "/incorreto/usuario-update-email-invalido.json");
 
-        databaseCleaner.clearTables();
+
         prepararDados();
+
+        tokenGer = login.logarGer(port);
     }
 
     @Test
@@ -129,6 +191,7 @@ public class UsuarioControllerIT {
         RestAssured.given()
                 .body(jsonUsuarioCorreto)
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .accept(ContentType.JSON)
                 .when()
                 .post()
@@ -141,6 +204,7 @@ public class UsuarioControllerIT {
         RestAssured.given()
                 .body(jsonUsuarioCorreto)
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .accept(ContentType.JSON)
                 .when()
                 .post()
@@ -157,6 +221,7 @@ public class UsuarioControllerIT {
         RestAssured.given()
                 .body(jsonUsuarioSemEmail)
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .accept(ContentType.JSON)
                 .when()
                 .post()
@@ -169,6 +234,7 @@ public class UsuarioControllerIT {
         RestAssured.given()
                 .body(jsonUsuarioSemNome)
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .accept(ContentType.JSON)
                 .when()
                 .post()
@@ -181,6 +247,7 @@ public class UsuarioControllerIT {
         RestAssured.given()
                 .body(jsonUsuarioSemSenha)
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .accept(ContentType.JSON)
                 .when()
                 .post()
@@ -193,6 +260,7 @@ public class UsuarioControllerIT {
         RestAssured.given()
                 .body(jsonUsuarioVazio)
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .accept(ContentType.JSON)
                 .when()
                 .post()
@@ -205,6 +273,7 @@ public class UsuarioControllerIT {
         RestAssured.given()
                 .body(jsonUsuarioEmailInvalido)
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .accept(ContentType.JSON)
                 .when()
                 .post()
@@ -217,6 +286,7 @@ public class UsuarioControllerIT {
     void deveRetornarStatus200_QuandoListarUsuario() {
         RestAssured.given()
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .when()
                 .get()
                 .then()
@@ -227,6 +297,7 @@ public class UsuarioControllerIT {
     void deveRetornarStatus200_QuandoBuscarUsuarioPorId() {
         RestAssured.given()
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .pathParam("id", u4.getId())
                 .when()
                 .get("/{id}")
@@ -238,6 +309,7 @@ public class UsuarioControllerIT {
     void deveRetornarCorpoCorretoSemSenha_QuandoBuscarUsuarioPorId() {
         RestAssured.given()
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .pathParam("id", u4.getId())
                 .when()
                 .get("/{id}")
@@ -252,6 +324,7 @@ public class UsuarioControllerIT {
     void deveRetornarStatus404_QuandoBuscarUsuarioPorIdInexistente() {
         RestAssured.given()
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .pathParam("id", ID_USUARIO_NAO_EXISTENTE)
                 .when()
                 .get("/{id}")
@@ -263,6 +336,7 @@ public class UsuarioControllerIT {
     void deveRetornarQuantidadeIgualDeUsuarioCadastrados_QuandoListarUsuario() {
         RestAssured.given()
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .when()
                 .get()
                 .then()
@@ -275,6 +349,7 @@ public class UsuarioControllerIT {
     void deveRetornarStatus204_QuandoExcluirUmUsuarioValido() {
         RestAssured.given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .pathParam("id", u4.getId())
                 .when()
                 .delete("/{id}")
@@ -287,6 +362,7 @@ public class UsuarioControllerIT {
         RestAssured.given()
                 .body(jsonUsuarioAtualizadoValido)
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .accept(ContentType.JSON)
                 .pathParam("id", u4.getId())
                 .when()
@@ -300,6 +376,7 @@ public class UsuarioControllerIT {
         RestAssured.given()
                 .body(jsonusuarioUpdateEmailInvalido)
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .contentType(ContentType.JSON)
                 .pathParam("id", u4.getId())
                 .put("/{id}")
@@ -312,6 +389,7 @@ public class UsuarioControllerIT {
         RestAssured.given()
                 .body(jsonUsuarioAtualizadoValido)
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .accept(ContentType.JSON)
                 .pathParam("id", u4.getId())
                 .when()
@@ -327,6 +405,7 @@ public class UsuarioControllerIT {
         RestAssured.given()
                 .body(jsonUsuarioAtualizadoComSenha)
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .accept(ContentType.JSON)
                 .pathParam("id", u4.getId())
                 .when()
@@ -335,36 +414,41 @@ public class UsuarioControllerIT {
                 .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
-    @Test
-    void deveRetornarStatus204_QuandoAtualizarSenhaDoUsuarioValido() {
-        RestAssured.given()
-                .body(jsonUsuarioUpdateSenhaValido)
-                .contentType(ContentType.JSON)
-                .accept(ContentType.JSON)
-                .pathParam("id", u4.getId())
-                .when()
-                .put("/{id}/senha")
-                .then()
-                .statusCode(HttpStatus.NO_CONTENT.value());
-    }
+    //    só quem pode alterar a senha é o usuario dono do cadastro
+//    @Test
+//    void deveRetornarStatus204_QuandoAtualizarSenhaDoUsuarioValido() {
+//        RestAssured.given()
+//                .body(jsonUsuarioUpdateSenhaValido)
+//                .contentType(ContentType.JSON)
+//                .header("Authorization", "Bearer " + tokenGer)
+//                .accept(ContentType.JSON)
+//                .pathParam("id", u4.getId())
+//                .when()
+//                .put("/{id}/senha")
+//                .then()
+//                .statusCode(HttpStatus.NO_CONTENT.value());
+//    }
 
-    @Test
-    void deveRetornarStatus400_QuandoSenhaAtualDiferenteDaSenhaDoUsuario() {
-        RestAssured.given()
-                .body(jsonUsuarioUpdateSenhaValido)
-                .contentType(ContentType.JSON)
-                .accept(ContentType.JSON)
-                .pathParam("id", u4.getId())
-                .when()
-                .put("/{id}/senha")
-                .then()
-                .statusCode(HttpStatus.NO_CONTENT.value());
-    }
+//    só quem pode alterar a senha é o usuario dono do cadastro
+//    @Test
+//    void deveRetornarStatus400_QuandoSenhaAtualDiferenteDaSenhaDoUsuario() {
+//        RestAssured.given()
+//                .body(jsonUsuarioUpdateSenhaValido)
+//                .contentType(ContentType.JSON)
+//                .header("Authorization", "Bearer " + tokenGer)
+//                .accept(ContentType.JSON)
+//                .pathParam("id", u4.getId())
+//                .when()
+//                .put("/{id}/senha")
+//                .then()
+//                .statusCode(HttpStatus.NO_CONTENT.value());
+//    }
 
     @Test
     void deveRetornarStatus200_QuandoListarGruposDoUsuario() {
         RestAssured.given()
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .pathParam("userId", u4.getId())
                 .when()
                 .get("/{userId}/grupos")
@@ -376,6 +460,7 @@ public class UsuarioControllerIT {
     void deveRetornarCorpoEStatusCorreto_QuandoListarGruposPorUsuario(){
         RestAssured.given()
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .pathParam("userId", u4.getId())
                 .when()
                 .get("/{userId}/grupos")
@@ -389,6 +474,7 @@ public class UsuarioControllerIT {
     void  deveRetornarStatus204_QuandoAssociarUsuarioComGrupo(){
         RestAssured.given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .pathParam("userId", u4.getId())
                 .pathParam("grupoId", g1.getId())
                 .when()
@@ -401,6 +487,7 @@ public class UsuarioControllerIT {
     void  deveRetornarStatus204_QuandoDesassociarUsuarioComGrupo(){
         RestAssured.given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .pathParam("userId", u4.getId())
                 .pathParam("grupoId", g1.getId())
                 .when()
@@ -415,6 +502,8 @@ public class UsuarioControllerIT {
 
 
     private void prepararDados() {
+
+        this.login.salvarUsuariosComGruposEPermissoes();
 
         Usuario u1 = new Usuario("u1", "email1@email.com", "12345678");
         Usuario u2 = new Usuario("u2", "email2@email.com", "12345679");

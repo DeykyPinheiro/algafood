@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.domain.service;
 
+import com.apigaworks.algafood.common.io.Base64ProtocolResolver;
 import com.apigaworks.algafood.domain.model.Cozinha;
 import com.apigaworks.algafood.domain.repository.CozinhaRepository;
 import org.junit.jupiter.api.*;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +22,7 @@ import java.util.Optional;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ActiveProfiles("test")
+@ContextConfiguration(initializers = Base64ProtocolResolver.class)
 public class CozinhaServiceTest {
 
     @MockBean

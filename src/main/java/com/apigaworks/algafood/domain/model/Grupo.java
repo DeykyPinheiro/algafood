@@ -5,6 +5,7 @@ import com.apigaworks.algafood.domain.dto.grupo.GrupoSaveDto;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class Grupo {
     @JoinTable(name = "grupo_permissao",
             joinColumns = @JoinColumn(name = "grupo_id"),
             inverseJoinColumns = @JoinColumn(name = "permissao_id"))
-    private Set<Permissao> listaPermissao;
+    private Set<Permissao> listaPermissao = new HashSet<>();
 
     @ManyToMany(mappedBy = "listaGrupos")
     private List<Usuario> listaUsuario;
@@ -37,6 +38,11 @@ public class Grupo {
     }
 
     public Grupo(String nome) {
+        this.nome = nome;
+    }
+
+    public Grupo(long id, String nome) {
+        this.id = id;
         this.nome = nome;
     }
 

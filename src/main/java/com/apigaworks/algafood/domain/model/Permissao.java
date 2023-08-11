@@ -45,6 +45,12 @@ public class Permissao {
         this.descricao = permissaoDto.descricao();
     }
 
+    public Permissao(Long id, String nome, String descricao) {
+        this.id = id;
+        this.nome = nome;
+        this.descricao = descricao;
+    }
+
     public Permissao(PermissaoUpdateDto permissaoDto) {
         this.nome = permissaoDto.nome();
         this.descricao = permissaoDto.descricao();

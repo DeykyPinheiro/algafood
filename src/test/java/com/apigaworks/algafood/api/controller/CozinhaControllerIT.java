@@ -1,8 +1,15 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.common.io.Base64ProtocolResolver;
 import com.apigaworks.algafood.domain.model.Cozinha;
 import com.apigaworks.algafood.domain.repository.CozinhaRepository;
+import com.apigaworks.algafood.domain.repository.GrupoRepository;
+import com.apigaworks.algafood.domain.repository.PermissaoRepository;
+import com.apigaworks.algafood.domain.repository.UsuarioRepository;
+import com.apigaworks.algafood.domain.service.GrupoService;
+import com.apigaworks.algafood.domain.service.UsuarioService;
 import com.apigaworks.algafood.util.DatabaseCleaner;
+import com.apigaworks.algafood.util.UserLogin;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +18,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
+import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
+import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
+
+import java.time.Duration;
 
 import static com.apigaworks.algafood.util.ResourceUtils.getContentFromResource;
 import static io.restassured.RestAssured.given;
@@ -22,6 +40,7 @@ import static org.hamcrest.Matchers.*;
 //sobe um servidor aleatorio e usa a porta
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
+@ContextConfiguration(initializers = Base64ProtocolResolver.class)
 class CozinhaControllerIT {
 
     public static final int ID_COZINHA_NAO_EXISTENTE = 100;
@@ -43,21 +62,77 @@ class CozinhaControllerIT {
 
     int quantidadeCozinhasCadastradas = 0;
 
+    private String tokenGer;
+
+    @Autowired
+    private GrupoRepository grupoRepository;
+
+    @Autowired
+    private PermissaoRepository permissaoRepository;
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private GrupoService grupoService;
+
+    private UserLogin login;
+
+    @Autowired
+    private RegisteredClientRepository registeredClientRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws Exception {
+        databaseCleaner.clearTables();
+
+        RegisteredClient registeredClient = RegisteredClient
+            .withId("5")
+            .clientId("autorizationcode")
+            .clientSecret(passwordEncoder.encode("123"))
+            .scope("READ")
+            .redirectUri("https://oidcdebugger.com/debug")
+            .redirectUri("https://oauthdebugger.com/debug")
+            .redirectUri("http://127.0.0.1:8080/swagger-ui/oauth2-redirect.html")
+            .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+            .authorizationGrantType(new AuthorizationGrantType("custom_password"))
+            .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+            .tokenSettings(TokenSettings.builder()
+                    .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED)
+                    .accessTokenTimeToLive(Duration.ofMinutes(30))
+                    .refreshTokenTimeToLive(Duration.ofMinutes(30))
+                    .reuseRefreshTokens(false)
+                    .build())
+            .clientSettings(ClientSettings.builder()
+                    .requireAuthorizationConsent(false)
+                    .requireProofKey(false)
+                    .build())
+            .build();
+        registeredClientRepository.save(registeredClient);
+
+
+
+        login = new UserLogin(grupoRepository, permissaoRepository, usuarioService, usuarioRepository, grupoService);
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.port = port;
         RestAssured.basePath = "/cozinhas";
 
-        databaseCleaner.clearTables();
+
         prepararDados();
+        tokenGer = login.logarGer(port);
     }
 
     @Test
     void deveRetornar200_QuandoConsultarCozinhas() {
         given()
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .when()
                 .get()
                 .then()
@@ -68,6 +143,7 @@ class CozinhaControllerIT {
     void deveRetornarQuantidadeIgualCadastradaCozinhas_QuandoConsultarCozinhas() {
         given()
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .when()
                 .get()
                 .then()
@@ -82,6 +158,7 @@ class CozinhaControllerIT {
         given()
                 .body(china)
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .accept(ContentType.JSON)
                 .when()
                 .post()
@@ -93,6 +170,7 @@ class CozinhaControllerIT {
     void deveRetornarRespostaEStatusCorretos_QuandoConsultarCozinhaExistente() {
         given()
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .pathParam("id", cozinha1.getId())
                 .when()
                 .get("/{id}")
@@ -105,6 +183,7 @@ class CozinhaControllerIT {
     void deveRetornarRespostaEStatus404_QuandoConsultarCozinhaInexistente() {
         given()
                 .accept(ContentType.JSON)
+                .header("Authorization", "Bearer " + tokenGer)
                 .pathParam("id", ID_COZINHA_NAO_EXISTENTE)
                 .when()
                 .get("/{id}")
@@ -115,6 +194,7 @@ class CozinhaControllerIT {
 
     private void prepararDados() {
 
+        this.login.salvarUsuariosComGruposEPermissoes();
         cozinhaRepository.save(cozinha1);
 
         Cozinha cozinha2 = new Cozinha();

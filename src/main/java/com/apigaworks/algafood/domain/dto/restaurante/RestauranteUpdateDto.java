@@ -6,18 +6,24 @@ import com.apigaworks.algafood.domain.model.Cozinha;
 import com.apigaworks.algafood.domain.model.Endereco;
 import com.apigaworks.algafood.domain.model.Restaurante;
 import com.apigaworks.algafood.domain.repository.RestauranteRepository;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
 public record RestauranteUpdateDto(
+    
+        @Schema(example = "tuk tuke")
         String nome,
 
+        @Schema(example = "1.00")
         BigDecimal taxaFrete,
 
+        @Schema(example = "true")
         Boolean ativo,
 
+        @Schema(example = "true")
         Boolean aberto,
 
         @Valid

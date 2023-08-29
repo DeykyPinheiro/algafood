@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.api.openapi.controller.OpenApiCozinhaController;
 import com.apigaworks.algafood.common.security.CheckSecurity;
 import com.apigaworks.algafood.common.security.PodeConsultarCozinhas;
 import com.apigaworks.algafood.common.security.PodeEditarCozinhas;
@@ -17,25 +18,28 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cozinhas")
-public class CozinhaController {
+public class CozinhaController implements OpenApiCozinhaController {
 
     @Autowired
     private CozinhaService cozinhaService;
 
 //    @PreAuthorize("isAuthenticated()")
 //    @PodeConsultarCozinhas coloquei do jeito que ta em baixo
+    @Override
     @CheckSecurity.Cozinhas.PodeConsultar
     @GetMapping
     public Page<Cozinha> listar(Pageable pageable) {
         return cozinhaService.listar(pageable);
     }
 
+    @Override
     @CheckSecurity.Cozinhas.PodeConsultar
     @GetMapping("/{id}")
     public Cozinha buscar(@PathVariable Long id) {
         return cozinhaService.buscarOuFalhar(id);
     }
 
+    @Override
     @CheckSecurity.Cozinhas.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -43,6 +47,7 @@ public class CozinhaController {
         return cozinhaService.salvar(cozinha);
     }
 
+    @Override
     @CheckSecurity.Cozinhas.PodeEditar
     @PutMapping("/{id}")
     public Cozinha atualizar(@PathVariable Long id, @RequestBody Cozinha cozinha) {
@@ -51,6 +56,7 @@ public class CozinhaController {
         return cozinhaService.atualizar(id, cozinha);
     }
 
+    @Override
     @CheckSecurity.Cozinhas.PodeEditar
     @DeleteMapping("/{id}")
     public void remover(@PathVariable Long id) {
@@ -65,6 +71,7 @@ public class CozinhaController {
 //    que é passada pelo path e recebida automaticamente e feito o bind pelo spring
 //    caso nao tenha o spring é só usar o @RequestParam  e colocar o nome do paramento
 //    o bind ta feito
+    @Override
     @GetMapping("/search")
     public List<String> search(String dia, String mes, String ano) {
         List<String> params = new ArrayList<>();
@@ -74,6 +81,7 @@ public class CozinhaController {
         return params;
     }
 
+    @Override
     @GetMapping("/primeiro")
     public Cozinha buscarPrimeiro() {
         return cozinhaService.buscarPrimeiro();

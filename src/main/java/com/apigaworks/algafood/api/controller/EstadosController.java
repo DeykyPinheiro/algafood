@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.api.openapi.controller.OpenApiEstadosController;
 import com.apigaworks.algafood.common.security.CheckSecurity;
 import com.apigaworks.algafood.domain.model.Estado;
 import com.apigaworks.algafood.domain.service.EstadoService;
@@ -10,24 +11,27 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/estados")
-public class EstadosController {
+public class EstadosController implements OpenApiEstadosController {
 
 
     @Autowired
     private EstadoService estadoService;
 
+    @Override
     @GetMapping
     @CheckSecurity.Estado.PodeConsultar
     public List<Estado> listar() {
         return estadoService.listar();
     }
 
+    @Override
     @GetMapping("/{id}")
     @CheckSecurity.Estado.PodeConsultar
     public Estado listar(@PathVariable Long id) {
         return estadoService.buscarOuFalhar(id);
     }
 
+    @Override
     @PostMapping
     @CheckSecurity.Estado.PodeEditar
     public Estado salvar(@RequestBody Estado estado) {
@@ -40,6 +44,7 @@ public class EstadosController {
         return estadoService.atualizar(idEstado, estado);
     }
 
+    @Override
     @DeleteMapping("/{id}")
     @CheckSecurity.Estado.PodeEditar
     public void excluir(@PathVariable Long id) {

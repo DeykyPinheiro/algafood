@@ -1,3 +1,90 @@
+#version: "3.9"
+#
+#networks:
+#  algafood-network:
+#    driver: bridge
+#
+#services:
+#  algafood-nginx:
+#    build: ./nginx
+#    image: algafood-nginx
+#    depends_on:
+#      - algafood-api
+#    networks:
+#      - algafood-network
+#    ports:
+#      - 8080:80
+#
+#
+#  algafood-redis:
+#    image: redis:6.2.1-alpine
+#    networks:
+#      - algafood-network
+#
+#
+#  algafood-mysql:
+#    image: mysql:8.0
+##    container_name: algafood-mysql # serve para dar nome ao container
+#    environment:
+#      MYSQL_ROOT_PASSWORD: root
+##    ports:
+##      - "3306:3306"
+#    networks:
+#      - algafood-network
+#    healthcheck:
+#      test: [ "CMD", "curl", "-f", "algafood-mysql:3306" ]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 5
+#
+#  algafood-api:
+##    image: algafood-api # isso serve se a image ja tiver contruida
+#    build: . # constroi em tempo de execucao
+#    restart: always # rebuilda sempre que tiver alguma atualizacao no diretorio atual
+#    environment:
+#      DB_HOST: algafood-mysql
+##      spring.session.store-type = redis
+#      SPRING_SESSION_STORE_TYPE: redis
+#      SPRING_REDIS_HOST: algafood-redis
+##    ports:
+##      - "8080:8080"  # retinei as portas para nao serem acessiveis de fora da rede
+#    networks:
+#      - algafood-network
+#    depends_on:
+#      algafood-mysql:
+#        condition: service_healthy
+
+
+
+#  como iniciar na mao
+#  docker run -p 8080:8080 --network rede-test algafood-api
+#  docker run -e MYSQL_ROOT_PASSWORD=root --network rede-test -d -p 3306:3306 --name algafood-mysql  mysql:8.0
+#  docker run -p 8080:8080 -e DB_HOST=algafood-mysql  --network rede-test algafood-api
+
+# iniciar mysql para test
+#  docker run -e MYSQL_ROOT_PASSWORD=root -d -p 3306:3306 mysql:8.0
+#  docker run -d -p 6379:6379 --name  algafood-redis redis:6.2.1-alpine
+
+# buildar jar 
+# ./mvnw clean package
+
+# escalando container
+# docker-compose up --scale algafood-api=2
+
+# docker container run --rm -it --network algafood_algafood-network  alpine sh
+
+# docker container run --rm -it -p 6379:6379 --network algafood_algafood-network redis:6.2.1-alpine sh
+
+# remove
+# docker rmi $(docker images ls -a -q) --force
+# docker rm $(docker ps -aq) --force
+
+
+#  entrar no container ja em execucao
+#  docker exec -it algafood-redis sh
+
+
+
 version: "3.9"
 
 networks:
@@ -5,13 +92,34 @@ networks:
     driver: bridge
 
 services:
+  algafood-nginx:
+    build: ./nginx
+    image: algafood-nginx
+    depends_on:
+      - algafood-api
+    networks:
+      - algafood-network
+    ports:
+      - 8080:80
+
+
+  algafood-redis:
+    container_name: algafood-redis
+    image: redis:6.2.1-alpine
+
+    networks:
+      - algafood-network
+    healthcheck:
+      test: [ "CMD", "redis-cli","ping" ]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+
+
   algafood-mysql:
     image: mysql:8.0
-    container_name: algafood-mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-    ports:
-      - "3306:3306"
     networks:
       - algafood-network
     healthcheck:
@@ -21,22 +129,17 @@ services:
       retries: 5
 
   algafood-api:
-#    image: algafood-api # isso serve se a image ja tiver contruida
-    build: . # constroi em tempo de execucao
-    restart: always # rebuilda sempre que tiver alguma atualizacao no diretorio atual
-    container_name: algafood-api
+    build: .
+    restart: always
     environment:
       DB_HOST: algafood-mysql
-    ports:
-      - "8080:8080"
+      DB_REDIS: algafood-redis
+#      SPRING_SESSION_STORE_TYPE: redis
+#      SPRING_REDIS_HOST: algafood-redis
     networks:
       - algafood-network
     depends_on:
       algafood-mysql:
         condition: service_healthy
-
-
-#  como iniciar na mao
-#  docker run -p 8080:8080 --network rede-test algafood-api
-#  docker run -e MYSQL_ROOT_PASSWORD=root --network rede-test -d -p 3306:3306 --name algafood-mysql  mysql:8.0
-#  docker run -p 8080:8080 -e DB_HOST=algafood-mysql  --network rede-test algafood-api
+      algafood-redis:
+        condition: service_healthy

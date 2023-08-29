@@ -2,6 +2,7 @@ package com.apigaworks.algafood.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,8 +19,10 @@ public class Estado {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(example = "1")
     private Long id;
 
+    @Schema(example = "São Paulo")
     private String nome;
 
     @JsonIgnore

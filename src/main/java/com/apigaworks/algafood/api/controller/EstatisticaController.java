@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.api.openapi.controller.OpenApiEstatisticaController;
 import com.apigaworks.algafood.common.security.CheckSecurity;
 import com.apigaworks.algafood.domain.filter.VendaDiariaFilter;
 import com.apigaworks.algafood.domain.model.dto.VendaDiaria;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/estatisticas")
-public class EstatisticaController {
+public class EstatisticaController implements OpenApiEstatisticaController {
 
     @Autowired
     private VendaQueryService vendaQueryService;
@@ -28,6 +29,7 @@ public class EstatisticaController {
     private VendaReportService VendaReportService;
 
     //    isso aqui é chamado quando o user aceita application/json
+    @Override
     @CheckSecurity.Estatistica.PodeConsultar
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
 //    @GetMapping(value = "/vendas-diarias")
@@ -36,6 +38,7 @@ public class EstatisticaController {
     }
 
     //    isso aqui é chamado quando o user aceita application/pdf
+    @Override
     @CheckSecurity.Estatistica.PodeConsultar
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
 //    @GetMapping(value = "/vendas-diarias-pdf")

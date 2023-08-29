@@ -1,6 +1,7 @@
 package com.apigaworks.algafood.domain.dto.produto;
 
 import com.apigaworks.algafood.domain.model.Produto;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -11,17 +12,22 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public record ProdutoListDto(
+        @Schema(example = "1")
         Long id,
 
+        @Schema(example = "Bifé")
         @NotBlank
         String nome,
 
         @NotBlank
+        @Schema(example = "bife ancho")
         String descricao,
 
+        @Schema(example = "20.00")
         @NotNull
         BigDecimal preco,
 
+        @Schema(example = "bife")
         @NotNull
         Boolean ativo
 ) {

@@ -7,6 +7,7 @@ import com.apigaworks.algafood.domain.dto.restaurante.RestaurantePedidoDto;
 import com.apigaworks.algafood.domain.dto.usuario.UsuarioDto;
 import com.apigaworks.algafood.domain.enumerated.StatusPedido;
 import com.apigaworks.algafood.domain.model.Pedido;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Collection;
 
@@ -17,18 +18,25 @@ import java.util.stream.Collectors;
 
 public record PedidoListDto(
 
+        @Schema(example = "1")
         Long id,
 
+        @Schema(example = "10")
         BigDecimal subtotal,
 
+        @Schema(example = "1.00")
         BigDecimal taxaFrete,
 
+        @Schema(example = "11.00")
         BigDecimal valorTotal,
 
+        @Schema(example = "CRIADO")
         StatusPedido statusPedido,
 
+        @Schema(example = "2023-08-28T22:27:33Z")
         OffsetDateTime dataCriacao,
 
+        @Schema(example = "2023-08-28T22:27:33Z")
         OffsetDateTime dataConfirmacao,
 
         RestaurantePedidoDto restaurante,

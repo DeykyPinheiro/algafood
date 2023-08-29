@@ -18,11 +18,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/grupos")
-public class GrupoController {
+public class GrupoController implements com.apigaworks.algafood.api.openapi.controller.OpenApiGrupoController {
 
     @Autowired
     private GrupoService grupoService;
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @CheckSecurity.UsuarioGruposPermissoes.PodeEditar
@@ -30,18 +31,21 @@ public class GrupoController {
         return grupoService.salvar(grupo);
     }
 
+    @Override
     @GetMapping
     @CheckSecurity.UsuarioGruposPermissoes.PodeConsultar
     public List<GrupoListDto> listar() {
         return grupoService.listar();
     }
 
+    @Override
     @GetMapping("/{id}")
     @CheckSecurity.UsuarioGruposPermissoes.PodeConsultar
     public GrupoDto buscar(@PathVariable Long id) {
         return grupoService.buscarOuFalhar(id);
     }
 
+    @Override
     @PutMapping("/{id}")
     @CheckSecurity.UsuarioGruposPermissoes.PodeEditar
     public GrupoDto atualizar(@PathVariable Long id, @RequestBody @Valid GrupoUpdateDto grupo) {
@@ -49,6 +53,7 @@ public class GrupoController {
         return g;
     }
 
+    @Override
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CheckSecurity.UsuarioGruposPermissoes.PodeEditar
@@ -56,17 +61,20 @@ public class GrupoController {
         grupoService.remover(id);
     }
 
+    @Override
     @GetMapping("/{grupoId}/permissoes")
     public List<PermissaoListDto> listaPermissoesPorGrupo(@PathVariable Long grupoId) {
         return grupoService.listaPermissoesPorGrupo(grupoId);
     }
 
+    @Override
     @PutMapping("/{grupoId}/permissoes/{permissaoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void associarPermissao(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
         grupoService.associarPermissao(grupoId, permissaoId);
     }
 
+    @Override
     @DeleteMapping("/{grupoId}/permissoes/{permissaoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void desassociarPermissao(@PathVariable Long grupoId, @PathVariable Long permissaoId) {

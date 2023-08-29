@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.api.openapi.controller.OpenApiCidadeController;
 import com.apigaworks.algafood.common.security.CheckSecurity;
 import com.apigaworks.algafood.domain.model.Cidade;
 import com.apigaworks.algafood.domain.service.CidadeService;
@@ -10,24 +11,27 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cidades")
-public class CidadeController {
+public class CidadeController implements OpenApiCidadeController {
 
 
     @Autowired
     private CidadeService cidadeService;
 
+    @Override
     @GetMapping("/{id}")
     @CheckSecurity.Cidade.PodeConsultar
     public Cidade buscar(@PathVariable Long id) {
         return cidadeService.buscarOuFalhar(id);
     }
 
+    @Override
     @GetMapping
     @CheckSecurity.Cidade.PodeConsultar
     public List<Cidade> listar() {
         return cidadeService.listar();
     }
 
+    @Override
     @PostMapping
     @CheckSecurity.Cidade.PodeEditar
     public Cidade adicionar(@RequestBody Cidade cidade) {
@@ -36,6 +40,7 @@ public class CidadeController {
 
     //    padrao na hora de atualizar é receber o id no path e os
 //    dados a serem atualizados todos no body
+    @Override
     @PutMapping("/{id}")
     @CheckSecurity.Cidade.PodeEditar
     public Cidade atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
@@ -43,6 +48,7 @@ public class CidadeController {
         return cidade;
     }
 
+    @Override
     @DeleteMapping("/{id}")
     @CheckSecurity.Cidade.PodeEditar
     public void excluir(@PathVariable Long id) {

@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.api.openapi.controller.OpenApiPedidoController;
 import com.apigaworks.algafood.common.security.CheckSecurity;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoDto;
 import com.apigaworks.algafood.domain.dto.pedido.PedidoListDto;
@@ -16,11 +17,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/pedidos")
-public class PedidoController {
+public class PedidoController implements OpenApiPedidoController {
 
     @Autowired
     private PedidoService pedidoService;
 
+    @Override
     @GetMapping
 //    @CheckSecurity.Pedidos.PodePesquisar
 //    só de por ali no campo o spring ja gerencia e pega da requestParam
@@ -29,12 +31,14 @@ public class PedidoController {
         return pedidoService.buscar(pedidoFilter, pageable);
     }
 
+    @Override
     @GetMapping("/{pedidoId}")
     @CheckSecurity.Pedidos.PodeBuscar
     public PedidoDto buscar(@PathVariable Long pedidoId) {
         return pedidoService.buscarOuFalhar(pedidoId);
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
         @CheckSecurity.Pedidos.PodeGerenciarPedido
@@ -42,6 +46,7 @@ public class PedidoController {
         return pedidoService.salvar(pedidoDto);
     }
 
+    @Override
     @PutMapping("/{pedidoId}/confirmacao")
     @CheckSecurity.Pedidos.PodeGerenciarPedido
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -49,6 +54,7 @@ public class PedidoController {
         pedidoService.confirmarPedido(pedidoId);
     }
 
+    @Override
     @PutMapping("/{pedidoId}/entrega")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CheckSecurity.Pedidos.PodeGerenciarPedido
@@ -56,6 +62,7 @@ public class PedidoController {
         pedidoService.entregarPedido(pedidoId);
     }
 
+    @Override
     @PutMapping("/{pedidoId}/cancelamento")
     @CheckSecurity.Pedidos.PodeGerenciarPedido
     @ResponseStatus(HttpStatus.NO_CONTENT)

@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.api.openapi.controller.OpenApiPermissaoController;
 import com.apigaworks.algafood.common.security.CheckSecurity;
 import com.apigaworks.algafood.domain.dto.permissao.PermissaoDto;
 import com.apigaworks.algafood.domain.dto.permissao.PermissaoListDto;
@@ -16,12 +17,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/permissoes")
-public class PermissaoController {
+public class PermissaoController implements OpenApiPermissaoController {
 
     @Autowired
     private PermissaoService permissaoService;
 
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @CheckSecurity.UsuarioGruposPermissoes.PodeEditar
@@ -29,24 +31,28 @@ public class PermissaoController {
         return permissaoService.salvar(permissaoDto);
     }
 
+    @Override
     @GetMapping("/{permissaoId}")
     @CheckSecurity.UsuarioGruposPermissoes.PodeConsultar
     public PermissaoDto buscar(@PathVariable Long permissaoId) {
         return permissaoService.buscarOuFalhar(permissaoId);
     }
 
+    @Override
     @GetMapping
     @CheckSecurity.UsuarioGruposPermissoes.PodeConsultar
     public List<PermissaoListDto> listar() {
         return permissaoService.listar();
     }
 
+    @Override
     @PutMapping("/{permissaoId}")
     @CheckSecurity.UsuarioGruposPermissoes.PodeEditar
     public PermissaoDto atualizar(@PathVariable Long permissaoId, @RequestBody @Valid PermissaoUpdateDto permissaoDto) {
         return permissaoService.atualizar(permissaoId, permissaoDto);
     }
 
+    @Override
     @DeleteMapping("/{permissaoId}")
     @CheckSecurity.UsuarioGruposPermissoes.PodeEditar
     @ResponseStatus(HttpStatus.NO_CONTENT)

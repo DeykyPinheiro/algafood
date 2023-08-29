@@ -1,5 +1,6 @@
 package com.apigaworks.algafood.api.controller;
 
+import com.apigaworks.algafood.api.openapi.controller.OpenApiRestauranteProdutoFotoController;
 import com.apigaworks.algafood.common.security.CheckSecurity;
 import com.apigaworks.algafood.domain.dto.foto.FotoDto;
 import com.apigaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
@@ -23,7 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
-public class RestauranteProdutoFotoController {
+public class RestauranteProdutoFotoController implements OpenApiRestauranteProdutoFotoController {
 
     @Autowired
     private CatalogoFotoProdutoService catalogoFotoProdutoService;
@@ -43,6 +44,7 @@ public class RestauranteProdutoFotoController {
     //    MultipartFile esse é o formato que recebemos o binarios
 //    MULTIPART_FORM_DATA_VALUE só cai na requisicao se for put e se tiver esse formato
 //    posso receber com @requesparam do tipo MULTIPART_FORM_DATA_VALUE ou do jeito que fiz
+    @Override
     @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public FotoProduto atualizarFoto(@PathVariable Long restauranteId,
@@ -50,12 +52,14 @@ public class RestauranteProdutoFotoController {
         return new FotoProduto(catalogoFotoProdutoService.salvar(restauranteId, produtoId, arquivoDto));
     }
 
+    @Override
     @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public FotoProduto buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         return catalogoFotoProdutoService.buscarFoto(restauranteId, produtoId);
     }
 
+    @Override
     @GetMapping
 //    InputStreamResource isso serve para servir a foto em uma requisicao
     public ResponseEntity<InputStreamResource> buscarBinarioImage(@PathVariable Long restauranteId, @PathVariable Long produtoId,
@@ -85,19 +89,19 @@ public class RestauranteProdutoFotoController {
 
     }
 
-    private void verificarMediaTypeAceitas(MediaType mediaTypeFoto,
-                                           List<MediaType> listaMediaTypesAceitas) throws HttpMediaTypeNotAcceptableException {
-//        aqui ele compara se qualquer uma estiver na lista ele vai returnar verdadeiro
-        Boolean compativel = listaMediaTypesAceitas.stream()
-                .anyMatch(mediaTypeAceita -> mediaTypeAceita.isCompatibleWith(mediaTypeFoto));
+//   ISSO AQUI TA NO NA VERSAO OPENAPI DA CLASSE
+//   private void verificarMediaTypeAceitas(MediaType mediaTypeFoto,
+//                                            List<MediaType> listaMediaTypesAceitas) throws HttpMediaTypeNotAcceptableException {
+// //        aqui ele compara se qualquer uma estiver na lista ele vai returnar verdadeiro
+//         Boolean compativel = listaMediaTypesAceitas.stream()
+//                 .anyMatch(mediaTypeAceita -> mediaTypeAceita.isCompatibleWith(mediaTypeFoto));
 
-//        to usando o construtor onde coloco a lista de MediaTypes aceitas
-        if (!compativel) {
-            throw new HttpMediaTypeNotAcceptableException(listaMediaTypesAceitas);
-        }
+// //        to usando o construtor onde coloco a lista de MediaTypes aceitas
+//         if (!compativel) {
+//             throw new HttpMediaTypeNotAcceptableException(listaMediaTypesAceitas);
+//         }
 
-    }
-
+//     }
     @DeleteMapping
     @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     public void deletarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId) {

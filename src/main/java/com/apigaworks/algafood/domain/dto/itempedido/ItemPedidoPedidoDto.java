@@ -2,6 +2,7 @@ package com.apigaworks.algafood.domain.dto.itempedido;
 
 import com.apigaworks.algafood.domain.dto.pedido.PedidoListDto;
 import com.apigaworks.algafood.domain.model.ItemPedido;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -11,16 +12,22 @@ import java.util.stream.Collectors;
 
 public record ItemPedidoPedidoDto(
 
+        @Schema(example = "10")
         Long produtoId,
 
+        @Schema(example = "Bife ancho")
         String produtoNome,
 
+        @Schema(example = "2")
         Integer quantidade,
 
+        @Schema(example = "10.00")
         BigDecimal precoUnitario,
 
+        @Schema(example = "20.00")
         BigDecimal precoTotal,
 
+        @Schema(example = "sem cebola")
         String observacao
 
 ) {

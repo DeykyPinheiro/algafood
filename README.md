@@ -31,6 +31,18 @@ docker compose up
 - Redis 6.2.1
 - Junit
 
+## Rodar testes
+```
+# derruba todos os container em execucao
+docker rm $(docker ps -aq) --force
+
+# sobe o redis e o mysql
+docker run -e MYSQL_ROOT_PASSWORD=root -d -p 3306:3306 mysql:8.0
+docker run -d -p 6379:6379 --name  algafood-redis redis:6.2.1-alpine
+
+#builda o projeto e roda os testes
+./mvnw clean package
+```
 
 ## Documentacao
 ```

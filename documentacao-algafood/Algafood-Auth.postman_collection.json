@@ -1,0 +1,497 @@
+{
+	"info": {
+		"_postman_id": "d9557e6f-21ab-4d9a-ab28-93b0d750cbe1",
+		"name": "Algafood-Auth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8664783"
+	},
+	"item": [
+		{
+			"name": "Cliente Credentials",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"\r",
+							"pm.environment.set(\"access_token\", jsonData.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "client",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "READ",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/oauth2/token",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"oauth2",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Custom Password / Password Flow",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"\r",
+							"pm.environment.set(\"access_token\", jsonData.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "autorizationcode",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "custom_password",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "READ",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "joao.ger@algafood.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/oauth2/token",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"oauth2",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Authorization Code",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "clientId",
+							"value": "autorizationcode",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "http://localhost:8080/oauth2/token",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "http://localhost:8080/oauth2/authorize",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "123",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "READ",
+							"type": "string"
+						},
+						{
+							"key": "client_authentication",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://oauthdebugger.com/debug",
+							"type": "string"
+						},
+						{
+							"key": "useBrowser",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "tokenName",
+							"value": "authorization_code",
+							"type": "string"
+						},
+						{
+							"key": "grant_type",
+							"value": "authorization_code",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "client_id",
+							"value": "client",
+							"type": "text"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://oauthdebugger.com/debug",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "read",
+							"type": "text"
+						},
+						{
+							"key": "response_type",
+							"value": "code",
+							"type": "text"
+						},
+						{
+							"key": "response_mode",
+							"value": "form_post",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:9000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OAuth2 Introspect",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "custompassword",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "text"
+						},
+						{
+							"key": "token",
+							"value": "eyJ4NXQjUzI1NiI6ImxhT181UWx2NlZDVUNDZ1dWY1lIeTdJVF9uOE8wWVR3VFAxeXpkekxodGsiLCJraWQiOiJhbGdhZm9vZCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJqb2FvLmdlckBhbGdhZm9vZC5jb20iLCJhdWQiOiJhdXRvcml6YXRpb25jb2RlIiwibmJmIjoxNjkxMTgwMDIxLCJ1c3VhcmlvX2lkIjoiMSIsInNjb3BlIjpbIlJFQUQiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwIiwiZXhwIjoxNjkxMTgxODIxLCJpYXQiOjE2OTExODAwMjEsImF1dGhvcml0aWVzIjpbIkdFUkFSX1JFTEFUT1JJT1MiLCJFRElUQVJfQ09aSU5IQVMiLCJDT05TVUxUQVJfVVNVQVJJT1NfR1JVUE9TX1BFUk1JU1NPRVMiLCJFRElUQVJfQ0lEQURFUyIsIkVESVRBUl9GT1JNQVNfUEFHQU1FTlRPIiwiRURJVEFSX1JFU1RBVVJBTlRFUyIsIkdFUkVOQ0lBUl9QRURJRE9TIiwiRURJVEFSX1VTVUFSSU9TX0dSVVBPU19QRVJNSVNTT0VTIiwiQ09OU1VMVEFSX1BFRElET1MiLCJFRElUQVJfRVNUQURPUyJdfQ.HLl4deFId1myAE3X-asPWqzZIc8zmEwFv1Zqh-Xau-KQxojHyS7OY4_zsocvUaYAwN0Jgm0qXleWEqhUblDDNKM5NRgWcSPzapLjLKty8aC-eQcXkJIwTb_-35oAF2FSVFIt8hUhwEk4xovcLHY8Yi5lGUfwstSURBQ0zstEUZDRNm4vPCVWx387OF201rwubDFao80gIIWzc2YdCnV1bQhA4t4XZ9RfjyjgPiF1xTKO4gKDr9mzpSIsIIvaQ0p4mdtg-ZM_I9T4pmy969Xk64guVSexKBvIZ4HCMYBWUYDLidfDrdL_EQ68o3eoVrlSlPFG-SmCNBcbvZMXqL_FEA",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/oauth2/introspect",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"oauth2",
+						"introspect"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Oauth2 Revoke Token",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "client",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "text"
+						},
+						{
+							"key": "token",
+							"value": "eyJ4NXQjUzI1NiI6ImxhT181UWx2NlZDVUNDZ1dWY1lIeTdJVF9uOE8wWVR3VFAxeXpkekxodGsiLCJraWQiOiJhbGdhZm9vZCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJKb8OjbyBkYSBTaWx2YSIsImF1ZCI6ImF1dG9yaXphdGlvbmNvZGUiLCJuYmYiOjE2ODkxNzI0NDAsInNjb3BlIjpbIlJFQUQiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo5MDAwIiwiZXhwIjoxNjg5MTcyNzQwLCJpYXQiOjE2ODkxNzI0NDB9.TABfAb2hPfcZXeJ8Apc6XFjSHlHMETRovagTApKppU19EAX033rMfzhgwVnCEBliEGE_yU-QWm6lU5keP9Fk6sEfer3iAvdjBdFPnTuhQJ4DY3uy_akEm-AwhhoDRJWCcwWpvOf-02sDfNaGcpD6OFVpshb4sy4KTqzl6FfMcdcSQAJKZSGcmHSR0krlFjXuSMH_SLWilkPBCYwSsLhruvQwmHSdWf8TneBkPT0b7EKSqZlWX0wDayY9arCwvFdDLzw4yD8cTyMXnsUqqgKvRSnnaxTy8wQC7LFAkzE6_oCgci6yEDNbpdKJf6wtOwFGo_H5y3T9JT5sYpbgyUW04A",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/oauth2/revoke",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"oauth2",
+						"revoke"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar PublicKeys",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/oauth2/jwks",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"oauth2",
+						"jwks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.environment.set(\"access_token\", jsonData.access_token);\r",
+							"pm.environment.set(\"refresh_token\", jsonData.refresh_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "autorizationcode",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "refresh_token",
+							"type": "text"
+						},
+						{
+							"key": "refresh_token",
+							"value": "{{refresh_token}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/oauth2/token",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"oauth2",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AuthorizationCode Por Code",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "autorizationcode",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "authorization_code",
+							"type": "text"
+						},
+						{
+							"key": "code",
+							"value": "0B7LPEo-hYlFwE9DiW3GnkGwQ7_shDbwnOmjhaVNyRJHitKs3yljiOTvNXE_WtrqevyavDHE5fwtvXSe09HXzDl1Y0NSQllZez1DgcEyGdE9ympRqFdcano8zi7mO89K",
+							"type": "text"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://oauthdebugger.com/debug",
+							"type": "text"
+						},
+						{
+							"key": "code_verifier",
+							"value": "sQXq9f8BdMVUwgPnHyqsxOTwBu1LWctiXs7ZtMrkbdM",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/oauth2/token",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"oauth2",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

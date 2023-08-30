@@ -1,0 +1,2217 @@
+{
+	"info": {
+		"_postman_id": "8a86e1ea-4480-4e28-b93f-76553b545795",
+		"name": "Algafood",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8664783"
+	},
+	"item": [
+		{
+			"name": "Cidades",
+			"item": [
+				{
+					"name": "listar cidades",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/cidades",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cidades"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "buscar cidade por id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/cidades/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cidades",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "adicionar cidades",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"cidade criada teste\",\r\n    \"estado\": {\r\n        \"id\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/cidades",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cidades"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "atualizar cidades",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"cidade atualizada\",\r\n    \"estado\": { \r\n        \"id\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/cidades/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cidades",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletar cidades",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/cidades/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cidades",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cozinhas",
+			"item": [
+				{
+					"name": "listas cozinhas",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ4NXQjUzI1NiI6ImxhT181UWx2NlZDVUNDZ1dWY1lIeTdJVF9uOE8wWVR3VFAxeXpkekxodGsiLCJraWQiOiJhbGdhZm9vZCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJqb2FvLmdlckBhbGdhZm9vZC5jb20iLCJhdWQiOiJhdXRvcml6YXRpb25jb2RlIiwibmJmIjoxNjkwMjE1MDg5LCJ1c3VhcmlvX2lkIjoiMSIsInNjb3BlIjpbIlJFQUQiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwIiwiZXhwIjoxNjkwMjE2ODg5LCJpYXQiOjE2OTAyMTUwODksImF1dGhvcml0aWVzIjpbIkdFUkFSX1JFTEFUT1JJT1MiLCJFRElUQVJfQ09aSU5IQVMiLCJDT05TVUxUQVJfVVNVQVJJT1NfR1JVUE9TX1BFUk1JU1NPRVMiLCJFRElUQVJfQ0lEQURFUyIsIkVESVRBUl9GT1JNQVNfUEFHQU1FTlRPIiwiRURJVEFSX1JFU1RBVVJBTlRFUyIsIkdFUkVOQ0lBUl9QRURJRE9TIiwiRURJVEFSX1VTVUFSSU9TX0dSVVBPU19QRVJNSVNTT0VTIiwiQ09OU1VMVEFSX1BFRElET1MiLCJFRElUQVJfRVNUQURPUyJdfQ.kNUF0tQqAAaDzXHI31siy12uKJnW4qkrHthbkQy8tNeTeq2M2Ycij9CK1wL5-PQE88HlbydBtXfwkghZS9HtRaEAHc7cj0VWdsasX_GN-Er-L6BjVVzNApZNSOhmwWpLDvd6UmrRJb3fPDgOi3qU3Hu4wj9-Eohm2Eb23y_4tugty4CJNS5LFx2CWdAWXj02ps2j2MrL9UbxRqC93_z7hnaTXHj4yRsrR6DgjAVbI0012lqghTyDBEnCp80KhUUQCkdX_DgauSyaTq2er0v48MLOv1-2F0pY0Rp6vh4b16mEwxqceEMTosHA6jT0jY4rDEsRN_wMkKb9StzFQi5s3w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic YWxnYWZvb2Q6MTIzNDU2",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/cozinhas?size=2&page=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cozinhas"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "2"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "buscar cozinha por id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/cozinhas/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cozinhas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "adicionar cozinha",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"cozinha teste\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/cozinhas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cozinhas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "atualizar cozinha",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ4NXQjUzI1NiI6ImxhT181UWx2NlZDVUNDZ1dWY1lIeTdJVF9uOE8wWVR3VFAxeXpkekxodGsiLCJraWQiOiJhbGdhZm9vZCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJqb2FvLmdlckBhbGdhZm9vZC5jb20iLCJhdWQiOiJhdXRvcml6YXRpb25jb2RlIiwibmJmIjoxNjkwMjE1MDg5LCJ1c3VhcmlvX2lkIjoiMSIsInNjb3BlIjpbIlJFQUQiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwIiwiZXhwIjoxNjkwMjE2ODg5LCJpYXQiOjE2OTAyMTUwODksImF1dGhvcml0aWVzIjpbIkdFUkFSX1JFTEFUT1JJT1MiLCJFRElUQVJfQ09aSU5IQVMiLCJDT05TVUxUQVJfVVNVQVJJT1NfR1JVUE9TX1BFUk1JU1NPRVMiLCJFRElUQVJfQ0lEQURFUyIsIkVESVRBUl9GT1JNQVNfUEFHQU1FTlRPIiwiRURJVEFSX1JFU1RBVVJBTlRFUyIsIkdFUkVOQ0lBUl9QRURJRE9TIiwiRURJVEFSX1VTVUFSSU9TX0dSVVBPU19QRVJNSVNTT0VTIiwiQ09OU1VMVEFSX1BFRElET1MiLCJFRElUQVJfRVNUQURPUyJdfQ.kNUF0tQqAAaDzXHI31siy12uKJnW4qkrHthbkQy8tNeTeq2M2Ycij9CK1wL5-PQE88HlbydBtXfwkghZS9HtRaEAHc7cj0VWdsasX_GN-Er-L6BjVVzNApZNSOhmwWpLDvd6UmrRJb3fPDgOi3qU3Hu4wj9-Eohm2Eb23y_4tugty4CJNS5LFx2CWdAWXj02ps2j2MrL9UbxRqC93_z7hnaTXHj4yRsrR6DgjAVbI0012lqghTyDBEnCp80KhUUQCkdX_DgauSyaTq2er0v48MLOv1-2F0pY0Rp6vh4b16mEwxqceEMTosHA6jT0jY4rDEsRN_wMkKb9StzFQi5s3w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"cozinha atualizada\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/cozinhas/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cozinhas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletar cozinha",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/cozinhas/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cozinhas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "testando bind query params",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/cozinhas/search?dia=6&mes=4&ano=2023",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cozinhas",
+								"search"
+							],
+							"query": [
+								{
+									"key": "dia",
+									"value": "6"
+								},
+								{
+									"key": "mes",
+									"value": "4"
+								},
+								{
+									"key": "ano",
+									"value": "2023"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "buscar primeiro",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/cozinhas/primeiro",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cozinhas",
+								"primeiro"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Estados",
+			"item": [
+				{
+					"name": "listar estados",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8080/estados",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"estados"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "buscar estado por id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/estados/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"estados",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "adiciona estados",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ4NXQjUzI1NiI6ImxhT181UWx2NlZDVUNDZ1dWY1lIeTdJVF9uOE8wWVR3VFAxeXpkekxodGsiLCJraWQiOiJhbGdhZm9vZCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJqb2FvLmdlckBhbGdhZm9vZC5jb20iLCJhdWQiOiJhdXRvcml6YXRpb25jb2RlIiwibmJmIjoxNjkwMjE1MDg5LCJ1c3VhcmlvX2lkIjoiMSIsInNjb3BlIjpbIlJFQUQiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwIiwiZXhwIjoxNjkwMjE2ODg5LCJpYXQiOjE2OTAyMTUwODksImF1dGhvcml0aWVzIjpbIkdFUkFSX1JFTEFUT1JJT1MiLCJFRElUQVJfQ09aSU5IQVMiLCJDT05TVUxUQVJfVVNVQVJJT1NfR1JVUE9TX1BFUk1JU1NPRVMiLCJFRElUQVJfQ0lEQURFUyIsIkVESVRBUl9GT1JNQVNfUEFHQU1FTlRPIiwiRURJVEFSX1JFU1RBVVJBTlRFUyIsIkdFUkVOQ0lBUl9QRURJRE9TIiwiRURJVEFSX1VTVUFSSU9TX0dSVVBPU19QRVJNSVNTT0VTIiwiQ09OU1VMVEFSX1BFRElET1MiLCJFRElUQVJfRVNUQURPUyJdfQ.kNUF0tQqAAaDzXHI31siy12uKJnW4qkrHthbkQy8tNeTeq2M2Ycij9CK1wL5-PQE88HlbydBtXfwkghZS9HtRaEAHc7cj0VWdsasX_GN-Er-L6BjVVzNApZNSOhmwWpLDvd6UmrRJb3fPDgOi3qU3Hu4wj9-Eohm2Eb23y_4tugty4CJNS5LFx2CWdAWXj02ps2j2MrL9UbxRqC93_z7hnaTXHj4yRsrR6DgjAVbI0012lqghTyDBEnCp80KhUUQCkdX_DgauSyaTq2er0v48MLOv1-2F0pY0Rp6vh4b16mEwxqceEMTosHA6jT0jY4rDEsRN_wMkKb9StzFQi5s3w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"estado teste\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/estados",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"estados"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "atualizar estados",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"estado atualizado\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/estados/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"estados",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletar estados",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/estados/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"estados",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Restaurantes",
+			"item": [
+				{
+					"name": "listar restaurantes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/restaurantes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "buscar restaurante por id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "adicionar restaurantes",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"teste\",\r\n    \"taxaFrete\": 10.00,\r\n    \"aberto\" : true,\r\n    \"cozinha\": {\r\n        \"id\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/restaurantes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "atualizar restaurantes",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"atualizado pelo put\",\r\n    \"taxaFrete\": 10.00,\r\n    \"ativo\": true,\r\n    \"aberto\": false,\r\n    \"cozinha\": {\r\n        \"id\": 3\r\n    },\r\n    \"endereco\": {\r\n        \"cep\": \"38400-999\",\r\n        \"logradouro\": \"Rua João Pinheiro\",\r\n        \"numero\": \"1000\",\r\n        \"complemento\": null,\r\n        \"bairro\": \"Centro\",\r\n        \"cidade\": {\r\n            \"id\": 1\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "atualizar restaurante parcial",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"atualizado pelo patch\",\r\n    \"taxaFrete\": 10.00,\r\n    \"ativo\": \"false\",\r\n    \"aberto\": \"false\",\r\n    \"cozinha\": {\r\n        \"id\": 2\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "desativar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/1/ativar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"1",
+								"ativar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ativar",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/1/ativar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"1",
+								"ativar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar formas de pagamento",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/2/formaPagamento",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"2",
+								"formaPagamento"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "associacao formas de pagamento",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/2/formaPagamento/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"2",
+								"formaPagamento",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "abrir restaurante",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ4NXQjUzI1NiI6ImxhT181UWx2NlZDVUNDZ1dWY1lIeTdJVF9uOE8wWVR3VFAxeXpkekxodGsiLCJraWQiOiJhbGdhZm9vZCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJqb2FvLmdlckBhbGdhZm9vZC5jb20iLCJhdWQiOiJhdXRvcml6YXRpb25jb2RlIiwibmJmIjoxNjkwMjE1MDg5LCJ1c3VhcmlvX2lkIjoiMSIsInNjb3BlIjpbIlJFQUQiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwIiwiZXhwIjoxNjkwMjE2ODg5LCJpYXQiOjE2OTAyMTUwODksImF1dGhvcml0aWVzIjpbIkdFUkFSX1JFTEFUT1JJT1MiLCJFRElUQVJfQ09aSU5IQVMiLCJDT05TVUxUQVJfVVNVQVJJT1NfR1JVUE9TX1BFUk1JU1NPRVMiLCJFRElUQVJfQ0lEQURFUyIsIkVESVRBUl9GT1JNQVNfUEFHQU1FTlRPIiwiRURJVEFSX1JFU1RBVVJBTlRFUyIsIkdFUkVOQ0lBUl9QRURJRE9TIiwiRURJVEFSX1VTVUFSSU9TX0dSVVBPU19QRVJNSVNTT0VTIiwiQ09OU1VMVEFSX1BFRElET1MiLCJFRElUQVJfRVNUQURPUyJdfQ.kNUF0tQqAAaDzXHI31siy12uKJnW4qkrHthbkQy8tNeTeq2M2Ycij9CK1wL5-PQE88HlbydBtXfwkghZS9HtRaEAHc7cj0VWdsasX_GN-Er-L6BjVVzNApZNSOhmwWpLDvd6UmrRJb3fPDgOi3qU3Hu4wj9-Eohm2Eb23y_4tugty4CJNS5LFx2CWdAWXj02ps2j2MrL9UbxRqC93_z7hnaTXHj4yRsrR6DgjAVbI0012lqghTyDBEnCp80KhUUQCkdX_DgauSyaTq2er0v48MLOv1-2F0pY0Rp6vh4b16mEwxqceEMTosHA6jT0jY4rDEsRN_wMkKb9StzFQi5s3w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/1/abertura",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"1",
+								"abertura"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fechar restaurante",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/1/fechamento",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"1",
+								"fechamento"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar reponsaveis pelo restaurante",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/2/responsaveis",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"2",
+								"responsaveis"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "adicionar responsaveis",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/4/responsaveis/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"4",
+								"responsaveis",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "dessasociar usuario",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/4/responsaveis/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"4",
+								"responsaveis",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ativar multiplos",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[1,2,3]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/ativacoes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"ativacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "destivacao multiplos",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[1,2,3]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/ativacoes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"ativacoes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "FormaPagamento",
+			"item": [
+				{
+					"name": "listar formas de pagamento",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/formaPagamentos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"formaPagamentos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "buscar forma de pagamento por id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/formaPagamentos/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"formaPagamentos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "adicionar formas de pagamento",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descricao\": \"pix\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/formaPagamentos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"formaPagamentos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletar forma de pagamento",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/formaPagamentos/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"formaPagamentos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Grupos",
+			"item": [
+				{
+					"name": "listar grupos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ4NXQjUzI1NiI6ImxhT181UWx2NlZDVUNDZ1dWY1lIeTdJVF9uOE8wWVR3VFAxeXpkekxodGsiLCJraWQiOiJhbGdhZm9vZCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJqb2FvLmdlckBhbGdhZm9vZC5jb20iLCJhdWQiOiJhdXRvcml6YXRpb25jb2RlIiwibmJmIjoxNjkwMjE1MDg5LCJ1c3VhcmlvX2lkIjoiMSIsInNjb3BlIjpbIlJFQUQiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwIiwiZXhwIjoxNjkwMjE2ODg5LCJpYXQiOjE2OTAyMTUwODksImF1dGhvcml0aWVzIjpbIkdFUkFSX1JFTEFUT1JJT1MiLCJFRElUQVJfQ09aSU5IQVMiLCJDT05TVUxUQVJfVVNVQVJJT1NfR1JVUE9TX1BFUk1JU1NPRVMiLCJFRElUQVJfQ0lEQURFUyIsIkVESVRBUl9GT1JNQVNfUEFHQU1FTlRPIiwiRURJVEFSX1JFU1RBVVJBTlRFUyIsIkdFUkVOQ0lBUl9QRURJRE9TIiwiRURJVEFSX1VTVUFSSU9TX0dSVVBPU19QRVJNSVNTT0VTIiwiQ09OU1VMVEFSX1BFRElET1MiLCJFRElUQVJfRVNUQURPUyJdfQ.kNUF0tQqAAaDzXHI31siy12uKJnW4qkrHthbkQy8tNeTeq2M2Ycij9CK1wL5-PQE88HlbydBtXfwkghZS9HtRaEAHc7cj0VWdsasX_GN-Er-L6BjVVzNApZNSOhmwWpLDvd6UmrRJb3fPDgOi3qU3Hu4wj9-Eohm2Eb23y_4tugty4CJNS5LFx2CWdAWXj02ps2j2MrL9UbxRqC93_z7hnaTXHj4yRsrR6DgjAVbI0012lqghTyDBEnCp80KhUUQCkdX_DgauSyaTq2er0v48MLOv1-2F0pY0Rp6vh4b16mEwxqceEMTosHA6jT0jY4rDEsRN_wMkKb9StzFQi5s3w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/grupos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"grupos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "buscar grupo por id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/grupos/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"grupos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "adicionar grupos",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"gerente\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/grupos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"grupos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "atualizar grupos",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"grupo put\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/grupos/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"grupos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletar grupo",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/grupos/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"grupos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "associar permissoes do grupo",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/grupos/1/permissoes/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"grupos",
+								"1",
+								"permissoes",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar permissoes por grupo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/grupos/1/permissoes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"grupos",
+								"1",
+								"permissoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "desassociar permissoes por grupo",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/grupos/1/permissoes/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"grupos",
+								"1",
+								"permissoes",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Usuarios",
+			"item": [
+				{
+					"name": "listar usuarios",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "adicionar usuarios",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ4NXQjUzI1NiI6ImxhT181UWx2NlZDVUNDZ1dWY1lIeTdJVF9uOE8wWVR3VFAxeXpkekxodGsiLCJraWQiOiJhbGdhZm9vZCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJqb2FvLmdlckBhbGdhZm9vZC5jb20iLCJhdWQiOiJhdXRvcml6YXRpb25jb2RlIiwibmJmIjoxNjkwMjI5MTYzLCJ1c3VhcmlvX2lkIjoiMSIsInNjb3BlIjpbIlJFQUQiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwIiwiZXhwIjoxNjkwMjMwOTYzLCJpYXQiOjE2OTAyMjkxNjMsImF1dGhvcml0aWVzIjpbIkdFUkFSX1JFTEFUT1JJT1MiLCJFRElUQVJfQ09aSU5IQVMiLCJDT05TVUxUQVJfVVNVQVJJT1NfR1JVUE9TX1BFUk1JU1NPRVMiLCJFRElUQVJfQ0lEQURFUyIsIkVESVRBUl9GT1JNQVNfUEFHQU1FTlRPIiwiRURJVEFSX1JFU1RBVVJBTlRFUyIsIkdFUkVOQ0lBUl9QRURJRE9TIiwiRURJVEFSX1VTVUFSSU9TX0dSVVBPU19QRVJNSVNTT0VTIiwiQ09OU1VMVEFSX1BFRElET1MiLCJFRElUQVJfRVNUQURPUyJdfQ.g_2VT4u-q_hf33sGOrOir68n4JVi24GRrjDR24xi5f-CtSVWmU_ENxUt1QoOHpJwyaszNx3RXoz9vSuA0JIHOD_GSuHTpZWw4XNu37eu7ujybu2IZ-SkB1f8T8NMd2Vj2JWOHwBwWHoER7R-ECAKxZvNuNEtSKjDfKnxI4TuBuo16vwpnyjlcj7jXVy5vP_z571JX35ncztz0Ibfi3fae0uoTpuf_PfM457vRJUDizwZUe7s45F59R3yDpRNXjLsJTEcZctp9DmCi07kJLVgwGgzdA0yv71u3Tyij2I5Kq4Ka-dKu3uj2fwl1rGwhmXmZ9KAS_i5Fkmt7H_5nXhE1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"jose\",\r\n  \"email\": \"email@email1\",\r\n  \"senha\": \"123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletar usuarios",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/usuarios/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "atualizar usuario",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"update\",\r\n  \"email\": \"atualizado@email\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/usuarios/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "atualizar senha do usuario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"senhaAtual\": \"123\",\r\n  \"novaSenha\": \"abcdef\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/usuarios/2/senha",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios",
+								"2",
+								"senha"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar grupos por usuario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/usuarios/1/grupos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios",
+								"1",
+								"grupos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "associar grupo com usuario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/usuarios/1/grupos/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios",
+								"1",
+								"grupos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "desassociar grupo com usuario",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/usuarios/1/grupos/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios",
+								"1",
+								"grupos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Produtos",
+			"item": [
+				{
+					"name": "adicionar produtos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ4NXQjUzI1NiI6ImxhT181UWx2NlZDVUNDZ1dWY1lIeTdJVF9uOE8wWVR3VFAxeXpkekxodGsiLCJraWQiOiJhbGdhZm9vZCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJqb2FvLmdlckBhbGdhZm9vZC5jb20iLCJhdWQiOiJhdXRvcml6YXRpb25jb2RlIiwibmJmIjoxNjkwMjE1MDg5LCJ1c3VhcmlvX2lkIjoiMSIsInNjb3BlIjpbIlJFQUQiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwIiwiZXhwIjoxNjkwMjE2ODg5LCJpYXQiOjE2OTAyMTUwODksImF1dGhvcml0aWVzIjpbIkdFUkFSX1JFTEFUT1JJT1MiLCJFRElUQVJfQ09aSU5IQVMiLCJDT05TVUxUQVJfVVNVQVJJT1NfR1JVUE9TX1BFUk1JU1NPRVMiLCJFRElUQVJfQ0lEQURFUyIsIkVESVRBUl9GT1JNQVNfUEFHQU1FTlRPIiwiRURJVEFSX1JFU1RBVVJBTlRFUyIsIkdFUkVOQ0lBUl9QRURJRE9TIiwiRURJVEFSX1VTVUFSSU9TX0dSVVBPU19QRVJNSVNTT0VTIiwiQ09OU1VMVEFSX1BFRElET1MiLCJFRElUQVJfRVNUQURPUyJdfQ.kNUF0tQqAAaDzXHI31siy12uKJnW4qkrHthbkQy8tNeTeq2M2Ycij9CK1wL5-PQE88HlbydBtXfwkghZS9HtRaEAHc7cj0VWdsasX_GN-Er-L6BjVVzNApZNSOhmwWpLDvd6UmrRJb3fPDgOi3qU3Hu4wj9-Eohm2Eb23y_4tugty4CJNS5LFx2CWdAWXj02ps2j2MrL9UbxRqC93_z7hnaTXHj4yRsrR6DgjAVbI0012lqghTyDBEnCp80KhUUQCkdX_DgauSyaTq2er0v48MLOv1-2F0pY0Rp6vh4b16mEwxqceEMTosHA6jT0jY4rDEsRN_wMkKb9StzFQi5s3w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"produto1\",\r\n    \"descricao\": \"isso é o produto1\",\r\n    \"preco\": \"10.50\",\r\n    \"ativo\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/2/produtos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"2",
+								"produtos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar produtos por restaurante",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/1/produtos?incluirInativos=true",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"1",
+								"produtos"
+							],
+							"query": [
+								{
+									"key": "incluirInativos",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "atualizar produto",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"produto1 atualizado\",\r\n  \"descricao\": \"isso é o produto1\",\r\n  \"preco\": \"10.50\",\r\n  \"ativo\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/1/produtos/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"1",
+								"produtos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletar produto",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/1/produtos/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"1",
+								"produtos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "buscas produto por restaurante por id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/1/produtos/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"1",
+								"produtos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "RestauranteProdutoFoto",
+			"item": [
+				{
+					"name": "atualizar foto do produto",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "descricao",
+									"value": "mudanca dessa porra",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "arquivo",
+									"type": "file",
+									"src": "/C:/Users/pinheiro/Downloads/anime-katekyō-hitman-reborn-tsunayoshi-sawada-wallpaper-preview (1).jpg",
+									"disabled": true
+								},
+								{
+									"key": "arquivo",
+									"type": "file",
+									"src": "/C:/Users/pinheiro/Downloads/ResultadosXPE-1fase-1S23.pdf",
+									"disabled": true
+								},
+								{
+									"key": "arquivo",
+									"type": "file",
+									"src": "/C:/Users/pinheiro/Downloads/5d46761d4f358e389108f2d6fe1eff80.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/1/produtos/1/foto",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"1",
+								"produtos",
+								"1",
+								"foto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "buscar foto por produto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "image/jpeg,image/png",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "image/png",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "image/gif",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/1/produtos/1/foto",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"1",
+								"produtos",
+								"1",
+								"foto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletar foto do produto",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/restaurantes/1/produtos/1/foto",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurantes",
+								"1",
+								"produtos",
+								"1",
+								"foto"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Permissoes",
+			"item": [
+				{
+					"name": "listar permissoes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/permissoes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"permissoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar permisao por id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ4NXQjUzI1NiI6ImxhT181UWx2NlZDVUNDZ1dWY1lIeTdJVF9uOE8wWVR3VFAxeXpkekxodGsiLCJraWQiOiJhbGdhZm9vZCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJqb2FvLmdlckBhbGdhZm9vZC5jb20iLCJhdWQiOiJhdXRvcml6YXRpb25jb2RlIiwibmJmIjoxNjkwMjE1NzUyLCJ1c3VhcmlvX2lkIjoiMSIsInNjb3BlIjpbIlJFQUQiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwIiwiZXhwIjoxNjkwMjE3NTUyLCJpYXQiOjE2OTAyMTU3NTIsImF1dGhvcml0aWVzIjpbIkdFUkFSX1JFTEFUT1JJT1MiLCJFRElUQVJfQ09aSU5IQVMiLCJDT05TVUxUQVJfVVNVQVJJT1NfR1JVUE9TX1BFUk1JU1NPRVMiLCJFRElUQVJfQ0lEQURFUyIsIkVESVRBUl9GT1JNQVNfUEFHQU1FTlRPIiwiRURJVEFSX1JFU1RBVVJBTlRFUyIsIkdFUkVOQ0lBUl9QRURJRE9TIiwiRURJVEFSX1VTVUFSSU9TX0dSVVBPU19QRVJNSVNTT0VTIiwiQ09OU1VMVEFSX1BFRElET1MiLCJFRElUQVJfRVNUQURPUyJdfQ.Ez1opuqbsZUpgIsDPWtz8caxQi443LCorfwsz9yl_8OBjnLCmc1ddlG8ST9-HSYUeepZGQRakwtnUec3LL1wpikPsO-Ljz_1Ti0nJDI67cZsRyeQDSB8dJ2dy660l12GJDS06XJK1y38Sl7DARtfHpQ_4_LmW9aulJ0B20z9hB8jVKjw5zN1K7AK81ZYsVB1jLjdoidw2zzLiHGBq5cPzOSzX48L_Zaj_WemhJgK6jhgjMzzLWs7BSdvYtRL5MgmZLYMAsuYoDTHkQeVjEHjlRHBvwAJtVTpsBK_zeGv9m7LXtaTvAjNNkuIqS1Kv6J34ZBm_88og73WQZKgS4OjlQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/permissoes/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"permissoes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "adicionar permissao",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"permissao nome teste\",\r\n  \"descricao\": \"permissao descricao teste\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/permissoes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"permissoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "atualizar permissao",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"atualizada\",\r\n  \"descricao\": \"permissao descricao atualizada\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/permissoes/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"permissoes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletar permissoes",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/permissoes/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"permissoes",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pedidos",
+			"item": [
+				{
+					"name": "buscar pedido por id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pedidos/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pedidos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar pedidos",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "file",
+							"file": {}
+						},
+						"url": {
+							"raw": "http://localhost:8080/pedidos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pedidos"
+							],
+							"query": [
+								{
+									"key": "clienteId",
+									"value": "6",
+									"disabled": true
+								},
+								{
+									"key": "restauranteId",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "dataCriacaoInicio",
+									"value": "2019-10-29T21:10:00Z",
+									"disabled": true
+								},
+								{
+									"key": "dataCriacaofim",
+									"value": "2019-11-02T21:01:21Z",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "dataCriacao",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "3",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "adicionar pedido",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"restauranteId\": 1,\r\n    \"formaPagamentoId\": 3,\r\n    \"enderecoEntrega\": {\r\n        \"cep\": \"38400-000\",\r\n        \"logradouro\": \"rua dos tres\",\r\n        \"numero\": \"300\",\r\n        \"complemento\": \"Apto torre 13\",\r\n        \"bairro\": \"bairro dos testes\",\r\n        \"cidadeId\": 1\r\n    },\r\n    \"itens\": [\r\n        {\r\n            \"produtoId\": 2,\r\n            \"quantidade\": 3,\r\n            \"observacao\": \"sem pimenta\"\r\n        },\r\n        {\r\n            \"produtoId\": 1,\r\n            \"quantidade\": 3,\r\n            \"observacao\": \"poe o que tiver\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/pedidos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pedidos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "confimar pedido",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pedidos/1/confirmacao",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pedidos",
+								"1",
+								"confirmacao"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cancelamento de pedido",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pedidos/1/cancelamento",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pedidos",
+								"1",
+								"cancelamento"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Estatisticas",
+			"item": [
+				{
+					"name": "venda diarias",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/pdf",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/estatisticas/vendas-diarias?dataCriacaoInicio=2019-11-02T00:00:00Z",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"estatisticas",
+								"vendas-diarias"
+							],
+							"query": [
+								{
+									"key": "dataCriacaoInicio",
+									"value": "2019-11-02T00:00:00Z"
+								},
+								{
+									"key": "dataCriacaofim",
+									"value": "2019-12-29T21:10:00Z",
+									"disabled": true
+								},
+								{
+									"key": "restauranteId",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Documentacao",
+			"item": [
+				{
+					"name": "api Json",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v3/api-docs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v3",
+								"api-docs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Swagger page",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/swagger-ui/index.html",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"swagger-ui",
+								"index.html"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "nginx",
+			"item": [
+				{
+					"name": "host id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/host",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"host"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

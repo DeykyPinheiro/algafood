@@ -5,6 +5,11 @@
 
 É uma implementação simplificada do IFOOD. algumas das operações possiveis são criar usuario, associar à grupos, à permissões ter diferentes niveis de acessos entre outros.
 
+## Necessario para rodar o Projeto
+- docker compose
+- docker
+
+
 ## Começando
 
 ```

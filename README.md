@@ -54,6 +54,6 @@ caso queira visualizar no postman basta importar os dois arquivos dentro da past
 
 ## Autor
 
-Desenvolvedor Java Jr
+Desenvolvedor Java
 
 [![LinkdIn Badge](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=whit)](https://www.linkedin.com/in/deyky-pinheiro-bbb735125/)
